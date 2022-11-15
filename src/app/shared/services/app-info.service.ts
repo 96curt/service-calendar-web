@@ -5,7 +5,7 @@ export class AppInfoService {
   constructor() {}
 
   public get title() {
-    return 'DevExtremeTemplate';
+    return 'Service Calendar';
   }
 
   public get currentYear() {
