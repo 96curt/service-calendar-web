@@ -7,6 +7,8 @@ import { FooterModule, ResetPasswordFormModule, CreateAccountFormModule, ChangeP
 import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
+import { ApiModule, Configuration, ConfigurationParameters } from 'openapi/index';
+import { environment } from 'environments/environment';
 
 @NgModule({
   declarations: [
@@ -23,12 +25,26 @@ import { AppRoutingModule } from './app-routing.module';
     ChangePasswordFormModule,
     LoginFormModule,
     UnauthenticatedContentModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ApiModule
   ],
   providers: [
     AuthService,
     ScreenService,
-    AppInfoService
+    AppInfoService,
+    {
+      provide: Configuration,
+      useFactory: (authService: AuthService) => new Configuration(
+        {
+          basePath: environment.apiBaseUrl,
+          withCredentials:true,
+          credentials: {
+            apikey:authService.getAccessToken.bind(authService)
+          }
+        }
+      ),
+      deps: [AuthService],
+      multi: false}
   ],
   bootstrap: [AppComponent]
 })

@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-
+import { ServiceService, TokenObtainPair } from 'openapi/index';
 export interface IUser {
-  email: string;
+  username: string;
   avatarUrl?: string
 }
 
 const defaultPath = '/';
-const defaultUser = {
-  email: 'sandra@example.com',
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
-};
+//const defaultUser = {
+//   email: 'sandra@example.com',
+//   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
+//};
 
 @Injectable()
 export class AuthService {
-  private _user: IUser | null = defaultUser;
+  private _user: IUser | null = null;
+  private _authData: TokenObtainPair | null = null;
   get loggedIn(): boolean {
     return !!this._user;
   }
@@ -24,16 +25,24 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    this._user = null;
+    this.router.navigate(['/login-form']);
+  }
 
-  async logIn(email: string, password: string) {
-
+  getAccessToken(){
+    if (this._authData == null)
+      return '';
+    return this._authData.access;
+  }
+  async logIn(username: string, password: string) {
     try {
       // Send request
-      console.log(email, password);
-      this._user = { ...defaultUser, email };
+      console.log(username, password);
+      //this._user = { ...defaultUser, email: username };
+      
       this.router.navigate([this._lastAuthenticatedPath]);
-
+      
       return {
         isOk: true,
         data: this._user
@@ -50,7 +59,7 @@ export class AuthService {
   async getUser() {
     try {
       // Send request
-
+      
       return {
         isOk: true,
         data: this._user
