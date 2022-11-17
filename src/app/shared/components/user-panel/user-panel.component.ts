@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DxListModule } from 'devextreme-angular/ui/list';
 import { DxContextMenuModule } from 'devextreme-angular/ui/context-menu';
-import { IUser } from '../../services/auth.service';
+import { User } from 'openapi';
 
 @Component({
   selector: 'app-user-panel',
@@ -19,7 +19,7 @@ export class UserPanelComponent {
   menuMode!: string;
 
   @Input()
-  user!: IUser | null;
+  user!: User | null;
 
   constructor() {}
 }

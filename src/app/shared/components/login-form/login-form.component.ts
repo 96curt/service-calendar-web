@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { HomeComponent } from 'app/pages/home/home.component';
 import { DxFormModule } from 'devextreme-angular/ui/form';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
@@ -18,21 +19,19 @@ export class LoginFormComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  async onSubmit(e: Event) {
+  onSubmit(e: Event) {
     e.preventDefault();
     const { username, password } = this.formData;
     this.loading = true;
-
-    const result = await this.authService.logIn(username, password);
-    if (!result.isOk) {
+    try{
+      this.authService.login(username, password);
+    }catch(e:any){
       this.loading = false;
-      notify(result.message, 'error', 2000);
+      notify(e, 'error', 2000);
     }
   }
 
-  onCreateAccountClick = () => {
-    this.router.navigate(['/create-account']);
-  }
+  
 }
 @NgModule({
   imports: [

@@ -1,12 +1,14 @@
 import { Component, NgModule, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthService, IUser } from '../../services';
+import { AuthService } from '../../services';
 import { UserPanelModule } from '../user-panel/user-panel.component';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
+import { UserService, User } from 'openapi';
+import {take, interval} from 'rxjs';
 @Component({
   selector: 'app-header',
   templateUrl: 'header.component.html',
@@ -23,7 +25,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title!: string;
 
-  user: IUser | null = { username: '' };
+  user: User | null = { username: '', id:0,profile:''};
 
   userMenuItems = [{
     text: 'Profile',
@@ -40,10 +42,25 @@ export class HeaderComponent implements OnInit {
     }
   }];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.authService.getUser().then((e) => this.user = e.data);
+    let username = this.authService.getUser();
+    if (username != ''){
+      //this.userService.configuration.credentials = {
+      //  apikey:getAccessToken
+      //};
+      let obs = this.userService.userRetrieve(username);
+      obs.subscribe({
+        next: (response) => {
+          this.user = response;
+        }
+      })
+    }
   }
 
   toggleMenu = () => {

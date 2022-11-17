@@ -1,5 +1,5 @@
 {
-  "name": "dev-extreme-template",
+  "name": "service-calendar-web",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -25,11 +25,12 @@
     "devextreme-angular": "^22.1.3",
     "devextreme-schematics": "^1.4.2",
     "rxjs": "~7.5.0",
+    "sass-embedded": "^1.56.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.6",
+    "@angular-devkit/build-angular": "^14.2.9",
     "@angular/cli": "~14.2.6",
     "@angular/compiler-cli": "^14.2.0",
     "@types/jasmine": "~4.0.0",
