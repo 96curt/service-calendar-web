@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { environment } from 'environments/environment';
 import { ApiService, ServiceService, TokenObtainPair,TokenRefresh,UserService } from 'openapi';
-import { throwError } from 'rxjs';
+import { Observable, throwError,map } from 'rxjs';
 import {TokenStorageService} from './token-storage.service'
 import { User } from 'openapi';
 
@@ -30,6 +30,9 @@ export class AuthService {
     private userService: UserService,
     private router: Router
   ) {
+    //if(this.loggedIn)
+    //check accessToken
+    
     //this.router.navigate(['/login-form']);
   }
 
@@ -61,23 +64,18 @@ export class AuthService {
       password: password
     } as TokenObtainPair;
     
-    this.apiService.apiTokenCreate(auth).subscribe({
-      next: (response) => {
-        this.storageService.saveAccessToken(response.access);
-        this.storageService.saveRefreshToken(response.refresh);
-        this.storageService.saveUser(username);
-        this.router.navigate([this._lastAuthenticatedPath]);
-      },
-      error: (error) => {
-        return error;
-      },
-      complete: () => {
-        console.log('token create complete')
-      }
-    }); 
+    return this.apiService.apiTokenCreate(auth).pipe(
+      map(
+        response => {
+          this.storageService.saveAccessToken(response.access);
+          this.storageService.saveRefreshToken(response.refresh);
+          this.storageService.saveUser(username);
+        },
+      )
+    );
   }
 
-  getUser(): string{
+  getUser(): string {
     let username = this.storageService.getUser();
     if (!username){
       this.logOut();
@@ -86,58 +84,9 @@ export class AuthService {
     return username;
   }
 
-  // async createAccount(email: string, password: string) {
-  //   try {
-  //     // Send request
-  //     console.log(email, password);
-
-  //     this.router.navigate(['/create-account']);
-  //     return {
-  //       isOk: true
-  //     };
-  //   }
-  //   catch {
-  //     return {
-  //       isOk: false,
-  //       message: "Failed to create account"
-  //     };
-  //   }
-  // }
-
-  // async changePassword(email: string, recoveryCode: string) {
-  //   try {
-  //     // Send request
-  //     console.log(email, recoveryCode);
-
-  //     return {
-  //       isOk: true
-  //     };
-  //   }
-  //   catch {
-  //     return {
-  //       isOk: false,
-  //       message: "Failed to change password"
-  //     }
-  //   };
-  // }
-
-  // async resetPassword(email: string) {
-  //   try {
-  //     // Send request
-  //     console.log(email);
-
-  //     return {
-  //       isOk: true
-  //     };
-  //   }
-  //   catch {
-  //     return {
-  //       isOk: false,
-  //       message: "Failed to reset password"
-  //     };
-  //   }
-  // }
-
+  getAccessToken(){
+    return this.storageService.getAccessToken()
+  }
   async logOut() {
     this.storageService.signOut();
     this.router.navigate(['/login-form']);

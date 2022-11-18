@@ -50,12 +50,12 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     let username = this.authService.getUser();
-    if (username != ''){
-      //this.userService.configuration.credentials = {
-      //  apikey:getAccessToken
-      //};
-      let obs = this.userService.userRetrieve(username);
-      obs.subscribe({
+    let token = this.authService.getAccessToken();
+    if (username != '' && !!token){
+      this.userService.configuration.credentials = {
+        apikey:token
+      };
+      this.userService.userRetrieve(username).subscribe({
         next: (response) => {
           this.user = response;
         }

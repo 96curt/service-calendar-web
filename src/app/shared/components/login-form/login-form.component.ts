@@ -23,15 +23,19 @@ export class LoginFormComponent {
     e.preventDefault();
     const { username, password } = this.formData;
     this.loading = true;
-    try{
-      this.authService.login(username, password);
-    }catch(e:any){
-      this.loading = false;
-      notify(e, 'error', 2000);
-    }
+    this.authService.login(username, password)
+    .subscribe({
+        error: (error) => {
+          notify(error.message,'error',2000)
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+          console.log('token create complete');
+          this.router.navigate(['/home']);
+        }
+      });
   }
-
-  
 }
 @NgModule({
   imports: [
