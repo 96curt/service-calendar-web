@@ -9,13 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RegionEnum } from './regionEnum';
 
 
-export interface Profile { 
-    readonly id: number;
-    region: RegionEnum;
-    user: number;
-    serviceCenter?: number | null;
+/**
+ * This serializer defines two fields for authentication:   * username   * password. It will try to authenticate the user with when validated.
+ */
+export interface Login { 
+    username: string;
+    password: string;
 }
 

@@ -5,9 +5,15 @@ import { AuthGuardService } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
-import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
+import { DxDataGridModule, DxFormModule, DxSchedulerModule } from 'devextreme-angular';
+import { ScheduleComponent } from './pages/schedule/schedule.component';
 
 const routes: Routes = [
+  {
+    path: 'pages/schedule',
+    component: ScheduleComponent,
+    canActivate: [ AuthGuardService ]
+  },
   {
     path: 'tasks',
     component: TasksComponent,
@@ -35,13 +41,19 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true }), DxDataGridModule, DxFormModule],
+  imports: [
+    RouterModule.forRoot(routes, { useHash: true }),
+    DxDataGridModule,
+    DxFormModule,
+    DxSchedulerModule
+  ],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [
     HomeComponent,
     ProfileComponent,
-    TasksComponent
+    TasksComponent,
+    ScheduleComponent
   ]
 })
 export class AppRoutingModule { }

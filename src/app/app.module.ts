@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule } from './layouts';
 import { FooterModule, LoginFormModule } from './shared/components';
-import { AuthService, ScreenService, AppInfoService } from './shared/services';
+import { AuthHelperService, ScreenService, AppInfoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiModule, ConfigurationParameters, Configuration} from 'openapi/index';
@@ -13,7 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
-    basePath:environment.apiBaseUrl
+    basePath:environment.apiBaseUrl,
+    withCredentials:true
   }
   return new Configuration(params);
 }
@@ -35,7 +36,7 @@ export function apiConfigFactory (): Configuration {
     ApiModule.forRoot(apiConfigFactory)
   ],
   providers: [
-    AuthService,
+    AuthHelperService,
     ScreenService,
     AppInfoService,
   ],

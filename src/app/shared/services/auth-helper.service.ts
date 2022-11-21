@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { environment } from 'environments/environment';
-import { ApiService, ServiceService, TokenObtainPair,TokenRefresh,UserService } from 'openapi';
+import { AuthService, Login} from 'openapi';
 import { Observable, throwError,map } from 'rxjs';
 import {TokenStorageService} from './token-storage.service'
 import { User } from 'openapi';
@@ -13,7 +13,7 @@ const defaultPath = '/';
 //};
 
 @Injectable()
-export class AuthService {
+export class AuthHelperService {
   
   get loggedIn(): boolean {
     return !!this.storageService.getUser();
@@ -25,50 +25,22 @@ export class AuthService {
   }
 
   constructor(
-    private apiService: ApiService,
+    private authService: AuthService,
     private storageService: TokenStorageService,
-    private userService: UserService,
+    //private cookieService: CookieService
     private router: Router
-  ) {
-    //if(this.loggedIn)
-    //check accessToken
-    
-    //this.router.navigate(['/login-form']);
-  }
+  ) { }
 
-  private _refreshToken(){
-    const refresh = {
-      refresh: this.storageService.getRefreshToken()
-    } as TokenRefresh;
-    this.apiService.apiTokenRefreshCreate(refresh)
-    .subscribe({
-      next: (value) => {
-        console.log(value);
-        this.apiService.apiTokenRefreshCreate(refresh).subscribe({
-          next: (response) => {
-            this.storageService.saveAccessToken(response.access);
-            console.log(response)
-          },
-          error: (error) => {
-    
-          }
-        });
-      }
-    })
-    
-  }
   
   login(username: string, password: string){
     const auth = {
       username: username,
       password: password
-    } as TokenObtainPair;
+    } as Login;
     
-    return this.apiService.apiTokenCreate(auth).pipe(
+    return this.authService.authLoginCreate(auth).pipe(
       map(
         response => {
-          this.storageService.saveAccessToken(response.access);
-          this.storageService.saveRefreshToken(response.refresh);
           this.storageService.saveUser(username);
         },
       )
@@ -84,18 +56,17 @@ export class AuthService {
     return username;
   }
 
-  getAccessToken(){
-    return this.storageService.getAccessToken()
-  }
   async logOut() {
+    this.authService.authLogoutCreate().subscribe();
     this.storageService.signOut();
+
     this.router.navigate(['/login-form']);
   }
 }
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthHelperService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;

@@ -1,42 +1,35 @@
 openapi: 3.0.3
 info:
   title: Service Calendar API
-  version: 1.3.0
+  version: 0.6.0
   description: Mockup Service Calendar API
 paths:
-  /api/token/:
+  /api/auth/login:
     post:
-      operationId: api_token_create
-      description: |-
-        Takes a set of user credentials and returns an access and refresh JSON web
-        token pair to prove the authentication of those credentials.
+      operationId: auth_login_create
       tags:
-      - api
+      - auth
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/Login'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/Login'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/Login'
         required: true
+      security:
+      - cookieAuth: []
+      - {}
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenObtainPair'
-          description: ''
-  /api/token{format}:
+          description: No response body
+  /api/auth/login{format}:
     post:
-      operationId: api_token_formatted_create
-      description: |-
-        Takes a set of user credentials and returns an access and refresh JSON web
-        token pair to prove the authentication of those credentials.
+      operationId: auth_login_formatted_create
       parameters:
       - in: path
         name: format
@@ -46,59 +39,38 @@ paths:
           - .json
         required: true
       tags:
-      - api
+      - auth
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/Login'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/Login'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/Login'
         required: true
+      security:
+      - cookieAuth: []
+      - {}
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenObtainPair'
-          description: ''
-  /api/token/refresh/:
+          description: No response body
+  /api/auth/logout:
     post:
-      operationId: api_token_refresh_create
-      description: |-
-        Takes a refresh type JSON web token and returns an access type JSON web
-        token if the refresh token is valid.
+      operationId: auth_logout_create
       tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-        required: true
+      - auth
+      security:
+      - cookieAuth: []
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenRefresh'
-          description: ''
-  /api/token/refresh{format}:
+          description: No response body
+  /api/auth/logout{format}:
     post:
-      operationId: api_token_refresh_formatted_create
-      description: |-
-        Takes a refresh type JSON web token and returns an access type JSON web
-        token if the refresh token is valid.
+      operationId: auth_logout_formatted_create
       parameters:
       - in: path
         name: format
@@ -108,48 +80,29 @@ paths:
           - .json
         required: true
       tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
-        required: true
+      - auth
+      security:
+      - cookieAuth: []
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenRefresh'
-          description: ''
-  /customers/:
+          description: No response body
+  /api/customers/:
     get:
       operationId: customers_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - customers
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCustomerList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
           description: ''
-  /customers{format}:
+  /api/customers{format}:
     get:
       operationId: customers_formatted_list
       parameters:
@@ -160,44 +113,34 @@ paths:
           enum:
           - .json
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - customers
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCustomerList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
           description: ''
-  /profile/{id}:
+  /api/profile/:
     get:
       operationId: profile_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
       tags:
       - profile
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
+                $ref: '#/components/schemas/User'
           description: ''
-  /profile/{id}{format}:
+  /api/profile{format}:
     get:
       operationId: profile_formatted_retrieve
       parameters:
@@ -208,44 +151,34 @@ paths:
           enum:
           - .json
         required: true
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
       tags:
       - profile
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
+                $ref: '#/components/schemas/User'
           description: ''
-  /service/centers/:
+  /api/service/centers/:
     get:
       operationId: service_centers_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedServiceCenterList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceCenter'
           description: ''
-  /service/centers{format}:
+  /api/service/centers{format}:
     get:
       operationId: service_centers_formatted_list
       parameters:
@@ -256,43 +189,34 @@ paths:
           enum:
           - .json
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedServiceCenterList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceCenter'
           description: ''
-  /service/comments/:
+  /api/service/comments/:
     get:
       operationId: service_comments_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCommentList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
           description: ''
     post:
       operationId: service_comments_create
@@ -311,7 +235,7 @@ paths:
               $ref: '#/components/schemas/Comment'
         required: true
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '201':
           content:
@@ -319,7 +243,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Comment'
           description: ''
-  /service/comments{format}:
+  /api/service/comments{format}:
     get:
       operationId: service_comments_formatted_list
       parameters:
@@ -330,22 +254,18 @@ paths:
           enum:
           - .json
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCommentList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
           description: ''
     post:
       operationId: service_comments_formatted_create
@@ -372,7 +292,7 @@ paths:
               $ref: '#/components/schemas/Comment'
         required: true
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '201':
           content:
@@ -380,28 +300,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Comment'
           description: ''
-  /service/jobsites/:
+  /api/service/jobsites/:
     get:
       operationId: service_jobsites_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedJobSiteList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobSite'
           description: ''
-  /service/jobsites{format}:
+  /api/service/jobsites{format}:
     get:
       operationId: service_jobsites_formatted_list
       parameters:
@@ -412,24 +327,20 @@ paths:
           enum:
           - .json
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedJobSiteList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobSite'
           description: ''
-  /service/order/addendum/{id}:
+  /api/service/order/addendum/{id}:
     get:
       operationId: service_order_addendum_retrieve
       parameters:
@@ -441,7 +352,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -449,7 +360,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderAddendumDetail'
           description: ''
-  /service/order/addendum/{id}{format}:
+  /api/service/order/addendum/{id}{format}:
     get:
       operationId: service_order_addendum_formatted_retrieve
       parameters:
@@ -468,7 +379,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -476,7 +387,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderAddendumDetail'
           description: ''
-  /service/order/item/{id}:
+  /api/service/order/item/{id}:
     get:
       operationId: service_order_item_retrieve
       parameters:
@@ -488,7 +399,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -496,7 +407,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderItem'
           description: ''
-  /service/order/item/{id}{format}:
+  /api/service/order/item/{id}{format}:
     get:
       operationId: service_order_item_formatted_retrieve
       parameters:
@@ -515,7 +426,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -523,7 +434,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderItem'
           description: ''
-  /service/order/sequence/{id}:
+  /api/service/order/sequence/{id}:
     get:
       operationId: service_order_sequence_retrieve
       parameters:
@@ -535,7 +446,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -543,7 +454,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderSequenceDetail'
           description: ''
-  /service/order/sequence/{id}{format}:
+  /api/service/order/sequence/{id}{format}:
     get:
       operationId: service_order_sequence_formatted_retrieve
       parameters:
@@ -562,7 +473,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -570,28 +481,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderSequenceDetail'
           description: ''
-  /service/orders:
+  /api/service/orders:
     get:
       operationId: service_orders_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedOrderSequenceListList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderSequenceList'
           description: ''
-  /service/orders{format}:
+  /api/service/orders{format}:
     get:
       operationId: service_orders_formatted_list
       parameters:
@@ -602,24 +508,20 @@ paths:
           enum:
           - .json
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedOrderSequenceListList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderSequenceList'
           description: ''
-  /service/schedule/{id}:
+  /api/service/schedule/{id}:
     get:
       operationId: service_schedule_retrieve
       parameters:
@@ -631,7 +533,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -662,7 +564,7 @@ paths:
               $ref: '#/components/schemas/Schedule'
         required: true
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -692,7 +594,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedSchedule'
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -711,11 +613,11 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '204':
           description: No response body
-  /service/schedule/{id}{format}:
+  /api/service/schedule/{id}{format}:
     get:
       operationId: service_schedule_formatted_retrieve
       parameters:
@@ -734,7 +636,7 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -772,7 +674,7 @@ paths:
               $ref: '#/components/schemas/Schedule'
         required: true
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -809,7 +711,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedSchedule'
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
@@ -835,11 +737,11 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '204':
           description: No response body
-  /service/schedules/:
+  /api/service/schedules/:
     get:
       operationId: service_schedules_list
       parameters:
@@ -882,35 +784,24 @@ paths:
           - '8'
           - '9'
       - in: query
-        name: date_after
-        schema:
-          type: string
-          format: date
-      - in: query
-        name: date_before
-        schema:
-          type: string
-          format: date
-      - in: query
-        name: endTime
-        schema:
-          type: string
-          format: time
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - in: query
         name: serviceCenter
         schema:
           type: integer
       - in: query
-        name: startTime
+        name: startDate
         schema:
           type: string
-          format: time
+          format: date
+      - in: query
+        name: startDateTime_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: startDateTime_before
+        schema:
+          type: string
+          format: date-time
       - in: query
         name: technicians
         schema:
@@ -922,13 +813,15 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedScheduleList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
           description: ''
     post:
       operationId: service_schedules_create
@@ -947,7 +840,7 @@ paths:
               $ref: '#/components/schemas/Schedule'
         required: true
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '201':
           content:
@@ -955,7 +848,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Schedule'
           description: ''
-  /service/schedules{format}:
+  /api/service/schedules{format}:
     get:
       operationId: service_schedules_formatted_list
       parameters:
@@ -997,21 +890,6 @@ paths:
           - '7'
           - '8'
           - '9'
-      - in: query
-        name: date_after
-        schema:
-          type: string
-          format: date
-      - in: query
-        name: date_before
-        schema:
-          type: string
-          format: date
-      - in: query
-        name: endTime
-        schema:
-          type: string
-          format: time
       - in: path
         name: format
         schema:
@@ -1019,21 +897,25 @@ paths:
           enum:
           - .json
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       - in: query
         name: serviceCenter
         schema:
           type: integer
       - in: query
-        name: startTime
+        name: startDate
         schema:
           type: string
-          format: time
+          format: date
+      - in: query
+        name: startDateTime_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: startDateTime_before
+        schema:
+          type: string
+          format: date-time
       - in: query
         name: technicians
         schema:
@@ -1045,13 +927,15 @@ paths:
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedScheduleList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
           description: ''
     post:
       operationId: service_schedules_formatted_create
@@ -1078,7 +962,7 @@ paths:
               $ref: '#/components/schemas/Schedule'
         required: true
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '201':
           content:
@@ -1086,28 +970,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Schedule'
           description: ''
-  /service/techs/:
+  /api/service/techs/:
     get:
       operationId: service_techs_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTechnicianList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Technician'
           description: ''
-  /service/techs{format}:
+  /api/service/techs{format}:
     get:
       operationId: service_techs_formatted_list
       parameters:
@@ -1118,69 +997,18 @@ paths:
           enum:
           - .json
         required: true
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       tags:
       - service
       security:
-      - jwtAuth: []
+      - cookieAuth: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTechnicianList'
-          description: ''
-  /user/{username}/:
-    get:
-      operationId: user_retrieve
-      parameters:
-      - in: path
-        name: username
-        schema:
-          type: string
-        required: true
-      tags:
-      - user
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-  /user/{username}{format}:
-    get:
-      operationId: user_formatted_retrieve
-      parameters:
-      - in: path
-        name: format
-        schema:
-          type: string
-          enum:
-          - .json
-        required: true
-      - in: path
-        name: username
-        schema:
-          type: string
-        required: true
-      tags:
-      - user
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Technician'
           description: ''
 components:
   schemas:
@@ -1321,6 +1149,23 @@ components:
       - state
       - street
       - zipCode
+    Login:
+      type: object
+      description: |-
+        This serializer defines two fields for authentication:
+          * username
+          * password.
+        It will try to authenticate the user with when validated.
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - username
     ManagerEnum:
       enum:
       - '1'
@@ -1466,146 +1311,6 @@ components:
       - number
       - region
       - serviceCenter
-    PaginatedCommentList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Comment'
-    PaginatedCustomerList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Customer'
-    PaginatedJobSiteList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/JobSite'
-    PaginatedOrderSequenceListList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderSequenceList'
-    PaginatedScheduleList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Schedule'
-    PaginatedServiceCenterList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceCenter'
-    PaginatedTechnicianList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Technician'
     PatchedSchedule:
       type: object
       properties:
@@ -1618,7 +1323,10 @@ components:
           type: string
           nullable: true
           maxLength: 1024
-        date:
+        startDate:
+          type: string
+          format: date
+        endDate:
           type: string
           format: date
         startTime:
@@ -1638,6 +1346,7 @@ components:
           type: integer
         scheduledBy:
           type: integer
+          nullable: true
         confirmedBy:
           type: integer
           nullable: true
@@ -1687,7 +1396,10 @@ components:
           type: string
           nullable: true
           maxLength: 1024
-        date:
+        startDate:
+          type: string
+          format: date
+        endDate:
           type: string
           format: date
         startTime:
@@ -1707,6 +1419,7 @@ components:
           type: integer
         scheduledBy:
           type: integer
+          nullable: true
         confirmedBy:
           type: integer
           nullable: true
@@ -1716,7 +1429,6 @@ components:
             type: integer
       required:
       - id
-      - scheduledBy
       - serviceCenter
       - technicians
       - travelHours
@@ -1930,38 +1642,6 @@ components:
       required:
       - firstName
       - id
-    TokenObtainPair:
-      type: object
-      properties:
-        username:
-          type: string
-          writeOnly: true
-        password:
-          type: string
-          writeOnly: true
-        access:
-          type: string
-          readOnly: true
-        refresh:
-          type: string
-          readOnly: true
-      required:
-      - access
-      - password
-      - refresh
-      - username
-    TokenRefresh:
-      type: object
-      properties:
-        access:
-          type: string
-          readOnly: true
-        refresh:
-          type: string
-          writeOnly: true
-      required:
-      - access
-      - refresh
     User:
       type: object
       properties:
@@ -1986,8 +1666,8 @@ components:
           title: Email address
           maxLength: 254
         profile:
-          type: string
-          format: uri
+          allOf:
+          - $ref: '#/components/schemas/Profile'
           readOnly: true
       required:
       - id
@@ -2004,7 +1684,7 @@ components:
       - '7'
       type: string
   securitySchemes:
-    jwtAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

@@ -5,7 +5,7 @@ import { HomeComponent } from 'app/pages/home/home.component';
 import { DxFormModule } from 'devextreme-angular/ui/form';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
-import { AuthService } from '../../services';
+import { AuthHelperService } from '../../services';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class LoginFormComponent {
   loading = false;
   formData: any = {};
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthHelperService, private router: Router) { }
 
   onSubmit(e: Event) {
     e.preventDefault();
@@ -26,12 +26,12 @@ export class LoginFormComponent {
     this.authService.login(username, password)
     .subscribe({
         error: (error) => {
-          notify(error.message,'error',2000)
+          this.authService.logOut();
+          notify(error.message,'error',2000);
           this.loading = false;
         },
         complete: () => {
           this.loading = false;
-          console.log('token create complete');
           this.router.navigate(['/home']);
         }
       });

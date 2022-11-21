@@ -1,0 +1,27 @@
+<h2 class="content-block">Schedule</h2>
+<div class="content-block">
+    <div class="dx-card responsive-paddings">
+        <dx-scheduler
+            [dataSource]="customDataSource"
+            textExpr="description"
+            startDateTimeZoneExpr="startDateTime"
+            endDateTimeZoneExpr="endDateTime"
+            currentView="week">
+            <dxi-view
+                type="day"
+                [startDayHour]="6"
+                [endDayHour]="18">
+            </dxi-view>
+            <dxi-view
+                type="week"
+                [startDayHour]="6"
+                [endDayHour]="18">
+            </dxi-view>
+            <dxi-view
+                type="month"
+                [startDayHour]="6"
+                [endDayHour]="18">
+            </dxi-view>
+        </dx-scheduler>
+    </div>
+</div>

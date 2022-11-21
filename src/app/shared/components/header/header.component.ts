@@ -1,13 +1,13 @@
 import { Component, NgModule, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthService } from '../../services';
+import { AuthHelperService } from '../../services';
 import { UserPanelModule } from '../user-panel/user-panel.component';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
-import { UserService, User } from 'openapi';
+import { User, ProfileService } from 'openapi';
 import {take, interval} from 'rxjs';
 @Component({
   selector: 'app-header',
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title!: string;
 
-  user: User | null = { username: '', id:0,profile:''};
+  user: User | null = null;
 
   userMenuItems = [{
     text: 'Profile',
@@ -43,24 +43,17 @@ export class HeaderComponent implements OnInit {
   }];
 
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
+    private authService: AuthHelperService,
+    private userService: ProfileService,
     private router: Router
   ) { }
 
   ngOnInit() {
-    let username = this.authService.getUser();
-    let token = this.authService.getAccessToken();
-    if (username != '' && !!token){
-      this.userService.configuration.credentials = {
-        apikey:token
-      };
-      this.userService.userRetrieve(username).subscribe({
+      this.userService.profileRetrieve().subscribe({
         next: (response) => {
           this.user = response;
         }
       })
-    }
   }
 
   toggleMenu = () => {
