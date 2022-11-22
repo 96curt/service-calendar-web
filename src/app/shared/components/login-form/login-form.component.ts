@@ -26,8 +26,7 @@ export class LoginFormComponent {
     this.authService.login(username, password)
     .subscribe({
         error: (error) => {
-          this.authService.logOut();
-          notify(error.message,'error',2000);
+          notify(error.message,'error', 2000);
           this.loading = false;
         },
         complete: () => {

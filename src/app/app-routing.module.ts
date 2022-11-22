@@ -5,7 +5,7 @@ import { AuthGuardService } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
-import { DxDataGridModule, DxFormModule, DxSchedulerModule } from 'devextreme-angular';
+import { DxDataGridModule, DxFormModule, DxSchedulerModule, DxTemplateHost, DxTemplateModule } from 'devextreme-angular';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 
 const routes: Routes = [
@@ -45,9 +45,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { useHash: true }),
     DxDataGridModule,
     DxFormModule,
-    DxSchedulerModule
+    DxSchedulerModule,
+    DxTemplateModule
   ],
-  providers: [AuthGuardService],
+  providers: [AuthGuardService,DxTemplateHost],
   exports: [RouterModule],
   declarations: [
     HomeComponent,

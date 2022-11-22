@@ -9,7 +9,8 @@ import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiModule, ConfigurationParameters, Configuration} from 'openapi/index';
 import { environment } from 'environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthHelperInterceptor } from './shared/services/auth-helper.interceptor';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -39,6 +40,12 @@ export function apiConfigFactory (): Configuration {
     AuthHelperService,
     ScreenService,
     AppInfoService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHelperInterceptor,
+      multi: true
+    }
+    
   ],
   bootstrap: [AppComponent]
 })
