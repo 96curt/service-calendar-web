@@ -9,7 +9,7 @@ import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiModule, ConfigurationParameters, Configuration} from 'openapi/index';
 import { environment } from 'environments/environment';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHelperInterceptor } from './shared/services/auth-helper.interceptor';
 
 export function apiConfigFactory (): Configuration {
@@ -34,7 +34,9 @@ export function apiConfigFactory (): Configuration {
     UnauthenticatedContentModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpClientXsrfModule,
     ApiModule.forRoot(apiConfigFactory)
+
   ],
   providers: [
     AuthHelperService,

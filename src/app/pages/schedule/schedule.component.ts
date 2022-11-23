@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import CustomStore from 'devextreme/data/custom_store';
-import { ServiceService } from 'openapi';
+import { Schedule, ServiceService } from 'openapi';
 import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
 
@@ -22,14 +22,23 @@ export class ScheduleComponent implements OnInit {
             data:response,
           }
         })
-        .catch(() => { throw 'Data loading error' });
+        .catch(() => { throw 'Error Loading Appointment' });
       },
       insert: (values) => {
         console.log(values);
-        return lastValueFrom(this.serviceService.serviceSchedulesCreate(values));
+        const schedule = {
+          description:values.description,
+          endDateTime:values.endDateTime,
+          startDateTime:values.startDateTime,
+          technicians:values.technicians,
+          
+        } as Schedule;
+        return lastValueFrom(this.serviceService.serviceSchedulesCreate(values))
+        .catch(() => { throw 'Error Creating Appointment' });
       },
       update: (key, values) => {console.log(values);
-        return lastValueFrom(this.serviceService.serviceScheduleUpdate(key,values));
+        return lastValueFrom(this.serviceService.serviceScheduleUpdate(key,values))
+        .catch(() => { throw 'Error Updating Appointment' });
       }
 
     });

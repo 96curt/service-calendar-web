@@ -22,7 +22,6 @@ paths:
               $ref: '#/components/schemas/Login'
         required: true
       security:
-      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -53,7 +52,6 @@ paths:
               $ref: '#/components/schemas/Login'
         required: true
       security:
-      - cookieAuth: []
       - {}
       responses:
         '200':
@@ -788,11 +786,6 @@ paths:
         schema:
           type: integer
       - in: query
-        name: startDate
-        schema:
-          type: string
-          format: date
-      - in: query
         name: startDateTime_after
         schema:
           type: string
@@ -901,11 +894,6 @@ paths:
         name: serviceCenter
         schema:
           type: integer
-      - in: query
-        name: startDate
-        schema:
-          type: string
-          format: date
       - in: query
         name: startDateTime_after
         schema:
@@ -1317,24 +1305,18 @@ components:
         id:
           type: integer
           readOnly: true
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
         confirmed:
           type: boolean
         description:
           type: string
           nullable: true
           maxLength: 1024
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        startTime:
-          type: string
-          format: time
-        endTime:
-          type: string
-          format: time
         travelHours:
           type: string
           format: decimal
@@ -1390,24 +1372,18 @@ components:
         id:
           type: integer
           readOnly: true
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
         confirmed:
           type: boolean
         description:
           type: string
           nullable: true
           maxLength: 1024
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        startTime:
-          type: string
-          format: time
-        endTime:
-          type: string
-          format: time
         travelHours:
           type: string
           format: decimal
@@ -1428,8 +1404,10 @@ components:
           items:
             type: integer
       required:
+      - endDateTime
       - id
       - serviceCenter
+      - startDateTime
       - technicians
       - travelHours
     ServiceCenter:

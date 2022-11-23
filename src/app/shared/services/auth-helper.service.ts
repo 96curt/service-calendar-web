@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { environment } from 'environments/environment';
-import { AuthService, Login} from 'openapi';
+import { AuthService, Configuration, Login} from 'openapi';
 import { Observable, throwError,map } from 'rxjs';
 import {TokenStorageService} from './token-storage.service'
 import { User } from 'openapi';
+import { CookieService } from 'ngx-cookie-service';
 
 const defaultPath = '/';
 //const defaultUser = {
@@ -27,7 +28,7 @@ export class AuthHelperService {
   constructor(
     private authService: AuthService,
     private storageService: TokenStorageService,
-    //private cookieService: CookieService
+    private cookieService: CookieService,
     private router: Router
   ) { }
 
@@ -37,8 +38,10 @@ export class AuthHelperService {
       username: username,
       password: password
     } as Login;
-    
-    return this.authService.authLoginCreate(auth).pipe(
+    //let authConfig = new Configuration(this.authService.configuration)
+    //authConfig.withCredentials=false
+    //this.authService.configuration = authConfig
+    return this.authService.authLoginCreate(auth,).pipe(
       map(
         response => {
           this.storageService.saveUser(username);

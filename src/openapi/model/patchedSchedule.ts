@@ -13,12 +13,10 @@
 
 export interface PatchedSchedule { 
     readonly id?: number;
+    startDateTime?: string;
+    endDateTime?: string;
     confirmed?: boolean;
     description?: string | null;
-    startDate?: string;
-    endDate?: string;
-    startTime?: string;
-    endTime?: string;
     travelHours?: string;
     addendum?: number | null;
     serviceCenter?: number;
