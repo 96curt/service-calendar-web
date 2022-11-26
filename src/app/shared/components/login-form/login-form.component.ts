@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HomeComponent } from 'app/pages/home/home.component';
+import { AuthHelperService } from 'app/shared/services';
 import { DxFormModule } from 'devextreme-angular/ui/form';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
-import { AuthService } from '../../services';
+
 
 
 @Component({
@@ -17,24 +18,25 @@ export class LoginFormComponent {
   loading = false;
   formData: any = {};
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authHelperService: AuthHelperService,
+    private router: Router) { }
 
   onSubmit(e: Event) {
     e.preventDefault();
     const { username, password } = this.formData;
     this.loading = true;
-    this.authService.login(username, password)
+    this.authHelperService.login(username, password)
     .subscribe({
-        error: (error) => {
-          notify(error.message,'error',2000)
-          this.loading = false;
-        },
-        complete: () => {
-          this.loading = false;
-          console.log('token create complete');
-          this.router.navigate(['/home']);
-        }
-      });
+      error: (error) => {
+        notify(error.message,'error', 2000)
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+        this.router.navigate(['/home']);
+      }
+    });
   }
 }
 @NgModule({

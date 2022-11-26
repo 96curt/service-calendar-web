@@ -1,19 +1,32 @@
 import { Component, HostBinding } from '@angular/core';
-import { AuthService, ScreenService, AppInfoService } from './shared/services';
+import { Router } from '@angular/router';
+import { ScreenService, AppInfoService, AuthHelperService } from './shared/services';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent  {
   @HostBinding('class') get getClass() {
     return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
   }
 
-  constructor(private authService: AuthService, private screen: ScreenService, public appInfo: AppInfoService) { }
+  constructor(
+    private screen: ScreenService,
+    public appInfo: AppInfoService,
+    private authHelperService: AuthHelperService
+  ) { }
 
-  isAuthenticated() {
-    return this.authService.loggedIn;
+  ngOnInit(): void {
   }
+
+  ngOnDestroy(): void {
+  }
+
+  isAuthenticated(): boolean{
+    return this.authHelperService.isLoggedIn;
+  }
+
 }

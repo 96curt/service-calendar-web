@@ -17,5 +17,10 @@ export const navigation = [
         path: '/tasks'
       }
     ]
+  },
+  {
+    text: 'Schedular',
+    path: 'schedular',
+    icon: 'event'
   }
 ];

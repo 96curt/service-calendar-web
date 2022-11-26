@@ -1,14 +1,14 @@
 import { Component, NgModule, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthService } from '../../services';
 import { UserPanelModule } from '../user-panel/user-panel.component';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
-import { UserService, User } from 'openapi';
-import {take, interval} from 'rxjs';
+import { User } from 'openapi';
+import { StorageService } from 'app/shared/services/storage.service';
+import { AuthHelperService } from 'app/shared/services';
 @Component({
   selector: 'app-header',
   templateUrl: 'header.component.html',
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title!: string;
 
-  user: User | null = { username: '', id:0,profile:''};
+  user: User | null = null
 
   userMenuItems = [{
     text: 'Profile',
@@ -38,29 +38,18 @@ export class HeaderComponent implements OnInit {
     text: 'Logout',
     icon: 'runner',
     onClick: () => {
-      this.authService.logOut();
+      this.authService.logout();
     }
   }];
 
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
+    private authService: AuthHelperService,
+    private storageService: StorageService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
-    let username = this.authService.getUser();
-    let token = this.authService.getAccessToken();
-    if (username != '' && !!token){
-      this.userService.configuration.credentials = {
-        apikey:token
-      };
-      this.userService.userRetrieve(username).subscribe({
-        next: (response) => {
-          this.user = response;
-        }
-      })
-    }
+    this.user = this.storageService.getUser();
   }
 
   toggleMenu = () => {
