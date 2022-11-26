@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule } from './layouts';
 import { FooterModule, LoginFormModule } from './shared/components';
-import { ScreenService, AppInfoService, AuthHelperService, AuthHelperInterceptor } from './shared/services';
+import { ScreenService, AppInfoService, AuthHelperService, AuthHelperInterceptor, StorageService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiModule, ConfigurationParameters, Configuration} from 'openapi/index';
@@ -14,7 +14,6 @@ import {  } from './shared/services/auth-helper.interceptor';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
-    basePath:environment.apiBaseUrl,
     withCredentials:true
   }
   return new Configuration(params);
@@ -42,6 +41,7 @@ export function apiConfigFactory (): Configuration {
     AuthHelperService,
     ScreenService,
     AppInfoService,
+    StorageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHelperInterceptor,

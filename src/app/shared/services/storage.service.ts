@@ -21,7 +21,7 @@ export class StorageService {
 
     public getUser(): User | null {
         let json = localStorage.getItem(USER_KEY);
-        if (json)
+        if (json != null)
             return JSON.parse(json);
         return null;
     }

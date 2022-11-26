@@ -2,14 +2,14 @@
 
 <div class="content-block dx-card responsive-paddings">
   <div class="form-avatar">
-    <img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/{{employee.Picture}}"/>
+    {{user.username}}
   </div>
-  <span>{{employee.Notes}}</span>
+  
 </div>
 
 <div class="content-block dx-card responsive-paddings">
   <dx-form id="form"
-    [formData]="employee"
+    [formData]="user"
     labelLocation="top"
     [colCountByScreen]="colCountByScreen"
   >

@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const isLoggedIn = this.authHelperService.loggedIn;
+    const isLoggedIn = this.authHelperService.isLoggedIn;
     const isAuthForm = [
       'login-form'
     ].includes(route.routeConfig?.path || defaultPath);

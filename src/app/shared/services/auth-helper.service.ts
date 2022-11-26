@@ -5,18 +5,11 @@ import { AuthService, Login, User} from 'openapi';
 import { map } from 'rxjs';
 import {StorageService} from './'
 
-const defaultPath = '/';
-
 @Injectable()
 export class AuthHelperService {
   
-  get loggedIn(): boolean {
+  get isLoggedIn(): boolean {
     return !!this.storageService.getUser();
-  }
-
-  private _lastAuthenticatedPath: string = defaultPath;
-  set lastAuthenticatedPath(value: string) {
-    this._lastAuthenticatedPath = value;
   }
 
   constructor(
