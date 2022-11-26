@@ -4,13 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule } from './layouts';
 import { FooterModule, LoginFormModule } from './shared/components';
-import { ScreenService, AppInfoService, AuthHelperService } from './shared/services';
+import { ScreenService, AppInfoService, AuthHelperService, AuthHelperInterceptor } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiModule, ConfigurationParameters, Configuration} from 'openapi/index';
 import { environment } from 'environments/environment';
-import { HttpClientModule } from '@angular/common/http';
-import { StorageService } from './shared/services/storage.service';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {  } from './shared/services/auth-helper.interceptor';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -34,13 +34,20 @@ export function apiConfigFactory (): Configuration {
     UnauthenticatedContentModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpClientXsrfModule,
     ApiModule.forRoot(apiConfigFactory)
+
   ],
   providers: [
+    AuthHelperService,
     ScreenService,
     AppInfoService,
-    AuthHelperService,
-    StorageService
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHelperInterceptor,
+      multi: true
+    }
+    
   ],
   bootstrap: [AppComponent]
 })

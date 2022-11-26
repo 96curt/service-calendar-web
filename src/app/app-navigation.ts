@@ -19,8 +19,8 @@ export const navigation = [
     ]
   },
   {
-    text: 'Schedular',
-    path: 'schedular',
+    text: 'Schedule',
+    path: '/pages/schedule',
     icon: 'event'
   }
 ];

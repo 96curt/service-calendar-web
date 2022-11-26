@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthHelperService } from './auth-helper.service';
-import { StorageService } from './storage.service';
+import { AuthHelperService } from './';
 
 const defaultPath = '/'
 
@@ -20,8 +19,7 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return true;
-    const isLoggedIn = this.authHelperService.isLoggedIn;
+    const isLoggedIn = this.authHelperService.loggedIn;
     const isAuthForm = [
       'login-form'
     ].includes(route.routeConfig?.path || defaultPath);

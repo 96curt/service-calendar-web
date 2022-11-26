@@ -1,6 +1,5 @@
 import { Component, HostBinding } from '@angular/core';
-import { Router } from '@angular/router';
-import { ScreenService, AppInfoService, AuthHelperService } from './shared/services';
+import { AuthHelperService, ScreenService, AppInfoService } from './shared/services';
 
 @Component({
   selector: 'app-root',
@@ -14,16 +13,10 @@ export class AppComponent  {
   }
 
   constructor(
+    private authHelperService: AuthHelperService,
     private screen: ScreenService,
-    public appInfo: AppInfoService,
-    private authHelperService: AuthHelperService
-  ) { }
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-  }
+    public appInfo: AppInfoService
+    ) { }
 
   isAuthenticated(): boolean{
     return this.authHelperService.isLoggedIn;

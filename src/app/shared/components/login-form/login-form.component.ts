@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { HomeComponent } from 'app/pages/home/home.component';
 import { AuthHelperService } from 'app/shared/services';
 import { DxFormModule } from 'devextreme-angular/ui/form';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
@@ -28,15 +27,16 @@ export class LoginFormComponent {
     this.loading = true;
     this.authHelperService.login(username, password)
     .subscribe({
-      error: (error) => {
-        notify(error.message,'error', 2000)
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-        this.router.navigate(['/home']);
-      }
-    });
+        error: (error) => {
+          console.log(username + ': ' + error.error.non_field_errors[0]);
+          notify(error.error.non_field_errors[0],'error', 2000);
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+          this.router.navigate(['/home']);
+        }
+      });
   }
 }
 @NgModule({

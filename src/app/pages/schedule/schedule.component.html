@@ -1,0 +1,60 @@
+<h2 class="content-block">Technician Schedule</h2>
+<div class="content-block">
+    <div class="dx-card responsive-paddings">
+        <!-- Configuration Options -->
+        <dx-scheduler
+            [dataSource]="scheduleDataSource"
+            textExpr="description"
+            timeZone="America/Los_Angeles"
+            startDateExpr="startDateTime"
+            endDateExpr="endDateTime"
+            currentView="week"
+            [groups]="['technicians']"
+            resourceCellTemplate="resourceCellTemplate"
+            [startDayHour]="6"
+            [endDayHour]="18"
+            >
+
+            <!-- Views -->
+            <dxi-view
+                type="timelineDay"
+                groupOrientation="vertical"
+            ></dxi-view>
+            <dxi-view
+                type="timelineWorkWeek"
+                groupOrientation="vertical"
+            ></dxi-view>
+            <dxi-view
+                type="day">
+            </dxi-view>
+            <dxi-view
+                type="workWeek">
+            </dxi-view>
+            <dxi-view
+                type="month">
+            </dxi-view>
+            
+            <!-- Resourses -->
+            <dxi-resource
+                fieldExpr="technicians"    
+                label="Technicians"          
+                [dataSource]="techDataSource"
+                [allowMultiple]="true"
+            ></dxi-resource>
+            
+
+            <!-- Custom Templates -->
+            <div *dxTemplate="let employee of 'resourceCellTemplate'">
+                <div class="name">
+                    {{ employee.data.firstName }} {{ employee.data.lastName }}
+                </div>
+                <div class="info">
+                    Service Center: {{ employee.data.primaryCenter }}
+                    <br />
+                    Qualifier: {{employee.data.qualifier}} 
+                </div>
+            </div> 
+
+        </dx-scheduler>
+    </div>
+</div>

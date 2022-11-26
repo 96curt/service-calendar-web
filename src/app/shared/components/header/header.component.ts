@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title!: string;
 
-  user: User | null = null
+  user: User | null = null;
 
   userMenuItems = [{
     text: 'Profile',
@@ -38,12 +38,12 @@ export class HeaderComponent implements OnInit {
     text: 'Logout',
     icon: 'runner',
     onClick: () => {
-      this.authService.logout();
+      this.authHelperService.logout();
     }
   }];
 
   constructor(
-    private authService: AuthHelperService,
+    private authHelperService: AuthHelperService,
     private storageService: StorageService,
     private router: Router
   ) {}

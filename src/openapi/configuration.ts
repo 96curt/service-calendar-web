@@ -87,12 +87,14 @@ export class Configuration {
             this.credentials = {};
         }
 
-        // init default jwtAuth credential
-        if (!this.credentials['jwtAuth']) {
-            this.credentials['jwtAuth'] = () => {
-                return typeof this.accessToken === 'function'
-                    ? this.accessToken()
-                    : this.accessToken;
+        // init default cookieAuth credential
+        if (!this.credentials['cookieAuth']) {
+            this.credentials['cookieAuth'] = () => {
+                if (this.apiKeys === null || this.apiKeys === undefined) {
+                    return undefined;
+                } else {
+                    return this.apiKeys['cookieAuth'] || this.apiKeys['sessionid'];
+                }
             };
         }
     }
