@@ -482,6 +482,26 @@ paths:
   /api/service/orders:
     get:
       operationId: service_orders_list
+      parameters:
+      - in: query
+        name: number
+        schema:
+          type: integer
+      - in: query
+        name: region
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '10'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
       tags:
       - service
       security:
@@ -506,6 +526,25 @@ paths:
           enum:
           - .json
         required: true
+      - in: query
+        name: number
+        schema:
+          type: integer
+      - in: query
+        name: region
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '10'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
       tags:
       - service
       security:

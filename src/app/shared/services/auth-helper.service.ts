@@ -3,15 +3,11 @@ import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { environment } from 'environments/environment';
 import { AuthService, Configuration, Login} from 'openapi';
 import { Observable, throwError,map } from 'rxjs';
-import {TokenStorageService} from './token-storage.service'
+import {StorageService} from './storage.service'
 import { User } from 'openapi';
 import { CookieService } from 'ngx-cookie-service';
 
 const defaultPath = '/';
-//const defaultUser = {
-//   username: 'sandra@example.com',
-//   avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
-//};
 
 @Injectable()
 export class AuthHelperService {
@@ -27,8 +23,7 @@ export class AuthHelperService {
 
   constructor(
     private authService: AuthService,
-    private storageService: TokenStorageService,
-    private cookieService: CookieService,
+    private storageService: StorageService,
     private router: Router
   ) { }
 
@@ -38,9 +33,6 @@ export class AuthHelperService {
       username: username,
       password: password
     } as Login;
-    //let authConfig = new Configuration(this.authService.configuration)
-    //authConfig.withCredentials=false
-    //this.authService.configuration = authConfig
     return this.authService.authLoginCreate(auth,).pipe(
       map(
         response => {
@@ -61,8 +53,7 @@ export class AuthHelperService {
 
   async logOut() {
     this.authService.authLogoutCreate().subscribe();
-    this.storageService.signOut();
-
+    this.storageService.clearAll();
     this.router.navigate(['/login-form']);
   }
 }

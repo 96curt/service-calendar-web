@@ -1021,15 +1021,27 @@ export class ServiceService {
 
     /**
      * @param format 
+     * @param number 
+     * @param region 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrdersFormattedList(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
-    public serviceOrdersFormattedList(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
-    public serviceOrdersFormattedList(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
-    public serviceOrdersFormattedList(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrdersFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
+    public serviceOrdersFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
+    public serviceOrdersFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
+    public serviceOrdersFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceOrdersFormattedList.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (number !== undefined && number !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>number, 'number');
+        }
+        if (region !== undefined && region !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>region, 'region');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1073,6 +1085,7 @@ export class ServiceService {
         return this.httpClient.request<Array<OrderSequenceList>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -1083,13 +1096,25 @@ export class ServiceService {
     }
 
     /**
+     * @param number 
+     * @param region 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrdersList(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
-    public serviceOrdersList(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
-    public serviceOrdersList(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
-    public serviceOrdersList(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrdersList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
+    public serviceOrdersList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
+    public serviceOrdersList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
+    public serviceOrdersList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (number !== undefined && number !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>number, 'number');
+        }
+        if (region !== undefined && region !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>region, 'region');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1132,6 +1157,7 @@ export class ServiceService {
         return this.httpClient.request<Array<OrderSequenceList>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

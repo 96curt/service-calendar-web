@@ -11,6 +11,7 @@
             currentView="week"
             [groups]="['technicians']"
             resourceCellTemplate="resourceCellTemplate"
+            (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
             [startDayHour]="6"
             [endDayHour]="18"
             >
@@ -41,7 +42,12 @@
                 [dataSource]="techDataSource"
                 [allowMultiple]="true"
             ></dxi-resource>
-            
+            <dxi-resource
+                fieldExpr="serviceCenter"    
+                label="Service Center"          
+                [dataSource]="centerDataSource"
+                [allowMultiple]="false"
+            ></dxi-resource>
 
             <!-- Custom Templates -->
             <div *dxTemplate="let employee of 'resourceCellTemplate'">
