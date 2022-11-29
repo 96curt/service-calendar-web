@@ -18,6 +18,7 @@ model/login.ts
 model/managerEnum.ts
 model/models.ts
 model/orderAddendumDetail.ts
+model/orderAddendumList.ts
 model/orderItem.ts
 model/orderSequenceDetail.ts
 model/orderSequenceList.ts

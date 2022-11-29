@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Service Calendar API
-  version: 0.6.0
+  version: 0.7.0
   description: Mockup Service Calendar API
 paths:
   /api/auth/login:
@@ -385,6 +385,123 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderAddendumDetail'
           description: ''
+  /api/service/order/addendums:
+    get:
+      operationId: service_order_addendums_list
+      parameters:
+      - in: query
+        name: number
+        schema:
+          type: integer
+      - in: query
+        name: sequence__number
+        schema:
+          type: integer
+      - in: query
+        name: sequence__region
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '10'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+      - in: query
+        name: statusDate
+        schema:
+          type: string
+          format: date
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderAddendumList'
+          description: ''
+  /api/service/order/addendums{format}:
+    get:
+      operationId: service_order_addendums_formatted_list
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: query
+        name: number
+        schema:
+          type: integer
+      - in: query
+        name: sequence__number
+        schema:
+          type: integer
+      - in: query
+        name: sequence__region
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '10'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+      - in: query
+        name: statusDate
+        schema:
+          type: string
+          format: date
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderAddendumList'
+          description: ''
   /api/service/order/item/{id}:
     get:
       operationId: service_order_item_retrieve
@@ -479,9 +596,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderSequenceDetail'
           description: ''
-  /api/service/orders:
+  /api/service/orders/sequences:
     get:
-      operationId: service_orders_list
+      operationId: service_orders_sequences_list
       parameters:
       - in: query
         name: number
@@ -515,9 +632,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/OrderSequenceList'
           description: ''
-  /api/service/orders{format}:
+  /api/service/orders/sequences{format}:
     get:
-      operationId: service_orders_formatted_list
+      operationId: service_orders_sequences_formatted_list
       parameters:
       - in: path
         name: format
@@ -1258,6 +1375,52 @@ components:
       - statusDate
       - travelHours
       - trips
+    OrderAddendumList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: integer
+          readOnly: true
+        sequence:
+          type: integer
+        __str__:
+          type: string
+          readOnly: true
+          title: '  str  '
+        description:
+          type: string
+          maxLength: 128
+        trips:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,2}(?:\.\d{0,0})?$
+        travelHours:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        laborHours:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        statusDate:
+          type: string
+          format: date
+          readOnly: true
+      required:
+      - __str__
+      - description
+      - id
+      - laborHours
+      - number
+      - sequence
+      - statusDate
+      - travelHours
+      - trips
     OrderItem:
       type: object
       properties:
@@ -1360,6 +1523,12 @@ components:
           type: string
           format: decimal
           pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        allDay:
+          type: boolean
+        recurrenceRule:
+          type: string
+          nullable: true
+          maxLength: 256
         addendum:
           type: integer
           nullable: true
@@ -1427,6 +1596,12 @@ components:
           type: string
           format: decimal
           pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        allDay:
+          type: boolean
+        recurrenceRule:
+          type: string
+          nullable: true
+          maxLength: 256
         addendum:
           type: integer
           nullable: true

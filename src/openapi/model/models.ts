@@ -5,6 +5,7 @@ export * from './jobSite';
 export * from './login';
 export * from './managerEnum';
 export * from './orderAddendumDetail';
+export * from './orderAddendumList';
 export * from './orderItem';
 export * from './orderSequenceDetail';
 export * from './orderSequenceList';

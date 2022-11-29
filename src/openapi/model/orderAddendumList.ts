@@ -9,13 +9,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrderAddendumDetail } from './orderAddendumDetail';
+import { StatusEnum } from './statusEnum';
 
 
-export interface OrderSequenceDetail { 
+export interface OrderAddendumList { 
     readonly id: number;
-    readonly region: string;
     readonly number: number;
-    addendum_set: Array<OrderAddendumDetail>;
+    sequence: number;
+    readonly __str__: string;
+    description: string;
+    trips: string;
+    travelHours: string;
+    laborHours: string;
+    status?: StatusEnum;
+    readonly statusDate: string;
 }
 

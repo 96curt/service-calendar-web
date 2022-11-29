@@ -4,7 +4,6 @@
         <!-- Configuration Options -->
         <dx-scheduler
             [dataSource]="scheduleDataSource"
-            textExpr="description"
             timeZone="America/Los_Angeles"
             startDateExpr="startDateTime"
             endDateExpr="endDateTime"
@@ -41,11 +40,18 @@
                 label="Technicians"          
                 [dataSource]="techDataSource"
                 [allowMultiple]="true"
+                displayExpr="fullName"
             ></dxi-resource>
             <dxi-resource
                 fieldExpr="serviceCenter"    
                 label="Service Center"          
                 [dataSource]="centerDataSource"
+                [allowMultiple]="false"
+            ></dxi-resource>
+            <dxi-resource
+                fieldExpr="addendum"    
+                label="Service Order"          
+                [dataSource]="addendumDataSource"
                 [allowMultiple]="false"
             ></dxi-resource>
 
