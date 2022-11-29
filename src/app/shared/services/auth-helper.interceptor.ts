@@ -25,7 +25,7 @@ export class AuthHelperInterceptor implements HttpInterceptor {
     let newReq = request.clone();
 
     if (request.url.includes('http')
-      && request.method === 'POST'
+      && (request.method === 'POST' || request.method === 'PUT' || request.method === 'PATCH' || request.method === 'DELETE')
       && !request.url.includes('auth')
       && token !== null
       && !request.headers.get(headerName)

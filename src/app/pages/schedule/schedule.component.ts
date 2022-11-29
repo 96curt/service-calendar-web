@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DxSchedulerComponent } from 'devextreme-angular';
+import { LoadOptions } from 'devextreme/data';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import { Schedule, ServiceService } from 'openapi';
@@ -11,6 +13,7 @@ import { Value } from 'sass-embedded';
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
+  //@ViewChild(DxSchedulerComponent, {stat})
   scheduleDataSource: DataSource | CustomStore;
   techDataSource: DataSource | CustomStore;
   centerDataSource: DataSource | CustomStore;
@@ -20,7 +23,8 @@ export class ScheduleComponent implements OnInit {
   constructor(private serviceService: ServiceService) {
     this.scheduleDataSource =  new CustomStore({
       key: 'id',
-      load: (loadOptions) => {
+      load: (loadOptions:LoadOptions<Schedule>) => {
+        console.log(loadOptions);
         return lastValueFrom(this.serviceService.serviceSchedulesList())
         .then(response => {
           return {
@@ -43,74 +47,71 @@ export class ScheduleComponent implements OnInit {
       }
     });
 
-    this.techDataSource = new DataSource({
-      store: new CustomStore({
-        key: 'id',
-        load: (loadOptions) => {
-          return lastValueFrom(this.serviceService.serviceTechsList())
-          .then(response => {
-            return {
-              data:response,
-            }
-          })
-          .catch(() => { throw 'Error loading technicians' });
-        }
-      }),
-      map: (dataItem) => {
-        return {
-          fullName: dataItem.firstName + " " + dataItem.lastName
-        }
+    this.techDataSource = new CustomStore({
+      key: 'id',
+      load: (loadOptions) => {
+        return lastValueFrom(this.serviceService.serviceTechsList())
+        .then(response => {
+          return {
+            data:response,
+          }
+        })
+        .catch(() => { throw 'Error loading technicians' });
       }
     });
 
-    this.centerDataSource = new DataSource({
-      store: new CustomStore({
-        key: 'id',
-        load: (loadOptions) => {
-          return lastValueFrom(this.serviceService.serviceCentersList())
-          .then(response => {
-            return {
-              data:response
-            }
-          })
-          .catch(() => { throw 'Error loading Service Centers' });
-        }
-      })
+    
+    //   map: (dataItem) => {
+    //     return {
+    //       fullName: dataItem.firstName + " " + dataItem.lastName
+    //     }
+    //   }
+    // });
+
+    this.centerDataSource = new CustomStore({
+      key: 'id',
+      load: (loadOptions) => {
+        return lastValueFrom(this.serviceService.serviceCentersList())
+        .then(response => {
+          return {
+            data:response
+          }
+        })
+        .catch(() => { throw 'Error loading Service Centers' });
+      }
     });
 
-    this.addendumDataSource = new DataSource({
-      store: new CustomStore({
-        key: 'id',
-        load: (loadOptions) => {
-          return lastValueFrom(this.serviceService.serviceOrderAddendumsList())
-          .then(response => {
-            return {
-              data:response
-            }
-          })
-          .catch(() => { throw 'Error loading Service Addendums' });
-        }
-      })
+    this.addendumDataSource = new CustomStore({
+      key: 'id',
+      load: (loadOptions) => {
+        return lastValueFrom(this.serviceService.serviceOrderAddendumsList())
+        .then(response => {
+          return {
+            data:response
+          }
+        })
+        .catch(() => { throw 'Error loading Service Addendums' });
+      }
     });
 
-    this.sequenceDataSource = new DataSource({
-      store: new CustomStore({
-        key: 'id',
-        load: (loadOptions) => {
-          return lastValueFrom(this.serviceService.serviceOrdersSequencesList())
-          .then(response => {
-            return {
-              data:response
-            }
-          })
-          .catch(() => { throw 'Error loading Service Sequences' });
-        }
-      })
-    });
+    this.sequenceDataSource = new CustomStore({
+      key: 'id',
+      load: (loadOptions) => {
+        return lastValueFrom(this.serviceService.serviceOrdersSequencesList())
+        .then(response => {
+          return {
+            data:response
+          }
+        })
+        .catch(() => { throw 'Error loading Service Sequences' });
+      }
+    })
   }
 
   ngOnInit(): void {
   }
+
+  
 
   onAppointmentFormOpening(e:any) {
     e.popup.option('showTitle', true);
