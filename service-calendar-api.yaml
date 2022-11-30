@@ -900,6 +900,10 @@ paths:
       operationId: service_schedules_list
       parameters:
       - in: query
+        name: addendum__number
+        schema:
+          type: integer
+      - in: query
         name: addendum__sequence__jobSite__city
         schema:
           type: string
@@ -907,6 +911,10 @@ paths:
         name: addendum__sequence__jobSite__zipCode
         schema:
           type: string
+      - in: query
+        name: addendum__sequence__number
+        schema:
+          type: integer
       - in: query
         name: addendum__sequence__region
         schema:
@@ -1002,6 +1010,10 @@ paths:
       operationId: service_schedules_formatted_list
       parameters:
       - in: query
+        name: addendum__number
+        schema:
+          type: integer
+      - in: query
         name: addendum__sequence__jobSite__city
         schema:
           type: string
@@ -1009,6 +1021,10 @@ paths:
         name: addendum__sequence__jobSite__zipCode
         schema:
           type: string
+      - in: query
+        name: addendum__sequence__number
+        schema:
+          type: integer
       - in: query
         name: addendum__sequence__region
         schema:
@@ -1117,6 +1133,23 @@ paths:
   /api/service/techs/:
     get:
       operationId: service_techs_list
+      parameters:
+      - in: query
+        name: primaryCenter
+        schema:
+          type: integer
+      - in: query
+        name: qualifier
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+      - in: query
+        name: workWeek
+        schema:
+          type: integer
       tags:
       - service
       security:
@@ -1141,6 +1174,22 @@ paths:
           enum:
           - .json
         required: true
+      - in: query
+        name: primaryCenter
+        schema:
+          type: integer
+      - in: query
+        name: qualifier
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+      - in: query
+        name: workWeek
+        schema:
+          type: integer
       tags:
       - service
       security:
@@ -1386,10 +1435,9 @@ components:
           readOnly: true
         sequence:
           type: integer
-        __str__:
+        name:
           type: string
           readOnly: true
-          title: '  str  '
         description:
           type: string
           maxLength: 128
@@ -1412,10 +1460,10 @@ components:
           format: date
           readOnly: true
       required:
-      - __str__
       - description
       - id
       - laborHours
+      - name
       - number
       - sequence
       - statusDate
@@ -1808,9 +1856,9 @@ components:
     Technician:
       type: object
       properties:
-        id:
+        primaryCenter:
           type: integer
-          readOnly: true
+          nullable: true
         qualifier:
           type: string
           maxLength: 1
@@ -1823,17 +1871,17 @@ components:
         lastName:
           type: string
           maxLength: 128
+        fullName:
+          type: string
+          readOnly: true
+        workWeek:
+          $ref: '#/components/schemas/WorkWeek'
         active:
           type: boolean
-        primaryCenter:
-          type: integer
-          nullable: true
-        workWeek:
-          type: integer
-          nullable: true
       required:
       - firstName
-      - id
+      - fullName
+      - workWeek
     User:
       type: object
       properties:
@@ -1875,6 +1923,23 @@ components:
       - '6'
       - '7'
       type: string
+    WorkWeek:
+      type: object
+      properties:
+        monday:
+          type: boolean
+        tuesday:
+          type: boolean
+        wedesday:
+          type: boolean
+        thursday:
+          type: boolean
+        friday:
+          type: boolean
+        saturday:
+          type: boolean
+        sunday:
+          type: boolean
   securitySchemes:
     cookieAuth:
       type: apiKey

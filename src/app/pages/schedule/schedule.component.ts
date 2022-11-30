@@ -13,7 +13,6 @@ import { Value } from 'sass-embedded';
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  //@ViewChild(DxSchedulerComponent, {stat})
   scheduleDataSource: DataSource | CustomStore;
   techDataSource: DataSource | CustomStore;
   centerDataSource: DataSource | CustomStore;
@@ -21,10 +20,10 @@ export class ScheduleComponent implements OnInit {
   addendumDataSource: DataSource | CustomStore;
 
   constructor(private serviceService: ServiceService) {
-    this.scheduleDataSource =  new CustomStore({
+    this.scheduleDataSource = new CustomStore({
       key: 'id',
       load: (loadOptions:LoadOptions<Schedule>) => {
-        console.log(loadOptions);
+        
         return lastValueFrom(this.serviceService.serviceSchedulesList())
         .then(response => {
           return {
@@ -59,14 +58,6 @@ export class ScheduleComponent implements OnInit {
         .catch(() => { throw 'Error loading technicians' });
       }
     });
-
-    
-    //   map: (dataItem) => {
-    //     return {
-    //       fullName: dataItem.firstName + " " + dataItem.lastName
-    //     }
-    //   }
-    // });
 
     this.centerDataSource = new CustomStore({
       key: 'id',

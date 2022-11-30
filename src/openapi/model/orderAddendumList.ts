@@ -16,7 +16,7 @@ export interface OrderAddendumList {
     readonly id: number;
     readonly number: number;
     sequence: number;
-    readonly __str__: string;
+    readonly name: string;
     description: string;
     trips: string;
     travelHours: string;

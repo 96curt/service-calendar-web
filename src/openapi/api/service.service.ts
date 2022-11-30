@@ -2079,8 +2079,10 @@ export class ServiceService {
 
     /**
      * @param format 
+     * @param addendumNumber 
      * @param addendumSequenceJobSiteCity 
      * @param addendumSequenceJobSiteZipCode 
+     * @param addendumSequenceNumber 
      * @param addendumSequenceRegion 
      * @param addendumSequenceServiceCenterManager 
      * @param serviceCenter 
@@ -2090,15 +2092,19 @@ export class ServiceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceSchedulesFormattedList(format: '.json', addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
-    public serviceSchedulesFormattedList(format: '.json', addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
-    public serviceSchedulesFormattedList(format: '.json', addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
-    public serviceSchedulesFormattedList(format: '.json', addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
+    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
+    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
+    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceSchedulesFormattedList.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (addendumNumber !== undefined && addendumNumber !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>addendumNumber, 'addendum__number');
+        }
         if (addendumSequenceJobSiteCity !== undefined && addendumSequenceJobSiteCity !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>addendumSequenceJobSiteCity, 'addendum__sequence__jobSite__city');
@@ -2106,6 +2112,10 @@ export class ServiceService {
         if (addendumSequenceJobSiteZipCode !== undefined && addendumSequenceJobSiteZipCode !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>addendumSequenceJobSiteZipCode, 'addendum__sequence__jobSite__zipCode');
+        }
+        if (addendumSequenceNumber !== undefined && addendumSequenceNumber !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>addendumSequenceNumber, 'addendum__sequence__number');
         }
         if (addendumSequenceRegion !== undefined && addendumSequenceRegion !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -2186,8 +2196,10 @@ export class ServiceService {
     }
 
     /**
+     * @param addendumNumber 
      * @param addendumSequenceJobSiteCity 
      * @param addendumSequenceJobSiteZipCode 
+     * @param addendumSequenceNumber 
      * @param addendumSequenceRegion 
      * @param addendumSequenceServiceCenterManager 
      * @param serviceCenter 
@@ -2197,12 +2209,16 @@ export class ServiceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceSchedulesList(addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
-    public serviceSchedulesList(addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
-    public serviceSchedulesList(addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
-    public serviceSchedulesList(addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
+    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
+    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
+    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (addendumNumber !== undefined && addendumNumber !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>addendumNumber, 'addendum__number');
+        }
         if (addendumSequenceJobSiteCity !== undefined && addendumSequenceJobSiteCity !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>addendumSequenceJobSiteCity, 'addendum__sequence__jobSite__city');
@@ -2210,6 +2226,10 @@ export class ServiceService {
         if (addendumSequenceJobSiteZipCode !== undefined && addendumSequenceJobSiteZipCode !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>addendumSequenceJobSiteZipCode, 'addendum__sequence__jobSite__zipCode');
+        }
+        if (addendumSequenceNumber !== undefined && addendumSequenceNumber !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>addendumSequenceNumber, 'addendum__sequence__number');
         }
         if (addendumSequenceRegion !== undefined && addendumSequenceRegion !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -2291,15 +2311,37 @@ export class ServiceService {
 
     /**
      * @param format 
+     * @param primaryCenter 
+     * @param qualifier 
+     * @param type 
+     * @param workWeek 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceTechsFormattedList(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
-    public serviceTechsFormattedList(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
-    public serviceTechsFormattedList(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
-    public serviceTechsFormattedList(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
+    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
+    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
+    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceTechsFormattedList.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (primaryCenter !== undefined && primaryCenter !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>primaryCenter, 'primaryCenter');
+        }
+        if (qualifier !== undefined && qualifier !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>qualifier, 'qualifier');
+        }
+        if (type !== undefined && type !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>type, 'type');
+        }
+        if (workWeek !== undefined && workWeek !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>workWeek, 'workWeek');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2343,6 +2385,7 @@ export class ServiceService {
         return this.httpClient.request<Array<Technician>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -2353,13 +2396,35 @@ export class ServiceService {
     }
 
     /**
+     * @param primaryCenter 
+     * @param qualifier 
+     * @param type 
+     * @param workWeek 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceTechsList(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
-    public serviceTechsList(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
-    public serviceTechsList(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
-    public serviceTechsList(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
+    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
+    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
+    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (primaryCenter !== undefined && primaryCenter !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>primaryCenter, 'primaryCenter');
+        }
+        if (qualifier !== undefined && qualifier !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>qualifier, 'qualifier');
+        }
+        if (type !== undefined && type !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>type, 'type');
+        }
+        if (workWeek !== undefined && workWeek !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>workWeek, 'workWeek');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -2402,6 +2467,7 @@ export class ServiceService {
         return this.httpClient.request<Array<Technician>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

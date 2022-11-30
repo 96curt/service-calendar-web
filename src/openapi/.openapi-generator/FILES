@@ -33,5 +33,6 @@ model/statusEnum.ts
 model/technician.ts
 model/user.ts
 model/warrantyCodeEnum.ts
+model/workWeek.ts
 param.ts
 variables.ts

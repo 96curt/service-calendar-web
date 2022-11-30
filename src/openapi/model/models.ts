@@ -20,3 +20,4 @@ export * from './statusEnum';
 export * from './technician';
 export * from './user';
 export * from './warrantyCodeEnum';
+export * from './workWeek';

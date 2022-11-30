@@ -28,7 +28,7 @@
                 type="day">
             </dxi-view>
             <dxi-view
-                type="workWeek">
+                type="week">
             </dxi-view>
             <dxi-view
                 type="month">
@@ -47,12 +47,14 @@
                 label="Service Center"          
                 [dataSource]="centerDataSource"
                 [allowMultiple]="false"
+                displayExpr="name"
             ></dxi-resource>
             <dxi-resource
                 fieldExpr="addendum"    
                 label="Service Order"          
                 [dataSource]="addendumDataSource"
                 [allowMultiple]="false"
+                displayExpr="name"
             ></dxi-resource>
 
             <!-- Custom Templates -->

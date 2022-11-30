@@ -9,17 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { WorkWeek } from './workWeek';
 
 
-export interface Technician { 
-    primaryCenter?: number | null;
-    qualifier?: string;
-    type?: string;
-    firstName: string;
-    lastName?: string;
-    readonly fullName: string;
-    workWeek: WorkWeek;
-    active?: boolean;
+export interface WorkWeek { 
+    monday?: boolean;
+    tuesday?: boolean;
+    wedesday?: boolean;
+    thursday?: boolean;
+    friday?: boolean;
+    saturday?: boolean;
+    sunday?: boolean;
 }
 
