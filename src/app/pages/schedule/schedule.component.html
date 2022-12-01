@@ -5,11 +5,13 @@
         <dx-scheduler
             [dataSource]="scheduleDataSource"
             timeZone="America/Los_Angeles"
+            textExpr="description"
             startDateExpr="startDateTime"
             endDateExpr="endDateTime"
             currentView="week"
             [groups]="['technicians']"
             resourceCellTemplate="resourceCellTemplate"
+            appointmentTemplate="appointment-template"
             (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
             [startDayHour]="6"
             [endDayHour]="18"
@@ -41,7 +43,7 @@
                 [dataSource]="techDataSource"
                 [allowMultiple]="true"
                 displayExpr="fullName"
-            ></dxi-resource>
+            ></dxi-resource> 
             <dxi-resource
                 fieldExpr="serviceCenter"    
                 label="Service Center"          
@@ -58,16 +60,23 @@
             ></dxi-resource>
 
             <!-- Custom Templates -->
-            <div *dxTemplate="let employee of 'resourceCellTemplate'">
+            <div *dxTemplate="let technician of 'resourceCellTemplate'">
                 <div class="name">
-                    {{ employee.data.firstName }} {{ employee.data.lastName }}
+                    {{ technician.data.firstName }} {{ technician.data.lastName }}
                 </div>
                 <div class="info">
-                    Service Center: {{ employee.data.primaryCenter }}
+                    Service Center: {{ technician.data.primaryCenter }}
                     <br />
-                    Qualifier: {{employee.data.qualifier}} 
+                    Qualifier: {{technician.data.qualifier}} 
                 </div>
-            </div> 
+            </div>
+            
+            <div *dxTemplate="let appointment of 'appointment-template'">
+                <div class="showtime-preview">
+                  <div>{{ (appointment.targetedAppointmentData) }}</div>
+                  
+                </div>
+              </div>
 
         </dx-scheduler>
     </div>

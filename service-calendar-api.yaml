@@ -1856,6 +1856,9 @@ components:
     Technician:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         primaryCenter:
           type: integer
           nullable: true
@@ -1881,6 +1884,7 @@ components:
       required:
       - firstName
       - fullName
+      - id
       - workWeek
     User:
       type: object

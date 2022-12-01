@@ -13,6 +13,7 @@ import { WorkWeek } from './workWeek';
 
 
 export interface Technician { 
+    readonly id: number;
     primaryCenter?: number | null;
     qualifier?: string;
     type?: string;

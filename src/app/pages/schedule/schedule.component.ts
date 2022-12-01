@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { DxSchedulerComponent } from 'devextreme-angular';
+import { CollectionNestedOptionContainerImpl, DxSchedulerComponent } from 'devextreme-angular';
 import { LoadOptions } from 'devextreme/data';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
-import { Schedule, ServiceService } from 'openapi';
+import { Schedule, ServiceService, Technician } from 'openapi';
 import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
+import Form, { SimpleItem } from "devextreme/ui/form";
+import { PatternRule } from 'devextreme/ui/validation_rules';
 
 @Component({
   selector: 'app-schedule',
@@ -13,11 +15,11 @@ import { Value } from 'sass-embedded';
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  scheduleDataSource: DataSource | CustomStore;
-  techDataSource: DataSource | CustomStore;
-  centerDataSource: DataSource | CustomStore;
-  sequenceDataSource: DataSource | CustomStore;
-  addendumDataSource: DataSource | CustomStore;
+  scheduleDataSource:  CustomStore;
+  techDataSource:  CustomStore;
+  centerDataSource:  CustomStore;
+  sequenceDataSource:  CustomStore;
+  addendumDataSource:  CustomStore;
 
   constructor(private serviceService: ServiceService) {
     this.scheduleDataSource = new CustomStore({
@@ -50,7 +52,7 @@ export class ScheduleComponent implements OnInit {
       key: 'id',
       load: (loadOptions) => {
         return lastValueFrom(this.serviceService.serviceTechsList())
-        .then(response => {
+        .then((response:Technician[]) => {
           return {
             data:response,
           }
@@ -110,15 +112,32 @@ export class ScheduleComponent implements OnInit {
         e.appointmentData.text : 
         'Create a new appointment');
 
-    const form = e.form;
-    let mainGroupItems = form.itemOption('mainGroup').items; 
+    const form = e.form as Form;
+    let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
+    {
+      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
+      if (index != -1) {
+        mainGroupItems.splice(index, 1);
+      }
+    }
+
+    //editing form items for resources
+    mainGroupItems.forEach((item, index) => {
+      if(item.dataField === "technicians" || item.dataField === "serviceCenter" || item.dataField === "description"){
+        console.log(item.dataField);
+        item.isRequired = true;
+      }
+    });
+
+
     if (!mainGroupItems.find(function(i:any) { return i.dataField === "travelHours" })) {
         mainGroupItems.push({
             colSpan: 2, 
             label: { text: "Travel Hours" },
             editorType: "dxTextBox",
-            dataField: "travelHours"
-        });
+            dataField: "travelHours",
+            isRequired: true
+        } as SimpleItem);
         form.itemOption('mainGroup', 'items', mainGroupItems);
     }
 
@@ -127,21 +146,31 @@ export class ScheduleComponent implements OnInit {
           colSpan: 1, 
           label: { text: "Confirm Appointment" },
           editorType: "dxCheckBox",
-          dataField: "confirm"
+          dataField: "confirm",
       });
       form.itemOption('mainGroup', 'items', mainGroupItems);
     }
 
-    // let formItems = form.option("items"); 
-    // if (!formItems.find(function(i:any) { return i.dataField === "travelHours" })) {
-    //     formItems.push({
-    //         colSpan: 2,
-    //         label: { text: "Travel Hours" },
-    //         editorType: "dxNumberBox",
-    //         dataField: "travelHours"
-    //     });
-    //     form.option("items", formItems);
-    // }
-}
+  }
 
+  getAddendum(id:): OrderAddendum {
+    return this.addendumDataSource.byKey(id);
+  }
+  
+  getSequence(id){
+
+  }
+
+  getCustomer(schedule:Schedule){
+    
+    
+    
+    await this.techDataSource.byKey(techId).then((response) => {
+        return response.name;
+      });
+    
+    
+    
+    return names;
+  }
 }
