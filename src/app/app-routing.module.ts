@@ -5,8 +5,16 @@ import { AuthGuardService } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
-import { DxDataGridModule, DxDropDownBoxModule, DxFormModule, DxSchedulerModule, DxTemplateHost, DxTemplateModule } from 'devextreme-angular';
+import {
+  DxDataGridModule,
+  DxDropDownBoxModule,
+  DxFormModule,
+  DxSchedulerModule,
+  DxTemplateHost,
+  DxTemplateModule
+} from 'devextreme-angular';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
+import { FilterComponent } from './shared/components/filter/filter.component';
 
 const routes: Routes = [
   {
@@ -47,7 +55,8 @@ const routes: Routes = [
     DxFormModule,
     DxSchedulerModule,
     DxTemplateModule,
-    DxDropDownBoxModule
+    DxDropDownBoxModule,
+    DxFormModule
   ],
   providers: [AuthGuardService,DxTemplateHost],
   exports: [RouterModule],
@@ -55,7 +64,8 @@ const routes: Routes = [
     HomeComponent,
     ProfileComponent,
     TasksComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    FilterComponent
   ]
 })
 export class AppRoutingModule { }

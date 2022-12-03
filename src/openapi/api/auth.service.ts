@@ -26,6 +26,19 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface AuthLoginCreateRequestParams {
+    login: Login;
+}
+
+export interface AuthLoginFormattedCreateRequestParams {
+    format: '.json';
+    login: Login;
+}
+
+export interface AuthLogoutFormattedCreateRequestParams {
+    format: '.json';
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -92,14 +105,15 @@ export class AuthService {
     }
 
     /**
-     * @param login 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authLoginCreate(login: Login, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public authLoginCreate(login: Login, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public authLoginCreate(login: Login, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public authLoginCreate(login: Login, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public authLoginCreate(requestParameters: AuthLoginCreateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public authLoginCreate(requestParameters: AuthLoginCreateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public authLoginCreate(requestParameters: AuthLoginCreateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public authLoginCreate(requestParameters: AuthLoginCreateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const login = requestParameters.login;
         if (login === null || login === undefined) {
             throw new Error('Required parameter login was null or undefined when calling authLoginCreate.');
         }
@@ -160,18 +174,19 @@ export class AuthService {
     }
 
     /**
-     * @param format 
-     * @param login 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authLoginFormattedCreate(format: '.json', login: Login, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public authLoginFormattedCreate(format: '.json', login: Login, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public authLoginFormattedCreate(format: '.json', login: Login, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public authLoginFormattedCreate(format: '.json', login: Login, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public authLoginFormattedCreate(requestParameters: AuthLoginFormattedCreateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public authLoginFormattedCreate(requestParameters: AuthLoginFormattedCreateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public authLoginFormattedCreate(requestParameters: AuthLoginFormattedCreateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public authLoginFormattedCreate(requestParameters: AuthLoginFormattedCreateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling authLoginFormattedCreate.');
         }
+        const login = requestParameters.login;
         if (login === null || login === undefined) {
             throw new Error('Required parameter login was null or undefined when calling authLoginFormattedCreate.');
         }
@@ -290,14 +305,15 @@ export class AuthService {
     }
 
     /**
-     * @param format 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authLogoutFormattedCreate(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public authLogoutFormattedCreate(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public authLogoutFormattedCreate(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public authLogoutFormattedCreate(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public authLogoutFormattedCreate(requestParameters: AuthLogoutFormattedCreateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public authLogoutFormattedCreate(requestParameters: AuthLogoutFormattedCreateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public authLogoutFormattedCreate(requestParameters: AuthLogoutFormattedCreateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public authLogoutFormattedCreate(requestParameters: AuthLogoutFormattedCreateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling authLogoutFormattedCreate.');
         }

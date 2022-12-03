@@ -46,6 +46,177 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface ServiceCentersFormattedListRequestParams {
+    format: '.json';
+}
+
+export interface ServiceCommentsCreateRequestParams {
+    comment: Comment;
+}
+
+export interface ServiceCommentsFormattedCreateRequestParams {
+    format: '.json';
+    comment: Comment;
+}
+
+export interface ServiceCommentsFormattedListRequestParams {
+    format: '.json';
+}
+
+export interface ServiceJobsitesFormattedListRequestParams {
+    format: '.json';
+}
+
+export interface ServiceOrderAddendumFormattedRetrieveRequestParams {
+    format: '.json';
+    id: number;
+}
+
+export interface ServiceOrderAddendumRetrieveRequestParams {
+    id: number;
+}
+
+export interface ServiceOrderAddendumsFormattedListRequestParams {
+    format: '.json';
+    number?: number;
+    sequenceNumber?: number;
+    sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    status?: '1' | '2' | '3' | '4' | '5';
+    statusDate?: string;
+}
+
+export interface ServiceOrderAddendumsListRequestParams {
+    number?: number;
+    sequenceNumber?: number;
+    sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    status?: '1' | '2' | '3' | '4' | '5';
+    statusDate?: string;
+}
+
+export interface ServiceOrderItemFormattedRetrieveRequestParams {
+    format: '.json';
+    id: number;
+}
+
+export interface ServiceOrderItemRetrieveRequestParams {
+    id: number;
+}
+
+export interface ServiceOrderSequenceFormattedRetrieveRequestParams {
+    format: '.json';
+    id: number;
+}
+
+export interface ServiceOrderSequenceRetrieveRequestParams {
+    id: number;
+}
+
+export interface ServiceOrdersSequencesFormattedListRequestParams {
+    format: '.json';
+    number?: number;
+    region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+}
+
+export interface ServiceOrdersSequencesListRequestParams {
+    number?: number;
+    region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+}
+
+export interface ServiceScheduleDestroyRequestParams {
+    id: number;
+}
+
+export interface ServiceScheduleFormattedDestroyRequestParams {
+    format: '.json';
+    id: number;
+}
+
+export interface ServiceScheduleFormattedPartialUpdateRequestParams {
+    format: '.json';
+    id: number;
+    patchedSchedule?: PatchedSchedule;
+}
+
+export interface ServiceScheduleFormattedRetrieveRequestParams {
+    format: '.json';
+    id: number;
+}
+
+export interface ServiceScheduleFormattedUpdateRequestParams {
+    format: '.json';
+    id: number;
+    schedule: Schedule;
+}
+
+export interface ServiceSchedulePartialUpdateRequestParams {
+    id: number;
+    patchedSchedule?: PatchedSchedule;
+}
+
+export interface ServiceScheduleRetrieveRequestParams {
+    id: number;
+}
+
+export interface ServiceScheduleUpdateRequestParams {
+    id: number;
+    schedule: Schedule;
+}
+
+export interface ServiceSchedulesCreateRequestParams {
+    schedule: Schedule;
+}
+
+export interface ServiceSchedulesFormattedCreateRequestParams {
+    format: '.json';
+    schedule: Schedule;
+}
+
+export interface ServiceSchedulesFormattedListRequestParams {
+    format: '.json';
+    addendumNumber?: number;
+    addendumSequenceJobSiteCity?: string;
+    addendumSequenceJobSiteZipCode?: string;
+    addendumSequenceNumber?: number;
+    addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    endDateTimeAfter?: string;
+    endDateTimeBefore?: string;
+    serviceCenter?: number;
+    startDateTimeAfter?: string;
+    startDateTimeBefore?: string;
+    technicians?: Array<number>;
+}
+
+export interface ServiceSchedulesListRequestParams {
+    addendumNumber?: number;
+    addendumSequenceJobSiteCity?: string;
+    addendumSequenceJobSiteZipCode?: string;
+    addendumSequenceNumber?: number;
+    addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    endDateTimeAfter?: string;
+    endDateTimeBefore?: string;
+    serviceCenter?: number;
+    startDateTimeAfter?: string;
+    startDateTimeBefore?: string;
+    technicians?: Array<number>;
+}
+
+export interface ServiceTechsFormattedListRequestParams {
+    format: '.json';
+    primaryCenter?: number;
+    qualifier?: string;
+    type?: string;
+    workWeek?: number;
+}
+
+export interface ServiceTechsListRequestParams {
+    primaryCenter?: number;
+    qualifier?: string;
+    type?: string;
+    workWeek?: number;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -112,14 +283,15 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceCentersFormattedList(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<ServiceCenter>>;
-    public serviceCentersFormattedList(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<ServiceCenter>>>;
-    public serviceCentersFormattedList(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<ServiceCenter>>>;
-    public serviceCentersFormattedList(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceCentersFormattedList(requestParameters: ServiceCentersFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<ServiceCenter>>;
+    public serviceCentersFormattedList(requestParameters: ServiceCentersFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<ServiceCenter>>>;
+    public serviceCentersFormattedList(requestParameters: ServiceCentersFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<ServiceCenter>>>;
+    public serviceCentersFormattedList(requestParameters: ServiceCentersFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceCentersFormattedList.');
         }
@@ -234,14 +406,15 @@ export class ServiceService {
     }
 
     /**
-     * @param comment 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceCommentsCreate(comment: Comment, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Comment>;
-    public serviceCommentsCreate(comment: Comment, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Comment>>;
-    public serviceCommentsCreate(comment: Comment, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Comment>>;
-    public serviceCommentsCreate(comment: Comment, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceCommentsCreate(requestParameters: ServiceCommentsCreateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Comment>;
+    public serviceCommentsCreate(requestParameters: ServiceCommentsCreateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Comment>>;
+    public serviceCommentsCreate(requestParameters: ServiceCommentsCreateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Comment>>;
+    public serviceCommentsCreate(requestParameters: ServiceCommentsCreateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const comment = requestParameters.comment;
         if (comment === null || comment === undefined) {
             throw new Error('Required parameter comment was null or undefined when calling serviceCommentsCreate.');
         }
@@ -309,18 +482,19 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param comment 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceCommentsFormattedCreate(format: '.json', comment: Comment, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Comment>;
-    public serviceCommentsFormattedCreate(format: '.json', comment: Comment, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Comment>>;
-    public serviceCommentsFormattedCreate(format: '.json', comment: Comment, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Comment>>;
-    public serviceCommentsFormattedCreate(format: '.json', comment: Comment, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceCommentsFormattedCreate(requestParameters: ServiceCommentsFormattedCreateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Comment>;
+    public serviceCommentsFormattedCreate(requestParameters: ServiceCommentsFormattedCreateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Comment>>;
+    public serviceCommentsFormattedCreate(requestParameters: ServiceCommentsFormattedCreateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Comment>>;
+    public serviceCommentsFormattedCreate(requestParameters: ServiceCommentsFormattedCreateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceCommentsFormattedCreate.');
         }
+        const comment = requestParameters.comment;
         if (comment === null || comment === undefined) {
             throw new Error('Required parameter comment was null or undefined when calling serviceCommentsFormattedCreate.');
         }
@@ -388,14 +562,15 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceCommentsFormattedList(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Comment>>;
-    public serviceCommentsFormattedList(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Comment>>>;
-    public serviceCommentsFormattedList(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Comment>>>;
-    public serviceCommentsFormattedList(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceCommentsFormattedList(requestParameters: ServiceCommentsFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Comment>>;
+    public serviceCommentsFormattedList(requestParameters: ServiceCommentsFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Comment>>>;
+    public serviceCommentsFormattedList(requestParameters: ServiceCommentsFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Comment>>>;
+    public serviceCommentsFormattedList(requestParameters: ServiceCommentsFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceCommentsFormattedList.');
         }
@@ -510,14 +685,15 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceJobsitesFormattedList(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<JobSite>>;
-    public serviceJobsitesFormattedList(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<JobSite>>>;
-    public serviceJobsitesFormattedList(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<JobSite>>>;
-    public serviceJobsitesFormattedList(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceJobsitesFormattedList(requestParameters: ServiceJobsitesFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<JobSite>>;
+    public serviceJobsitesFormattedList(requestParameters: ServiceJobsitesFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<JobSite>>>;
+    public serviceJobsitesFormattedList(requestParameters: ServiceJobsitesFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<JobSite>>>;
+    public serviceJobsitesFormattedList(requestParameters: ServiceJobsitesFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceJobsitesFormattedList.');
         }
@@ -632,18 +808,19 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderAddendumFormattedRetrieve(format: '.json', id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderAddendumDetail>;
-    public serviceOrderAddendumFormattedRetrieve(format: '.json', id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderAddendumDetail>>;
-    public serviceOrderAddendumFormattedRetrieve(format: '.json', id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderAddendumDetail>>;
-    public serviceOrderAddendumFormattedRetrieve(format: '.json', id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderAddendumFormattedRetrieve(requestParameters: ServiceOrderAddendumFormattedRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderAddendumDetail>;
+    public serviceOrderAddendumFormattedRetrieve(requestParameters: ServiceOrderAddendumFormattedRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderAddendumDetail>>;
+    public serviceOrderAddendumFormattedRetrieve(requestParameters: ServiceOrderAddendumFormattedRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderAddendumDetail>>;
+    public serviceOrderAddendumFormattedRetrieve(requestParameters: ServiceOrderAddendumFormattedRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceOrderAddendumFormattedRetrieve.');
         }
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceOrderAddendumFormattedRetrieve.');
         }
@@ -699,14 +876,15 @@ export class ServiceService {
     }
 
     /**
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderAddendumRetrieve(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderAddendumDetail>;
-    public serviceOrderAddendumRetrieve(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderAddendumDetail>>;
-    public serviceOrderAddendumRetrieve(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderAddendumDetail>>;
-    public serviceOrderAddendumRetrieve(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderAddendumRetrieve(requestParameters: ServiceOrderAddendumRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderAddendumDetail>;
+    public serviceOrderAddendumRetrieve(requestParameters: ServiceOrderAddendumRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderAddendumDetail>>;
+    public serviceOrderAddendumRetrieve(requestParameters: ServiceOrderAddendumRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderAddendumDetail>>;
+    public serviceOrderAddendumRetrieve(requestParameters: ServiceOrderAddendumRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceOrderAddendumRetrieve.');
         }
@@ -762,22 +940,23 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param number 
-     * @param sequenceNumber 
-     * @param sequenceRegion 
-     * @param status 
-     * @param statusDate 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderAddendumsFormattedList(format: '.json', number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderAddendumList>>;
-    public serviceOrderAddendumsFormattedList(format: '.json', number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderAddendumList>>>;
-    public serviceOrderAddendumsFormattedList(format: '.json', number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderAddendumList>>>;
-    public serviceOrderAddendumsFormattedList(format: '.json', number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderAddendumsFormattedList(requestParameters: ServiceOrderAddendumsFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderAddendumList>>;
+    public serviceOrderAddendumsFormattedList(requestParameters: ServiceOrderAddendumsFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderAddendumList>>>;
+    public serviceOrderAddendumsFormattedList(requestParameters: ServiceOrderAddendumsFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderAddendumList>>>;
+    public serviceOrderAddendumsFormattedList(requestParameters: ServiceOrderAddendumsFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceOrderAddendumsFormattedList.');
         }
+        const number = requestParameters.number;
+        const sequenceNumber = requestParameters.sequenceNumber;
+        const sequenceRegion = requestParameters.sequenceRegion;
+        const status = requestParameters.status;
+        const statusDate = requestParameters.statusDate;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (number !== undefined && number !== null) {
@@ -853,18 +1032,19 @@ export class ServiceService {
     }
 
     /**
-     * @param number 
-     * @param sequenceNumber 
-     * @param sequenceRegion 
-     * @param status 
-     * @param statusDate 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderAddendumsList(number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderAddendumList>>;
-    public serviceOrderAddendumsList(number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderAddendumList>>>;
-    public serviceOrderAddendumsList(number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderAddendumList>>>;
-    public serviceOrderAddendumsList(number?: number, sequenceNumber?: number, sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', status?: '1' | '2' | '3' | '4' | '5', statusDate?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderAddendumsList(requestParameters: ServiceOrderAddendumsListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderAddendumList>>;
+    public serviceOrderAddendumsList(requestParameters: ServiceOrderAddendumsListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderAddendumList>>>;
+    public serviceOrderAddendumsList(requestParameters: ServiceOrderAddendumsListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderAddendumList>>>;
+    public serviceOrderAddendumsList(requestParameters: ServiceOrderAddendumsListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const number = requestParameters.number;
+        const sequenceNumber = requestParameters.sequenceNumber;
+        const sequenceRegion = requestParameters.sequenceRegion;
+        const status = requestParameters.status;
+        const statusDate = requestParameters.statusDate;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (number !== undefined && number !== null) {
@@ -940,18 +1120,19 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderItemFormattedRetrieve(format: '.json', id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderItem>;
-    public serviceOrderItemFormattedRetrieve(format: '.json', id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderItem>>;
-    public serviceOrderItemFormattedRetrieve(format: '.json', id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderItem>>;
-    public serviceOrderItemFormattedRetrieve(format: '.json', id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderItemFormattedRetrieve(requestParameters: ServiceOrderItemFormattedRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderItem>;
+    public serviceOrderItemFormattedRetrieve(requestParameters: ServiceOrderItemFormattedRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderItem>>;
+    public serviceOrderItemFormattedRetrieve(requestParameters: ServiceOrderItemFormattedRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderItem>>;
+    public serviceOrderItemFormattedRetrieve(requestParameters: ServiceOrderItemFormattedRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceOrderItemFormattedRetrieve.');
         }
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceOrderItemFormattedRetrieve.');
         }
@@ -1007,14 +1188,15 @@ export class ServiceService {
     }
 
     /**
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderItemRetrieve(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderItem>;
-    public serviceOrderItemRetrieve(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderItem>>;
-    public serviceOrderItemRetrieve(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderItem>>;
-    public serviceOrderItemRetrieve(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderItemRetrieve(requestParameters: ServiceOrderItemRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderItem>;
+    public serviceOrderItemRetrieve(requestParameters: ServiceOrderItemRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderItem>>;
+    public serviceOrderItemRetrieve(requestParameters: ServiceOrderItemRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderItem>>;
+    public serviceOrderItemRetrieve(requestParameters: ServiceOrderItemRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceOrderItemRetrieve.');
         }
@@ -1070,18 +1252,19 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderSequenceFormattedRetrieve(format: '.json', id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderSequenceDetail>;
-    public serviceOrderSequenceFormattedRetrieve(format: '.json', id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderSequenceDetail>>;
-    public serviceOrderSequenceFormattedRetrieve(format: '.json', id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderSequenceDetail>>;
-    public serviceOrderSequenceFormattedRetrieve(format: '.json', id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderSequenceFormattedRetrieve(requestParameters: ServiceOrderSequenceFormattedRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderSequenceDetail>;
+    public serviceOrderSequenceFormattedRetrieve(requestParameters: ServiceOrderSequenceFormattedRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderSequenceDetail>>;
+    public serviceOrderSequenceFormattedRetrieve(requestParameters: ServiceOrderSequenceFormattedRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderSequenceDetail>>;
+    public serviceOrderSequenceFormattedRetrieve(requestParameters: ServiceOrderSequenceFormattedRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceOrderSequenceFormattedRetrieve.');
         }
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceOrderSequenceFormattedRetrieve.');
         }
@@ -1137,14 +1320,15 @@ export class ServiceService {
     }
 
     /**
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrderSequenceRetrieve(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderSequenceDetail>;
-    public serviceOrderSequenceRetrieve(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderSequenceDetail>>;
-    public serviceOrderSequenceRetrieve(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderSequenceDetail>>;
-    public serviceOrderSequenceRetrieve(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrderSequenceRetrieve(requestParameters: ServiceOrderSequenceRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<OrderSequenceDetail>;
+    public serviceOrderSequenceRetrieve(requestParameters: ServiceOrderSequenceRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<OrderSequenceDetail>>;
+    public serviceOrderSequenceRetrieve(requestParameters: ServiceOrderSequenceRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<OrderSequenceDetail>>;
+    public serviceOrderSequenceRetrieve(requestParameters: ServiceOrderSequenceRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceOrderSequenceRetrieve.');
         }
@@ -1200,19 +1384,20 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param number 
-     * @param region 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrdersSequencesFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
-    public serviceOrdersSequencesFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
-    public serviceOrdersSequencesFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
-    public serviceOrdersSequencesFormattedList(format: '.json', number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrdersSequencesFormattedList(requestParameters: ServiceOrdersSequencesFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
+    public serviceOrdersSequencesFormattedList(requestParameters: ServiceOrdersSequencesFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
+    public serviceOrdersSequencesFormattedList(requestParameters: ServiceOrdersSequencesFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
+    public serviceOrdersSequencesFormattedList(requestParameters: ServiceOrdersSequencesFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceOrdersSequencesFormattedList.');
         }
+        const number = requestParameters.number;
+        const region = requestParameters.region;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (number !== undefined && number !== null) {
@@ -1276,15 +1461,16 @@ export class ServiceService {
     }
 
     /**
-     * @param number 
-     * @param region 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceOrdersSequencesList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
-    public serviceOrdersSequencesList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
-    public serviceOrdersSequencesList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
-    public serviceOrdersSequencesList(number?: number, region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceOrdersSequencesList(requestParameters: ServiceOrdersSequencesListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OrderSequenceList>>;
+    public serviceOrdersSequencesList(requestParameters: ServiceOrdersSequencesListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OrderSequenceList>>>;
+    public serviceOrdersSequencesList(requestParameters: ServiceOrdersSequencesListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OrderSequenceList>>>;
+    public serviceOrdersSequencesList(requestParameters: ServiceOrdersSequencesListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const number = requestParameters.number;
+        const region = requestParameters.region;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (number !== undefined && number !== null) {
@@ -1348,14 +1534,15 @@ export class ServiceService {
     }
 
     /**
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceScheduleDestroy(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public serviceScheduleDestroy(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public serviceScheduleDestroy(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public serviceScheduleDestroy(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public serviceScheduleDestroy(requestParameters: ServiceScheduleDestroyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public serviceScheduleDestroy(requestParameters: ServiceScheduleDestroyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public serviceScheduleDestroy(requestParameters: ServiceScheduleDestroyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public serviceScheduleDestroy(requestParameters: ServiceScheduleDestroyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceScheduleDestroy.');
         }
@@ -1410,18 +1597,19 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceScheduleFormattedDestroy(format: '.json', id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public serviceScheduleFormattedDestroy(format: '.json', id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public serviceScheduleFormattedDestroy(format: '.json', id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public serviceScheduleFormattedDestroy(format: '.json', id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public serviceScheduleFormattedDestroy(requestParameters: ServiceScheduleFormattedDestroyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public serviceScheduleFormattedDestroy(requestParameters: ServiceScheduleFormattedDestroyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public serviceScheduleFormattedDestroy(requestParameters: ServiceScheduleFormattedDestroyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public serviceScheduleFormattedDestroy(requestParameters: ServiceScheduleFormattedDestroyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceScheduleFormattedDestroy.');
         }
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceScheduleFormattedDestroy.');
         }
@@ -1476,22 +1664,23 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param id 
-     * @param patchedSchedule 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceScheduleFormattedPartialUpdate(format: '.json', id: number, patchedSchedule?: PatchedSchedule, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceScheduleFormattedPartialUpdate(format: '.json', id: number, patchedSchedule?: PatchedSchedule, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceScheduleFormattedPartialUpdate(format: '.json', id: number, patchedSchedule?: PatchedSchedule, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceScheduleFormattedPartialUpdate(format: '.json', id: number, patchedSchedule?: PatchedSchedule, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceScheduleFormattedPartialUpdate(requestParameters: ServiceScheduleFormattedPartialUpdateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceScheduleFormattedPartialUpdate(requestParameters: ServiceScheduleFormattedPartialUpdateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceScheduleFormattedPartialUpdate(requestParameters: ServiceScheduleFormattedPartialUpdateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceScheduleFormattedPartialUpdate(requestParameters: ServiceScheduleFormattedPartialUpdateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceScheduleFormattedPartialUpdate.');
         }
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceScheduleFormattedPartialUpdate.');
         }
+        const patchedSchedule = requestParameters.patchedSchedule;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1556,18 +1745,19 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceScheduleFormattedRetrieve(format: '.json', id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceScheduleFormattedRetrieve(format: '.json', id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceScheduleFormattedRetrieve(format: '.json', id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceScheduleFormattedRetrieve(format: '.json', id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceScheduleFormattedRetrieve(requestParameters: ServiceScheduleFormattedRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceScheduleFormattedRetrieve(requestParameters: ServiceScheduleFormattedRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceScheduleFormattedRetrieve(requestParameters: ServiceScheduleFormattedRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceScheduleFormattedRetrieve(requestParameters: ServiceScheduleFormattedRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceScheduleFormattedRetrieve.');
         }
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceScheduleFormattedRetrieve.');
         }
@@ -1623,22 +1813,23 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param id 
-     * @param schedule 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceScheduleFormattedUpdate(format: '.json', id: number, schedule: Schedule, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceScheduleFormattedUpdate(format: '.json', id: number, schedule: Schedule, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceScheduleFormattedUpdate(format: '.json', id: number, schedule: Schedule, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceScheduleFormattedUpdate(format: '.json', id: number, schedule: Schedule, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceScheduleFormattedUpdate(requestParameters: ServiceScheduleFormattedUpdateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceScheduleFormattedUpdate(requestParameters: ServiceScheduleFormattedUpdateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceScheduleFormattedUpdate(requestParameters: ServiceScheduleFormattedUpdateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceScheduleFormattedUpdate(requestParameters: ServiceScheduleFormattedUpdateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceScheduleFormattedUpdate.');
         }
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceScheduleFormattedUpdate.');
         }
+        const schedule = requestParameters.schedule;
         if (schedule === null || schedule === undefined) {
             throw new Error('Required parameter schedule was null or undefined when calling serviceScheduleFormattedUpdate.');
         }
@@ -1706,18 +1897,19 @@ export class ServiceService {
     }
 
     /**
-     * @param id 
-     * @param patchedSchedule 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceSchedulePartialUpdate(id: number, patchedSchedule?: PatchedSchedule, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceSchedulePartialUpdate(id: number, patchedSchedule?: PatchedSchedule, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceSchedulePartialUpdate(id: number, patchedSchedule?: PatchedSchedule, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceSchedulePartialUpdate(id: number, patchedSchedule?: PatchedSchedule, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceSchedulePartialUpdate(requestParameters: ServiceSchedulePartialUpdateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceSchedulePartialUpdate(requestParameters: ServiceSchedulePartialUpdateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceSchedulePartialUpdate(requestParameters: ServiceSchedulePartialUpdateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceSchedulePartialUpdate(requestParameters: ServiceSchedulePartialUpdateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceSchedulePartialUpdate.');
         }
+        const patchedSchedule = requestParameters.patchedSchedule;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1782,14 +1974,15 @@ export class ServiceService {
     }
 
     /**
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceScheduleRetrieve(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceScheduleRetrieve(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceScheduleRetrieve(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceScheduleRetrieve(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceScheduleRetrieve(requestParameters: ServiceScheduleRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceScheduleRetrieve(requestParameters: ServiceScheduleRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceScheduleRetrieve(requestParameters: ServiceScheduleRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceScheduleRetrieve(requestParameters: ServiceScheduleRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceScheduleRetrieve.');
         }
@@ -1845,18 +2038,19 @@ export class ServiceService {
     }
 
     /**
-     * @param id 
-     * @param schedule 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceScheduleUpdate(id: number, schedule: Schedule, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceScheduleUpdate(id: number, schedule: Schedule, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceScheduleUpdate(id: number, schedule: Schedule, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceScheduleUpdate(id: number, schedule: Schedule, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceScheduleUpdate(requestParameters: ServiceScheduleUpdateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceScheduleUpdate(requestParameters: ServiceScheduleUpdateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceScheduleUpdate(requestParameters: ServiceScheduleUpdateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceScheduleUpdate(requestParameters: ServiceScheduleUpdateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling serviceScheduleUpdate.');
         }
+        const schedule = requestParameters.schedule;
         if (schedule === null || schedule === undefined) {
             throw new Error('Required parameter schedule was null or undefined when calling serviceScheduleUpdate.');
         }
@@ -1924,14 +2118,15 @@ export class ServiceService {
     }
 
     /**
-     * @param schedule 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceSchedulesCreate(schedule: Schedule, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceSchedulesCreate(schedule: Schedule, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceSchedulesCreate(schedule: Schedule, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceSchedulesCreate(schedule: Schedule, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceSchedulesCreate(requestParameters: ServiceSchedulesCreateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceSchedulesCreate(requestParameters: ServiceSchedulesCreateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceSchedulesCreate(requestParameters: ServiceSchedulesCreateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceSchedulesCreate(requestParameters: ServiceSchedulesCreateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const schedule = requestParameters.schedule;
         if (schedule === null || schedule === undefined) {
             throw new Error('Required parameter schedule was null or undefined when calling serviceSchedulesCreate.');
         }
@@ -1999,18 +2194,19 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param schedule 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceSchedulesFormattedCreate(format: '.json', schedule: Schedule, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
-    public serviceSchedulesFormattedCreate(format: '.json', schedule: Schedule, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
-    public serviceSchedulesFormattedCreate(format: '.json', schedule: Schedule, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
-    public serviceSchedulesFormattedCreate(format: '.json', schedule: Schedule, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceSchedulesFormattedCreate(requestParameters: ServiceSchedulesFormattedCreateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Schedule>;
+    public serviceSchedulesFormattedCreate(requestParameters: ServiceSchedulesFormattedCreateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Schedule>>;
+    public serviceSchedulesFormattedCreate(requestParameters: ServiceSchedulesFormattedCreateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Schedule>>;
+    public serviceSchedulesFormattedCreate(requestParameters: ServiceSchedulesFormattedCreateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceSchedulesFormattedCreate.');
         }
+        const schedule = requestParameters.schedule;
         if (schedule === null || schedule === undefined) {
             throw new Error('Required parameter schedule was null or undefined when calling serviceSchedulesFormattedCreate.');
         }
@@ -2078,27 +2274,30 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param addendumNumber 
-     * @param addendumSequenceJobSiteCity 
-     * @param addendumSequenceJobSiteZipCode 
-     * @param addendumSequenceNumber 
-     * @param addendumSequenceRegion 
-     * @param addendumSequenceServiceCenterManager 
-     * @param serviceCenter 
-     * @param startDateTimeAfter 
-     * @param startDateTimeBefore 
-     * @param technicians 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
-    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
-    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
-    public serviceSchedulesFormattedList(format: '.json', addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceSchedulesFormattedList(requestParameters: ServiceSchedulesFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
+    public serviceSchedulesFormattedList(requestParameters: ServiceSchedulesFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
+    public serviceSchedulesFormattedList(requestParameters: ServiceSchedulesFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
+    public serviceSchedulesFormattedList(requestParameters: ServiceSchedulesFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceSchedulesFormattedList.');
         }
+        const addendumNumber = requestParameters.addendumNumber;
+        const addendumSequenceJobSiteCity = requestParameters.addendumSequenceJobSiteCity;
+        const addendumSequenceJobSiteZipCode = requestParameters.addendumSequenceJobSiteZipCode;
+        const addendumSequenceNumber = requestParameters.addendumSequenceNumber;
+        const addendumSequenceRegion = requestParameters.addendumSequenceRegion;
+        const addendumSequenceServiceCenterManager = requestParameters.addendumSequenceServiceCenterManager;
+        const endDateTimeAfter = requestParameters.endDateTimeAfter;
+        const endDateTimeBefore = requestParameters.endDateTimeBefore;
+        const serviceCenter = requestParameters.serviceCenter;
+        const startDateTimeAfter = requestParameters.startDateTimeAfter;
+        const startDateTimeBefore = requestParameters.startDateTimeBefore;
+        const technicians = requestParameters.technicians;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (addendumNumber !== undefined && addendumNumber !== null) {
@@ -2124,6 +2323,14 @@ export class ServiceService {
         if (addendumSequenceServiceCenterManager !== undefined && addendumSequenceServiceCenterManager !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>addendumSequenceServiceCenterManager, 'addendum__sequence__serviceCenter__manager');
+        }
+        if (endDateTimeAfter !== undefined && endDateTimeAfter !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>endDateTimeAfter, 'endDateTime_after');
+        }
+        if (endDateTimeBefore !== undefined && endDateTimeBefore !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>endDateTimeBefore, 'endDateTime_before');
         }
         if (serviceCenter !== undefined && serviceCenter !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -2196,23 +2403,26 @@ export class ServiceService {
     }
 
     /**
-     * @param addendumNumber 
-     * @param addendumSequenceJobSiteCity 
-     * @param addendumSequenceJobSiteZipCode 
-     * @param addendumSequenceNumber 
-     * @param addendumSequenceRegion 
-     * @param addendumSequenceServiceCenterManager 
-     * @param serviceCenter 
-     * @param startDateTimeAfter 
-     * @param startDateTimeBefore 
-     * @param technicians 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
-    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
-    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
-    public serviceSchedulesList(addendumNumber?: number, addendumSequenceJobSiteCity?: string, addendumSequenceJobSiteZipCode?: string, addendumSequenceNumber?: number, addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9', serviceCenter?: number, startDateTimeAfter?: string, startDateTimeBefore?: string, technicians?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceSchedulesList(requestParameters: ServiceSchedulesListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Schedule>>;
+    public serviceSchedulesList(requestParameters: ServiceSchedulesListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Schedule>>>;
+    public serviceSchedulesList(requestParameters: ServiceSchedulesListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Schedule>>>;
+    public serviceSchedulesList(requestParameters: ServiceSchedulesListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const addendumNumber = requestParameters.addendumNumber;
+        const addendumSequenceJobSiteCity = requestParameters.addendumSequenceJobSiteCity;
+        const addendumSequenceJobSiteZipCode = requestParameters.addendumSequenceJobSiteZipCode;
+        const addendumSequenceNumber = requestParameters.addendumSequenceNumber;
+        const addendumSequenceRegion = requestParameters.addendumSequenceRegion;
+        const addendumSequenceServiceCenterManager = requestParameters.addendumSequenceServiceCenterManager;
+        const endDateTimeAfter = requestParameters.endDateTimeAfter;
+        const endDateTimeBefore = requestParameters.endDateTimeBefore;
+        const serviceCenter = requestParameters.serviceCenter;
+        const startDateTimeAfter = requestParameters.startDateTimeAfter;
+        const startDateTimeBefore = requestParameters.startDateTimeBefore;
+        const technicians = requestParameters.technicians;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (addendumNumber !== undefined && addendumNumber !== null) {
@@ -2238,6 +2448,14 @@ export class ServiceService {
         if (addendumSequenceServiceCenterManager !== undefined && addendumSequenceServiceCenterManager !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>addendumSequenceServiceCenterManager, 'addendum__sequence__serviceCenter__manager');
+        }
+        if (endDateTimeAfter !== undefined && endDateTimeAfter !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>endDateTimeAfter, 'endDateTime_after');
+        }
+        if (endDateTimeBefore !== undefined && endDateTimeBefore !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>endDateTimeBefore, 'endDateTime_before');
         }
         if (serviceCenter !== undefined && serviceCenter !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -2310,21 +2528,22 @@ export class ServiceService {
     }
 
     /**
-     * @param format 
-     * @param primaryCenter 
-     * @param qualifier 
-     * @param type 
-     * @param workWeek 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
-    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
-    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
-    public serviceTechsFormattedList(format: '.json', primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceTechsFormattedList(requestParameters: ServiceTechsFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
+    public serviceTechsFormattedList(requestParameters: ServiceTechsFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
+    public serviceTechsFormattedList(requestParameters: ServiceTechsFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
+    public serviceTechsFormattedList(requestParameters: ServiceTechsFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling serviceTechsFormattedList.');
         }
+        const primaryCenter = requestParameters.primaryCenter;
+        const qualifier = requestParameters.qualifier;
+        const type = requestParameters.type;
+        const workWeek = requestParameters.workWeek;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (primaryCenter !== undefined && primaryCenter !== null) {
@@ -2396,17 +2615,18 @@ export class ServiceService {
     }
 
     /**
-     * @param primaryCenter 
-     * @param qualifier 
-     * @param type 
-     * @param workWeek 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
-    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
-    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
-    public serviceTechsList(primaryCenter?: number, qualifier?: string, type?: string, workWeek?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public serviceTechsList(requestParameters: ServiceTechsListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Technician>>;
+    public serviceTechsList(requestParameters: ServiceTechsListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Technician>>>;
+    public serviceTechsList(requestParameters: ServiceTechsListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
+    public serviceTechsList(requestParameters: ServiceTechsListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const primaryCenter = requestParameters.primaryCenter;
+        const qualifier = requestParameters.qualifier;
+        const type = requestParameters.type;
+        const workWeek = requestParameters.workWeek;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (primaryCenter !== undefined && primaryCenter !== null) {

@@ -24,7 +24,7 @@ export class AuthHelperInterceptor implements HttpInterceptor {
     const token = this.cookieService.get('csrf-token');
     let newReq = request.clone();
 
-    if (request.url.includes('http')
+    if ((request.url.includes('http') || request.url.includes('https'))
       && (request.method === 'POST' || request.method === 'PUT' || request.method === 'PATCH' || request.method === 'DELETE')
       && !request.url.includes('auth')
       && token !== null

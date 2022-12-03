@@ -3,7 +3,13 @@ import { CollectionNestedOptionContainerImpl, DxSchedulerComponent } from 'devex
 import { LoadOptions } from 'devextreme/data';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
-import { Schedule, ServiceService, Technician } from 'openapi';
+import {
+  Schedule,
+  ServiceService,
+  Technician,
+  ServiceSchedulesListRequestParams,
+  ServiceTechsListRequestParams
+} from 'openapi';
 import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
 import Form, { SimpleItem } from "devextreme/ui/form";
@@ -20,13 +26,21 @@ export class ScheduleComponent implements OnInit {
   centerDataSource:  CustomStore;
   sequenceDataSource:  CustomStore;
   addendumDataSource:  CustomStore;
-
+  technicians:number[];
   constructor(private serviceService: ServiceService) {
+    this.technicians = [2];
     this.scheduleDataSource = new CustomStore({
       key: 'id',
-      load: (loadOptions:LoadOptions<Schedule>) => {
+      loadMode:'processed',
+      load: (loadOptions) => {
+        let filter = loadOptions.filter[0]
+        let requestPrams = {
+          startDateTimeBefore: filter[0][1][2],
+          endDateTimeAfter: filter[0][0][2],
+          technicians:this.technicians
+        } as ServiceSchedulesListRequestParams
         
-        return lastValueFrom(this.serviceService.serviceSchedulesList())
+        return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams))
         .then(response => {
           return {
             data:response,
@@ -34,16 +48,16 @@ export class ScheduleComponent implements OnInit {
         })
         .catch(() => { throw 'Error Loading Appointments' });
       },
-      insert: (values:Schedule) => {
-        return lastValueFrom(this.serviceService.serviceSchedulesCreate(values))
-        .catch(() => { throw 'Error Creating Appointment: ' + values.description });
+      insert: (schedule:Schedule) => {
+        return lastValueFrom(this.serviceService.serviceSchedulesCreate({schedule:schedule}))
+        .catch(() => { throw 'Error Creating Appointment: ' + schedule.description });
       },
-      update: (key:number, values:Schedule) => {
-        return lastValueFrom(this.serviceService.serviceScheduleUpdate(key, values))
+      update: (key:number, schedule:Schedule) => {
+        return lastValueFrom(this.serviceService.serviceScheduleUpdate({id:key, schedule:schedule}))
         .catch(() => { throw 'Error Updating Appointment: ' + key });
       },
       remove: (key:number) => {
-        return lastValueFrom(this.serviceService.serviceScheduleDestroy(key))
+        return lastValueFrom(this.serviceService.serviceScheduleDestroy({id:key}))
         .catch(() => { throw 'Error Removing Appointment: ' + key})
       }
     });
@@ -51,7 +65,11 @@ export class ScheduleComponent implements OnInit {
     this.techDataSource = new CustomStore({
       key: 'id',
       load: (loadOptions) => {
-        return lastValueFrom(this.serviceService.serviceTechsList())
+        let op = loadOptions
+        const requestParams = {
+          
+        } as ServiceTechsListRequestParams;
+        return lastValueFrom(this.serviceService.serviceTechsList({}))
         .then((response:Technician[]) => {
           return {
             data:response,
@@ -77,7 +95,7 @@ export class ScheduleComponent implements OnInit {
     this.addendumDataSource = new CustomStore({
       key: 'id',
       load: (loadOptions) => {
-        return lastValueFrom(this.serviceService.serviceOrderAddendumsList())
+        return lastValueFrom(this.serviceService.serviceOrderAddendumsList({}))
         .then(response => {
           return {
             data:response
@@ -90,7 +108,7 @@ export class ScheduleComponent implements OnInit {
     this.sequenceDataSource = new CustomStore({
       key: 'id',
       load: (loadOptions) => {
-        return lastValueFrom(this.serviceService.serviceOrdersSequencesList())
+        return lastValueFrom(this.serviceService.serviceOrdersSequencesList({}))
         .then(response => {
           return {
             data:response
@@ -153,24 +171,24 @@ export class ScheduleComponent implements OnInit {
 
   }
 
-  getAddendum(id:): OrderAddendum {
-    return this.addendumDataSource.byKey(id);
-  }
+  // getAddendum(id:): OrderAddendum {
+  //   return this.addendumDataSource.byKey(id);
+  // }
   
-  getSequence(id){
+  // getSequence(id){
 
-  }
+  // }
 
-  getCustomer(schedule:Schedule){
+  // getCustomer(schedule:Schedule){
     
     
     
-    await this.techDataSource.byKey(techId).then((response) => {
-        return response.name;
-      });
+  //   await this.techDataSource.byKey(techId).then((response) => {
+  //       return response.name;
+  //     });
     
     
     
-    return names;
-  }
+  //   return names;
+  // }
 }

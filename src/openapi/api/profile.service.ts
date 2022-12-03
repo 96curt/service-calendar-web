@@ -26,6 +26,10 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface ProfileFormattedRetrieveRequestParams {
+    format: '.json';
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -92,14 +96,15 @@ export class ProfileService {
     }
 
     /**
-     * @param format 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public profileFormattedRetrieve(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<User>;
-    public profileFormattedRetrieve(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<User>>;
-    public profileFormattedRetrieve(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<User>>;
-    public profileFormattedRetrieve(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public profileFormattedRetrieve(requestParameters: ProfileFormattedRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<User>;
+    public profileFormattedRetrieve(requestParameters: ProfileFormattedRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<User>>;
+    public profileFormattedRetrieve(requestParameters: ProfileFormattedRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<User>>;
+    public profileFormattedRetrieve(requestParameters: ProfileFormattedRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling profileFormattedRetrieve.');
         }

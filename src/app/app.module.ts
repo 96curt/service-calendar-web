@@ -12,6 +12,7 @@ import { environment } from 'environments/environment';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHelperInterceptor } from './shared/services/auth-helper.interceptor';
 
+
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
     basePath:environment.apiBaseUrl,

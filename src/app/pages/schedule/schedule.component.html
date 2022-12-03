@@ -1,5 +1,6 @@
 <h2 class="content-block">Technician Schedule</h2>
 <div class="content-block">
+    
     <div class="dx-card responsive-paddings">
         <!-- Configuration Options -->
         <dx-scheduler
@@ -15,6 +16,7 @@
             (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
             [startDayHour]="6"
             [endDayHour]="18"
+            [remoteFiltering]="true"
             >
 
             <!-- Views -->
@@ -73,7 +75,7 @@
             
             <div *dxTemplate="let appointment of 'appointment-template'">
                 <div class="showtime-preview">
-                  <div>{{ (appointment.targetedAppointmentData) }}</div>
+                  <div>{{ appointment.targetedAppointmentData.description }}</div>
                   
                 </div>
               </div>

@@ -26,6 +26,10 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface CustomersFormattedListRequestParams {
+    format: '.json';
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -92,14 +96,15 @@ export class CustomersService {
     }
 
     /**
-     * @param format 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customersFormattedList(format: '.json', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Customer>>;
-    public customersFormattedList(format: '.json', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Customer>>>;
-    public customersFormattedList(format: '.json', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Customer>>>;
-    public customersFormattedList(format: '.json', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Customer>>;
+    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Customer>>>;
+    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Customer>>>;
+    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const format = requestParameters.format;
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling customersFormattedList.');
         }

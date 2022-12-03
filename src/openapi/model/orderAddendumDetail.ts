@@ -15,6 +15,7 @@ import { StatusEnum } from './statusEnum';
 export interface OrderAddendumDetail { 
     readonly id: number;
     readonly number: number;
+    sequence: string;
     description: string;
     laborHours: string;
     travelHours: string;

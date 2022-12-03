@@ -4,8 +4,6 @@ import { environment } from 'environments/environment';
 import { AuthService, Configuration, Login} from 'openapi';
 import { Observable, throwError,map } from 'rxjs';
 import {StorageService} from './storage.service'
-import { User } from 'openapi';
-import { CookieService } from 'ngx-cookie-service';
 
 const defaultPath = '/';
 
@@ -33,7 +31,7 @@ export class AuthHelperService {
       username: username,
       password: password
     } as Login;
-    return this.authService.authLoginCreate(auth,).pipe(
+    return this.authService.authLoginCreate({login:auth}).pipe(
       map(
         response => {
           this.storageService.saveUser(username);

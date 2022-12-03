@@ -946,6 +946,16 @@ paths:
           - '8'
           - '9'
       - in: query
+        name: endDateTime_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: endDateTime_before
+        schema:
+          type: string
+          format: date-time
+      - in: query
         name: serviceCenter
         schema:
           type: integer
@@ -1055,6 +1065,16 @@ paths:
           - '7'
           - '8'
           - '9'
+      - in: query
+        name: endDateTime_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: endDateTime_before
+        schema:
+          type: string
+          format: date-time
       - in: path
         name: format
         schema:
@@ -1381,6 +1401,9 @@ components:
         number:
           type: integer
           readOnly: true
+        sequence:
+          type: string
+          format: uri
         description:
           type: string
           maxLength: 128
@@ -1421,6 +1444,7 @@ components:
       - laborHours
       - number
       - schedule_set
+      - sequence
       - statusDate
       - travelHours
       - trips
