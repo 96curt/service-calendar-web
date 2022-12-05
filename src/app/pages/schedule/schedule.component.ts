@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CollectionNestedOptionContainerImpl, DxSchedulerComponent } from 'devextreme-angular';
 import { LoadOptions } from 'devextreme/data';
 import CustomStore from 'devextreme/data/custom_store';
@@ -8,7 +8,8 @@ import {
   ServiceService,
   Technician,
   ServiceSchedulesListRequestParams,
-  ServiceTechsListRequestParams
+  ServiceTechsListRequestParams,
+  Region
 } from 'openapi';
 import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
@@ -21,14 +22,39 @@ import { PatternRule } from 'devextreme/ui/validation_rules';
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
+  @ViewChild(DxSchedulerComponent, { static: false }) dxScheduler!: DxSchedulerComponent
+
   scheduleDataSource:  CustomStore;
   techDataSource:  CustomStore;
   centerDataSource:  CustomStore;
-  sequenceDataSource:  CustomStore;
   addendumDataSource:  CustomStore;
-  technicians:number[];
+  selectedTechs: number[] | undefined;
+  selectedRegion: number | undefined;
+
   constructor(private serviceService: ServiceService) {
-    this.technicians = [2];
+
+    this.techDataSource = new CustomStore({
+      key: 'id',
+      loadMode:'processed',
+      load: () => {
+        const requestPrams = {
+          primaryCenterRegion:this.selectedRegion
+        } as ServiceTechsListRequestParams
+        return lastValueFrom(this.serviceService.serviceTechsList(requestPrams))
+        .then((response:Technician[]) => {
+          let techs: number[] | undefined = [];
+          response.forEach((tech) => {
+            techs!.push(tech.id)
+          });
+          this.selectedTechs = techs;
+          return {
+            data:response
+          }
+        })
+        .catch(() => { throw 'Error loading technicians' });
+      }
+    });
+
     this.scheduleDataSource = new CustomStore({
       key: 'id',
       loadMode:'processed',
@@ -37,7 +63,7 @@ export class ScheduleComponent implements OnInit {
         let requestPrams = {
           startDateTimeBefore: filter[0][1][2],
           endDateTimeAfter: filter[0][0][2],
-          technicians:this.technicians
+          technicians:this.selectedTechs
         } as ServiceSchedulesListRequestParams
         
         return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams))
@@ -62,26 +88,9 @@ export class ScheduleComponent implements OnInit {
       }
     });
 
-    this.techDataSource = new CustomStore({
-      key: 'id',
-      load: (loadOptions) => {
-        let op = loadOptions
-        const requestParams = {
-          
-        } as ServiceTechsListRequestParams;
-        return lastValueFrom(this.serviceService.serviceTechsList({}))
-        .then((response:Technician[]) => {
-          return {
-            data:response,
-          }
-        })
-        .catch(() => { throw 'Error loading technicians' });
-      }
-    });
-
     this.centerDataSource = new CustomStore({
       key: 'id',
-      load: (loadOptions) => {
+      load: () => {
         return lastValueFrom(this.serviceService.serviceCentersList())
         .then(response => {
           return {
@@ -104,25 +113,22 @@ export class ScheduleComponent implements OnInit {
         .catch(() => { throw 'Error loading Service Addendums' });
       }
     });
-
-    this.sequenceDataSource = new CustomStore({
-      key: 'id',
-      load: (loadOptions) => {
-        return lastValueFrom(this.serviceService.serviceOrdersSequencesList({}))
-        .then(response => {
-          return {
-            data:response
-          }
-        })
-        .catch(() => { throw 'Error loading Service Sequences' });
-      }
-    })
   }
+
+
+  /*****  EVENTS ******/
+
 
   ngOnInit(): void {
   }
 
-  
+  onSelectedRegion(region:number) {
+    this.dxScheduler.instance.beginUpdate();
+    this.selectedRegion = region;
+    this.techDataSource.load();
+    this.scheduleDataSource.load();
+    this.dxScheduler.instance.endUpdate();
+  }
 
   onAppointmentFormOpening(e:any) {
     e.popup.option('showTitle', true);
@@ -142,7 +148,6 @@ export class ScheduleComponent implements OnInit {
     //editing form items for resources
     mainGroupItems.forEach((item, index) => {
       if(item.dataField === "technicians" || item.dataField === "serviceCenter" || item.dataField === "description"){
-        console.log(item.dataField);
         item.isRequired = true;
       }
     });

@@ -11,7 +11,8 @@ import {
   DxFormModule,
   DxSchedulerModule,
   DxTemplateHost,
-  DxTemplateModule
+  DxTemplateModule,
+  DxSelectBoxModule
 } from 'devextreme-angular';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { FilterComponent } from './shared/components/filter/filter.component';
@@ -56,7 +57,8 @@ const routes: Routes = [
     DxSchedulerModule,
     DxTemplateModule,
     DxDropDownBoxModule,
-    DxFormModule
+    DxFormModule,
+    DxSelectBoxModule
   ],
   providers: [AuthGuardService,DxTemplateHost],
   exports: [RouterModule],

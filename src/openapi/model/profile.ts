@@ -9,13 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RegionEnum } from './regionEnum';
 
 
 export interface Profile { 
     readonly id: number;
-    region: RegionEnum;
     user: number;
+    region?: number | null;
     serviceCenter?: number | null;
 }
 

@@ -160,6 +160,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+  /api/regions:
+    get:
+      operationId: regions_list
+      tags:
+      - regions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Region'
+          description: ''
+  /api/regions{format}:
+    get:
+      operationId: regions_formatted_list
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      tags:
+      - regions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Region'
+          description: ''
   /api/service/centers/:
     get:
       operationId: service_centers_list
@@ -400,18 +440,7 @@ paths:
       - in: query
         name: sequence__region
         schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
+          type: integer
       - in: query
         name: status
         schema:
@@ -462,18 +491,7 @@ paths:
       - in: query
         name: sequence__region
         schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
+          type: integer
       - in: query
         name: status
         schema:
@@ -607,18 +625,7 @@ paths:
       - in: query
         name: region
         schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
+          type: integer
       tags:
       - service
       security:
@@ -650,18 +657,7 @@ paths:
       - in: query
         name: region
         schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
+          type: integer
       tags:
       - service
       security:
@@ -918,18 +914,7 @@ paths:
       - in: query
         name: addendum__sequence__region
         schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
+          type: integer
       - in: query
         name: addendum__sequence__serviceCenter__manager
         schema:
@@ -1038,18 +1023,7 @@ paths:
       - in: query
         name: addendum__sequence__region
         schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
+          type: integer
       - in: query
         name: addendum__sequence__serviceCenter__manager
         schema:
@@ -1159,6 +1133,25 @@ paths:
         schema:
           type: integer
       - in: query
+        name: primaryCenter__manager
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '10'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+      - in: query
+        name: primaryCenter__region
+        schema:
+          type: integer
+      - in: query
         name: qualifier
         schema:
           type: string
@@ -1196,6 +1189,25 @@ paths:
         required: true
       - in: query
         name: primaryCenter
+        schema:
+          type: integer
+      - in: query
+        name: primaryCenter__manager
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '10'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+      - in: query
+        name: primaryCenter__region
         schema:
           type: integer
       - in: query
@@ -1350,7 +1362,7 @@ components:
           format: double
           nullable: true
         region:
-          $ref: '#/components/schemas/RegionEnum'
+          type: integer
         owner:
           type: integer
       required:
@@ -1534,8 +1546,7 @@ components:
           type: integer
           readOnly: true
         region:
-          type: string
-          readOnly: true
+          type: integer
         number:
           type: integer
           readOnly: true
@@ -1558,8 +1569,7 @@ components:
           type: integer
           readOnly: true
         region:
-          type: string
-          readOnly: true
+          type: integer
         jobSite:
           type: integer
         serviceCenter:
@@ -1622,30 +1632,29 @@ components:
         id:
           type: integer
           readOnly: true
-        region:
-          $ref: '#/components/schemas/RegionEnum'
         user:
           type: integer
+        region:
+          type: integer
+          nullable: true
         serviceCenter:
           type: integer
           nullable: true
       required:
       - id
-      - region
       - user
-    RegionEnum:
-      enum:
-      - '1'
-      - '2'
-      - '3'
-      - '4'
-      - '5'
-      - '6'
-      - '7'
-      - '8'
-      - '9'
-      - '10'
-      type: string
+    Region:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+      required:
+      - id
+      - name
     Schedule:
       type: object
       properties:
@@ -1733,10 +1742,10 @@ components:
         name:
           type: string
           maxLength: 128
-        region:
-          $ref: '#/components/schemas/RegionEnum'
         manager:
           $ref: '#/components/schemas/ManagerEnum'
+        region:
+          type: integer
       required:
       - city
       - county

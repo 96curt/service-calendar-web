@@ -5,6 +5,7 @@ api/api.ts
 api/auth.service.ts
 api/customers.service.ts
 api/profile.service.ts
+api/regions.service.ts
 api/service.service.ts
 configuration.ts
 encoder.ts
@@ -24,7 +25,7 @@ model/orderSequenceDetail.ts
 model/orderSequenceList.ts
 model/patchedSchedule.ts
 model/profile.ts
-model/regionEnum.ts
+model/region.ts
 model/schedule.ts
 model/serviceCenter.ts
 model/serviceCodeEnum.ts

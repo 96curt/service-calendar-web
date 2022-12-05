@@ -14,7 +14,7 @@ import { OrderAddendumDetail } from './orderAddendumDetail';
 
 export interface OrderSequenceDetail { 
     readonly id: number;
-    readonly region: string;
+    region: number;
     readonly number: number;
     addendum_set: Array<OrderAddendumDetail>;
 }

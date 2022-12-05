@@ -9,7 +9,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RegionEnum } from './regionEnum';
 import { StateEnum } from './stateEnum';
 
 
@@ -24,7 +23,7 @@ export interface JobSite {
     county: string;
     latitude?: number | null;
     longitute?: number | null;
-    region: RegionEnum;
+    region: number;
     owner: number;
 }
 

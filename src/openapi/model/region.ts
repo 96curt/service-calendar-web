@@ -11,12 +11,8 @@
  */
 
 
-export interface OrderSequenceList { 
+export interface Region { 
     readonly id: number;
-    readonly number: number;
-    region: number;
-    jobSite: number;
-    serviceCenter: number;
-    billingCust: number;
+    name: string;
 }
 

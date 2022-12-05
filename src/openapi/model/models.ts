@@ -11,7 +11,7 @@ export * from './orderSequenceDetail';
 export * from './orderSequenceList';
 export * from './patchedSchedule';
 export * from './profile';
-export * from './regionEnum';
+export * from './region';
 export * from './schedule';
 export * from './serviceCenter';
 export * from './serviceCodeEnum';

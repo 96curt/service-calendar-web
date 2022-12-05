@@ -80,7 +80,7 @@ export interface ServiceOrderAddendumsFormattedListRequestParams {
     format: '.json';
     number?: number;
     sequenceNumber?: number;
-    sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    sequenceRegion?: number;
     status?: '1' | '2' | '3' | '4' | '5';
     statusDate?: string;
 }
@@ -88,7 +88,7 @@ export interface ServiceOrderAddendumsFormattedListRequestParams {
 export interface ServiceOrderAddendumsListRequestParams {
     number?: number;
     sequenceNumber?: number;
-    sequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    sequenceRegion?: number;
     status?: '1' | '2' | '3' | '4' | '5';
     statusDate?: string;
 }
@@ -114,12 +114,12 @@ export interface ServiceOrderSequenceRetrieveRequestParams {
 export interface ServiceOrdersSequencesFormattedListRequestParams {
     format: '.json';
     number?: number;
-    region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    region?: number;
 }
 
 export interface ServiceOrdersSequencesListRequestParams {
     number?: number;
-    region?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    region?: number;
 }
 
 export interface ServiceScheduleDestroyRequestParams {
@@ -177,7 +177,7 @@ export interface ServiceSchedulesFormattedListRequestParams {
     addendumSequenceJobSiteCity?: string;
     addendumSequenceJobSiteZipCode?: string;
     addendumSequenceNumber?: number;
-    addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    addendumSequenceRegion?: number;
     addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     endDateTimeAfter?: string;
     endDateTimeBefore?: string;
@@ -192,7 +192,7 @@ export interface ServiceSchedulesListRequestParams {
     addendumSequenceJobSiteCity?: string;
     addendumSequenceJobSiteZipCode?: string;
     addendumSequenceNumber?: number;
-    addendumSequenceRegion?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    addendumSequenceRegion?: number;
     addendumSequenceServiceCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     endDateTimeAfter?: string;
     endDateTimeBefore?: string;
@@ -205,6 +205,8 @@ export interface ServiceSchedulesListRequestParams {
 export interface ServiceTechsFormattedListRequestParams {
     format: '.json';
     primaryCenter?: number;
+    primaryCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    primaryCenterRegion?: number;
     qualifier?: string;
     type?: string;
     workWeek?: number;
@@ -212,6 +214,8 @@ export interface ServiceTechsFormattedListRequestParams {
 
 export interface ServiceTechsListRequestParams {
     primaryCenter?: number;
+    primaryCenterManager?: '1' | '10' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+    primaryCenterRegion?: number;
     qualifier?: string;
     type?: string;
     workWeek?: number;
@@ -2541,6 +2545,8 @@ export class ServiceService {
             throw new Error('Required parameter format was null or undefined when calling serviceTechsFormattedList.');
         }
         const primaryCenter = requestParameters.primaryCenter;
+        const primaryCenterManager = requestParameters.primaryCenterManager;
+        const primaryCenterRegion = requestParameters.primaryCenterRegion;
         const qualifier = requestParameters.qualifier;
         const type = requestParameters.type;
         const workWeek = requestParameters.workWeek;
@@ -2549,6 +2555,14 @@ export class ServiceService {
         if (primaryCenter !== undefined && primaryCenter !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>primaryCenter, 'primaryCenter');
+        }
+        if (primaryCenterManager !== undefined && primaryCenterManager !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>primaryCenterManager, 'primaryCenter__manager');
+        }
+        if (primaryCenterRegion !== undefined && primaryCenterRegion !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>primaryCenterRegion, 'primaryCenter__region');
         }
         if (qualifier !== undefined && qualifier !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -2624,6 +2638,8 @@ export class ServiceService {
     public serviceTechsList(requestParameters: ServiceTechsListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Technician>>>;
     public serviceTechsList(requestParameters: ServiceTechsListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         const primaryCenter = requestParameters.primaryCenter;
+        const primaryCenterManager = requestParameters.primaryCenterManager;
+        const primaryCenterRegion = requestParameters.primaryCenterRegion;
         const qualifier = requestParameters.qualifier;
         const type = requestParameters.type;
         const workWeek = requestParameters.workWeek;
@@ -2632,6 +2648,14 @@ export class ServiceService {
         if (primaryCenter !== undefined && primaryCenter !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>primaryCenter, 'primaryCenter');
+        }
+        if (primaryCenterManager !== undefined && primaryCenterManager !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>primaryCenterManager, 'primaryCenter__manager');
+        }
+        if (primaryCenterRegion !== undefined && primaryCenterRegion !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>primaryCenterRegion, 'primaryCenter__region');
         }
         if (qualifier !== undefined && qualifier !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

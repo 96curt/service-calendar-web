@@ -9,7 +9,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RegionEnum } from './regionEnum';
 import { ManagerEnum } from './managerEnum';
 import { StateEnum } from './stateEnum';
 
@@ -26,7 +25,7 @@ export interface ServiceCenter {
     latitude?: number | null;
     longitute?: number | null;
     name: string;
-    region: RegionEnum;
     manager: ManagerEnum;
+    region: number;
 }
 
