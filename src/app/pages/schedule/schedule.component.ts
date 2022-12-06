@@ -26,10 +26,10 @@ import { PatternRule } from 'devextreme/ui/validation_rules';
 export class ScheduleComponent implements OnInit {
   @ViewChild(DxSchedulerComponent, { static: false }) dxScheduler!: DxSchedulerComponent
 
-  scheduleDataSource:  CustomStore;
-  techDataSource:  CustomStore;
-  centerDataSource:  CustomStore;
-  addendumDataSource:  CustomStore;
+  scheduleStore:  CustomStore;
+  techStore:  CustomStore;
+  centerStore:  CustomStore;
+  addendumStore:  CustomStore;
   sequenceDataSource: CustomStore;
   jobSiteDataSource: CustomStore;
 
@@ -39,7 +39,7 @@ export class ScheduleComponent implements OnInit {
 
   constructor(private serviceService: ServiceService, private customerService:CustomerService) {
 
-    this.techDataSource = new CustomStore({
+    this.techStore = new CustomStore({
       key: 'id',
       loadMode:'processed',
       load: () => {
@@ -61,7 +61,7 @@ export class ScheduleComponent implements OnInit {
       }
     });
 
-    this.scheduleDataSource = new CustomStore({
+    this.scheduleStore = new CustomStore({
       key: 'id',
       loadMode:'processed',
       load: (loadOptions) => {
@@ -92,7 +92,7 @@ export class ScheduleComponent implements OnInit {
       }
     });
 
-    this.centerDataSource = new CustomStore({
+    this.centerStore = new CustomStore({
       key: 'id',
       load: () => {
         return lastValueFrom(this.serviceService.serviceCentersList())
@@ -100,7 +100,7 @@ export class ScheduleComponent implements OnInit {
       }
     });
 
-    this.addendumDataSource = new CustomStore({
+    this.addendumStore = new CustomStore({
       key: 'id',
       load: () => {
         return lastValueFrom(this.serviceService.serviceOrderAddendumsList({}))
@@ -143,9 +143,20 @@ export class ScheduleComponent implements OnInit {
 
   onSelectedRegion(region:number) {
     this.dxScheduler.instance.beginUpdate();
+    let scheduleSource = this.dxScheduler.instance.getDataSource();
+    let options = scheduleSource.loadOptions()
+    options.filter
+    
+    this.dxScheduler.resources.forEach(({dataSource,fieldExpr})=>{
+      dataSource.load();
+    })
+
     this.selectedRegion = region;
-    this.techDataSource.load();
-    this.scheduleDataSource.load();
+    
+    
+    this.techStore.load();
+    this.scheduleStore.load();
+    scheduleSource.load();
     this.dxScheduler.instance.endUpdate();
   }
 
@@ -196,7 +207,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   async getAddendum(id:number) {
-    let tmp = await this.addendumDataSource.byKey(id);
+    let tmp = await this.addendumStore.byKey(id);
     console.log(tmp)
     return tmp
   }

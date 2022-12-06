@@ -9,7 +9,7 @@
     <div class="dx-card responsive-paddings">
         <!-- Configuration Options -->
         <dx-scheduler
-            [dataSource]="scheduleDataSource"
+            [dataSource]="scheduleStore"
             timeZone="America/Los_Angeles"
             textExpr="description"
             startDateExpr="startDateTime"
@@ -20,7 +20,6 @@
             [startDayHour]="6"
             [endDayHour]="18"
             [remoteFiltering]="true"
- 
             >
 
             <!-- Views -->
@@ -46,21 +45,21 @@
             <dxi-resource
                 fieldExpr="technicians"    
                 label="Technicians"          
-                [dataSource]="techDataSource"
+                [dataSource]="techStore"
                 [allowMultiple]="true"
                 displayExpr="fullName"
             ></dxi-resource> 
             <dxi-resource
                 fieldExpr="serviceCenter"    
                 label="Service Center"          
-                [dataSource]="centerDataSource"
+                [dataSource]="centerStore"
                 [allowMultiple]="false"
                 displayExpr="name"
             ></dxi-resource>
             <dxi-resource
                 fieldExpr="addendum"    
                 label="Service Order"          
-                [dataSource]="addendumDataSource"
+                [dataSource]="addendumStore"
                 [allowMultiple]="false"
                 displayExpr="name"
             ></dxi-resource>
