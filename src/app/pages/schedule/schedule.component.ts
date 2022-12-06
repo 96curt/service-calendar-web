@@ -11,7 +11,7 @@ import {
   ServiceTechsListRequestParams,
   Region,
   CustomerService,
-  OrderAddendumDetail
+  OrderAddendum,
 } from 'openapi';
 import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
@@ -30,6 +30,10 @@ export class ScheduleComponent implements OnInit {
   techDataSource:  CustomStore;
   centerDataSource:  CustomStore;
   addendumDataSource:  CustomStore;
+  sequenceDataSource: CustomStore;
+  jobSiteDataSource: CustomStore;
+
+
   selectedTechs: number[] | undefined;
   selectedRegion: number | undefined;
 
@@ -69,12 +73,10 @@ export class ScheduleComponent implements OnInit {
         } as ServiceSchedulesListRequestParams
         
         return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams))
-        .then(response => {
-          return {
-            data:response,
-          }
-        })
         .catch(() => { throw 'Error Loading Appointments' });
+      },
+      byKey: (key) => {
+        return lastValueFrom(this.serviceService.serviceScheduleRetrieve({id:key}));
       },
       insert: (schedule:Schedule) => {
         return lastValueFrom(this.serviceService.serviceSchedulesCreate({schedule:schedule}))
@@ -94,25 +96,40 @@ export class ScheduleComponent implements OnInit {
       key: 'id',
       load: () => {
         return lastValueFrom(this.serviceService.serviceCentersList())
-        .then(response => {
-          return {
-            data:response
-          }
-        })
         .catch(() => { throw 'Error loading Service Centers' });
       }
     });
 
     this.addendumDataSource = new CustomStore({
       key: 'id',
-      load: (loadOptions) => {
+      load: () => {
         return lastValueFrom(this.serviceService.serviceOrderAddendumsList({}))
-        .then(response => {
-          return {
-            data:response
-          }
-        })
         .catch(() => { throw 'Error loading Service Addendums' });
+      },
+      byKey: (key) => {
+        return lastValueFrom(this.serviceService.serviceOrderAddendumRetrieve({id:key}))
+      }
+    });
+
+    this.sequenceDataSource = new CustomStore({
+      key: 'id',
+      load: () => {
+        return lastValueFrom(this.serviceService.serviceOrdersSequencesList({}))
+        .catch(() => { throw 'Error loading Service Addendums' });
+      },
+      byKey: (key) => {
+        return lastValueFrom(this.serviceService.serviceOrderSequenceRetrieve({id:key}));
+      }
+    });
+
+    this.jobSiteDataSource = new CustomStore({
+      key: 'id',
+      load: () => {
+        return lastValueFrom(this.serviceService.serviceJobsitesList())
+        .catch(() => { throw 'Error loading Service Addendums' });
+      },
+      byKey: (key) => {
+        return lastValueFrom(this.serviceService.serviceJobsiteRetrieve({id:key}))
       }
     });
   }
@@ -178,33 +195,21 @@ export class ScheduleComponent implements OnInit {
 
   }
 
-  // getAddendum(id:): OrderAddendum {
-  //   return this.addendumDataSource.byKey(id);
-  // }
-  
-  // getSequence(id){
-
-  // }
-
-  getCustomer(schedule:Schedule){
-    let addendum: OrderAddendumDetail
-    addendum await this.addendumDataSource.byKey(schedule.addendum).then(
-      (response) =>  {
-        return response;
-      }
-    );
-    
-    this.customerService.customerRetrieve({addendum.})
+  async getAddendum(id:number) {
+    let tmp = await this.addendumDataSource.byKey(id);
+    console.log(tmp)
+    return tmp
   }
+  
+  getSequence(id:number){
+
+  }
+
+  getCustomer(id:number){
     
     
-    
-  //   await this.techDataSource.byKey(techId).then((response) => {
-  //       return response.name;
-  //     });
-    
-    
-    
-  //   return names;
-  // }
+
+  }
+       
+ 
 }

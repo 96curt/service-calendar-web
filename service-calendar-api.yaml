@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Service Calendar API
-  version: 0.7.0
+  version: 0.8.0
   description: Mockup Service Calendar API
 paths:
   /api/auth/login:
@@ -84,7 +84,54 @@ paths:
       responses:
         '200':
           description: No response body
-  /api/customers/:
+  /api/customer/{id}:
+    get:
+      operationId: customer_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - customer
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+  /api/customer/{id}{format}:
+    get:
+      operationId: customer_formatted_retrieve
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - customer
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+  /api/customers:
     get:
       operationId: customers_list
       tags:
@@ -124,7 +171,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Customer'
           description: ''
-  /api/profile/:
+  /api/profile:
     get:
       operationId: profile_retrieve
       tags:
@@ -200,7 +247,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Region'
           description: ''
-  /api/service/centers/:
+  /api/service/centers:
     get:
       operationId: service_centers_list
       tags:
@@ -240,7 +287,54 @@ paths:
                 items:
                   $ref: '#/components/schemas/ServiceCenter'
           description: ''
-  /api/service/comments/:
+  /api/service/comment/{id}:
+    get:
+      operationId: service_comment_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+  /api/service/comment/{id}{format}:
+    get:
+      operationId: service_comment_formatted_retrieve
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+  /api/service/comments:
     get:
       operationId: service_comments_list
       tags:
@@ -255,31 +349,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comment'
-          description: ''
-    post:
-      operationId: service_comments_create
-      tags:
-      - service
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Comment'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Comment'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Comment'
-        required: true
-      security:
-      - cookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Comment'
           description: ''
   /api/service/comments{format}:
     get:
@@ -305,8 +374,29 @@ paths:
                 items:
                   $ref: '#/components/schemas/Comment'
           description: ''
-    post:
-      operationId: service_comments_formatted_create
+  /api/service/jobsite/{id}:
+    get:
+      operationId: service_jobsite_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobSite'
+          description: ''
+  /api/service/jobsite/{id}{format}:
+    get:
+      operationId: service_jobsite_formatted_retrieve
       parameters:
       - in: path
         name: format
@@ -315,30 +405,23 @@ paths:
           enum:
           - .json
         required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
       - service
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Comment'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Comment'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Comment'
-        required: true
       security:
       - cookieAuth: []
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
+                $ref: '#/components/schemas/JobSite'
           description: ''
-  /api/service/jobsites/:
+  /api/service/jobsites:
     get:
       operationId: service_jobsites_list
       tags:
@@ -396,7 +479,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderAddendumDetail'
+                $ref: '#/components/schemas/OrderAddendum'
           description: ''
   /api/service/order/addendum/{id}{format}:
     get:
@@ -423,7 +506,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderAddendumDetail'
+                $ref: '#/components/schemas/OrderAddendum'
           description: ''
   /api/service/order/addendums:
     get:
@@ -467,7 +550,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderAddendumList'
+                  $ref: '#/components/schemas/OrderAddendum'
           description: ''
   /api/service/order/addendums{format}:
     get:
@@ -518,7 +601,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderAddendumList'
+                  $ref: '#/components/schemas/OrderAddendum'
           description: ''
   /api/service/order/item/{id}:
     get:
@@ -585,7 +668,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderSequenceDetail'
+                $ref: '#/components/schemas/OrderSequence'
           description: ''
   /api/service/order/sequence/{id}{format}:
     get:
@@ -612,18 +695,30 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderSequenceDetail'
+                $ref: '#/components/schemas/OrderSequence'
           description: ''
   /api/service/orders/sequences:
     get:
       operationId: service_orders_sequences_list
       parameters:
       - in: query
+        name: billingCust
+        schema:
+          type: integer
+      - in: query
+        name: jobSite
+        schema:
+          type: integer
+      - in: query
         name: number
         schema:
           type: integer
       - in: query
         name: region
+        schema:
+          type: integer
+      - in: query
+        name: serviceCenter
         schema:
           type: integer
       tags:
@@ -637,12 +732,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderSequenceList'
+                  $ref: '#/components/schemas/OrderSequence'
           description: ''
   /api/service/orders/sequences{format}:
     get:
       operationId: service_orders_sequences_formatted_list
       parameters:
+      - in: query
+        name: billingCust
+        schema:
+          type: integer
       - in: path
         name: format
         schema:
@@ -651,11 +750,19 @@ paths:
           - .json
         required: true
       - in: query
+        name: jobSite
+        schema:
+          type: integer
+      - in: query
         name: number
         schema:
           type: integer
       - in: query
         name: region
+        schema:
+          type: integer
+      - in: query
+        name: serviceCenter
         schema:
           type: integer
       tags:
@@ -669,7 +776,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OrderSequenceList'
+                  $ref: '#/components/schemas/OrderSequence'
           description: ''
   /api/service/schedule/{id}:
     get:
@@ -891,7 +998,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/service/schedules/:
+  /api/service/schedules:
     get:
       operationId: service_schedules_list
       parameters:
@@ -1124,7 +1231,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Schedule'
           description: ''
-  /api/service/techs/:
+  /api/service/techs:
     get:
       operationId: service_techs_list
       parameters:
@@ -1404,63 +1511,7 @@ components:
       - '9'
       - '10'
       type: string
-    OrderAddendumDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        number:
-          type: integer
-          readOnly: true
-        sequence:
-          type: string
-          format: uri
-        description:
-          type: string
-          maxLength: 128
-        laborHours:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
-        travelHours:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
-        trips:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,2}(?:\.\d{0,0})?$
-        status:
-          $ref: '#/components/schemas/StatusEnum'
-        statusDate:
-          type: string
-          format: date
-          readOnly: true
-        item_set:
-          type: array
-          items:
-            type: string
-            format: uri
-          readOnly: true
-        schedule_set:
-          type: array
-          items:
-            type: string
-            format: uri
-          readOnly: true
-      required:
-      - description
-      - id
-      - item_set
-      - laborHours
-      - number
-      - schedule_set
-      - sequence
-      - statusDate
-      - travelHours
-      - trips
-    OrderAddendumList:
+    OrderAddendum:
       type: object
       properties:
         id:
@@ -1539,27 +1590,7 @@ components:
       - partOrder
       - serviceCode
       - warrantyCode
-    OrderSequenceDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        region:
-          type: integer
-        number:
-          type: integer
-          readOnly: true
-        addendum_set:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderAddendumDetail'
-      required:
-      - addendum_set
-      - id
-      - number
-      - region
-    OrderSequenceList:
+    OrderSequence:
       type: object
       properties:
         id:

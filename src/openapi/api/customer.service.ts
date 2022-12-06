@@ -26,15 +26,20 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-export interface CustomersFormattedListRequestParams {
+export interface CustomerFormattedRetrieveRequestParams {
     format: '.json';
+    id: number;
+}
+
+export interface CustomerRetrieveRequestParams {
+    id: number;
 }
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomersService {
+export class CustomerService {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();
@@ -100,13 +105,17 @@ export class CustomersService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Customer>>;
-    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Customer>>>;
-    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Customer>>>;
-    public customersFormattedList(requestParameters: CustomersFormattedListRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public customerFormattedRetrieve(requestParameters: CustomerFormattedRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Customer>;
+    public customerFormattedRetrieve(requestParameters: CustomerFormattedRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Customer>>;
+    public customerFormattedRetrieve(requestParameters: CustomerFormattedRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Customer>>;
+    public customerFormattedRetrieve(requestParameters: CustomerFormattedRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         const format = requestParameters.format;
         if (format === null || format === undefined) {
-            throw new Error('Required parameter format was null or undefined when calling customersFormattedList.');
+            throw new Error('Required parameter format was null or undefined when calling customerFormattedRetrieve.');
+        }
+        const id = requestParameters.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling customerFormattedRetrieve.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -146,8 +155,8 @@ export class CustomersService {
             }
         }
 
-        let localVarPath = `/api/customers${this.configuration.encodeParam({name: "format", value: format, in: "path", style: "simple", explode: false, dataType: "'.json'", dataFormat: undefined})}`;
-        return this.httpClient.request<Array<Customer>>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/customer/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}${this.configuration.encodeParam({name: "format", value: format, in: "path", style: "simple", explode: false, dataType: "'.json'", dataFormat: undefined})}`;
+        return this.httpClient.request<Customer>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -160,13 +169,18 @@ export class CustomersService {
     }
 
     /**
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customersList(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Customer>>;
-    public customersList(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Customer>>>;
-    public customersList(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Customer>>>;
-    public customersList(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public customerRetrieve(requestParameters: CustomerRetrieveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Customer>;
+    public customerRetrieve(requestParameters: CustomerRetrieveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Customer>>;
+    public customerRetrieve(requestParameters: CustomerRetrieveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Customer>>;
+    public customerRetrieve(requestParameters: CustomerRetrieveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const id = requestParameters.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling customerRetrieve.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -205,8 +219,8 @@ export class CustomersService {
             }
         }
 
-        let localVarPath = `/api/customers`;
-        return this.httpClient.request<Array<Customer>>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/customer/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        return this.httpClient.request<Customer>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

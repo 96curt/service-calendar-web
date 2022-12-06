@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { AuthService } from './api/auth.service';
+import { CustomerService } from './api/customer.service';
 import { CustomersService } from './api/customers.service';
 import { ProfileService } from './api/profile.service';
 import { RegionsService } from './api/regions.service';

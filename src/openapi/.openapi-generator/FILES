@@ -1,8 +1,10 @@
 .gitignore
+.openapi-generator-ignore
 README.md
 api.module.ts
 api/api.ts
 api/auth.service.ts
+api/customer.service.ts
 api/customers.service.ts
 api/profile.service.ts
 api/regions.service.ts
@@ -18,11 +20,9 @@ model/jobSite.ts
 model/login.ts
 model/managerEnum.ts
 model/models.ts
-model/orderAddendumDetail.ts
-model/orderAddendumList.ts
+model/orderAddendum.ts
 model/orderItem.ts
-model/orderSequenceDetail.ts
-model/orderSequenceList.ts
+model/orderSequence.ts
 model/patchedSchedule.ts
 model/profile.ts
 model/region.ts
