@@ -9,7 +9,9 @@ import {
   Technician,
   ServiceSchedulesListRequestParams,
   ServiceTechsListRequestParams,
-  Region
+  Region,
+  CustomerService,
+  OrderAddendumDetail
 } from 'openapi';
 import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
@@ -31,7 +33,7 @@ export class ScheduleComponent implements OnInit {
   selectedTechs: number[] | undefined;
   selectedRegion: number | undefined;
 
-  constructor(private serviceService: ServiceService) {
+  constructor(private serviceService: ServiceService, private customerService:CustomerService) {
 
     this.techDataSource = new CustomStore({
       key: 'id',
@@ -184,7 +186,16 @@ export class ScheduleComponent implements OnInit {
 
   // }
 
-  // getCustomer(schedule:Schedule){
+  getCustomer(schedule:Schedule){
+    let addendum: OrderAddendumDetail
+    addendum await this.addendumDataSource.byKey(schedule.addendum).then(
+      (response) =>  {
+        return response;
+      }
+    );
+    
+    this.customerService.customerRetrieve({addendum.})
+  }
     
     
     
