@@ -44,19 +44,9 @@ export class ScheduleComponent implements OnInit {
       loadMode:'processed',
       load: () => {
         const requestPrams = {
-          primaryCenterRegion:this.selectedRegion
+          primaryCenterRegion:4
         } as ServiceTechsListRequestParams
         return lastValueFrom(this.serviceService.serviceTechsList(requestPrams))
-        .then((response:Technician[]) => {
-          let techs: number[] | undefined = [];
-          response.forEach((tech) => {
-            techs!.push(tech.id)
-          });
-          this.selectedTechs = techs;
-          return {
-            data:response
-          }
-        })
         .catch(() => { throw 'Error loading technicians' });
       }
     });
@@ -69,7 +59,7 @@ export class ScheduleComponent implements OnInit {
         let requestPrams = {
           startDateTimeBefore: filter[0][1][2],
           endDateTimeAfter: filter[0][0][2],
-          technicians:this.selectedTechs
+          addendumSequenceRegion:4
         } as ServiceSchedulesListRequestParams
         
         return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams))
@@ -145,7 +135,7 @@ export class ScheduleComponent implements OnInit {
     this.dxScheduler.instance.beginUpdate();
     let scheduleSource = this.dxScheduler.instance.getDataSource();
     let options = scheduleSource.loadOptions()
-    options.filter
+    console.log(options.filter);
     
     this.dxScheduler.resources.forEach(({dataSource,fieldExpr})=>{
       dataSource.load();
@@ -169,9 +159,10 @@ export class ScheduleComponent implements OnInit {
     const form = e.form as Form;
     let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
     {
-      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
+      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "text" })
       if (index != -1) {
-        mainGroupItems.splice(index, 1);
+        mainGroupItems[index].visible=false;
+        
       }
     }
 
