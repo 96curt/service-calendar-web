@@ -1,17 +1,16 @@
-<!-- <div>
-    <app-filter
-    (onSelected)="onSelectedRegion($event)"
-    ></app-filter>
-</div> -->
 <div class="content-block">
-    
+    <h2>Technician Schedules</h2>
     <div class="dx-card responsive-paddings">
+
+        <app-filter
+            (onSelected)="selectedTechs"
+        ></app-filter>
         <!-- Configuration Options -->
         <dx-scheduler
             [dataSource]="scheduleStore"
             timeZone="America/Los_Angeles"
-            textExpr="description"
-            descriptionExpr="text"
+            textExpr="label"
+            descriptionExpr="description"
             startDateExpr="startDateTime"
             endDateExpr="endDateTime"
             currentView="Vertical Work Week Timeline"
@@ -21,6 +20,7 @@
             [endDayHour]="18"
             [remoteFiltering]="true"
             height="600"
+            (onContentReady)="onContentReady($event)"
             >
 
             <!-- Views -->
@@ -28,13 +28,13 @@
                 name="Vertical Day Timeline"
                 type="timelineDay"
                 groupOrientation="vertical"
-                [cellDuration]="60"
+                [cellDuration]="120"
             ></dxi-view>
             <dxi-view
                 name="Vertical Work Week Timeline"
                 type="timelineWorkWeek"
                 groupOrientation="vertical"
-                [cellDuration]="60"
+                [cellDuration]="180"
                 
             ></dxi-view>
             <dxi-view
@@ -96,7 +96,7 @@
                   <div>{{ appointment.targetedAppointmentData.description }}</div>
                   
                 </div>
-              </div>
+            </div>
 
         </dx-scheduler>
     </div>

@@ -247,6 +247,53 @@ paths:
                 items:
                   $ref: '#/components/schemas/Region'
           description: ''
+  /api/service/center/{id}:
+    get:
+      operationId: service_center_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceCenter'
+          description: ''
+  /api/service/center/{id}{format}:
+    get:
+      operationId: service_center_formatted_retrieve
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceCenter'
+          description: ''
   /api/service/centers:
     get:
       operationId: service_centers_list
@@ -1231,6 +1278,53 @@ paths:
               schema:
                 $ref: '#/components/schemas/Schedule'
           description: ''
+  /api/service/tech/{id}:
+    get:
+      operationId: service_tech_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Technician'
+          description: ''
+  /api/service/tech/{id}{format}:
+    get:
+      operationId: service_tech_formatted_retrieve
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Technician'
+          description: ''
   /api/service/techs:
     get:
       operationId: service_techs_list
@@ -1620,6 +1714,9 @@ components:
         id:
           type: integer
           readOnly: true
+        label:
+          type: string
+          readOnly: true
         startDateTime:
           type: string
           format: date-time
@@ -1692,6 +1789,9 @@ components:
         id:
           type: integer
           readOnly: true
+        label:
+          type: string
+          readOnly: true
         startDateTime:
           type: string
           format: date-time
@@ -1732,6 +1832,7 @@ components:
       required:
       - endDateTime
       - id
+      - label
       - serviceCenter
       - startDateTime
       - technicians

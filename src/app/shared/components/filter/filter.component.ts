@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import CustomStore from 'devextreme/data/custom_store';
 import { ValueChangedEvent } from 'devextreme/ui/select_box';
 import { Region, RegionsService } from 'openapi';
 import { lastValueFrom } from 'rxjs';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-filter',
@@ -11,29 +12,48 @@ import { lastValueFrom } from 'rxjs';
 })
 export class FilterComponent implements OnInit {
   regionStore: CustomStore;
-  //@Input() techList = Techni
-  @Output() onSelected = new EventEmitter<any>();
+  filterValues: any;
+
+  @Output() onChange = new EventEmitter<any>();
+
   
-  
+  filterVisible = false
+  emailButtonOptions: any;
+  closeButtonOptions: any;
+
   constructor(private regionsService: RegionsService) {
+    this.emailButtonOptions = {
+      icon: 'clear',
+      text: 'Clear',
+      onClick() {
+        
+      },
+    };
+
+    this.closeButtonOptions = {
+      text: 'Close',
+      onClick() {
+        this.filterVisible = false;
+      }
+    };
+
     this.regionStore = new CustomStore({
       load: () => {
         return lastValueFrom(this.regionsService.regionsList())
-        .then(response => {
-          return {
-            data:response,
-          }
-        })
         .catch(() => { throw 'Error loading regions' });
       }
     });
+
    }
 
   ngOnInit(): void {
   }
 
   onValueChanged(e:ValueChangedEvent){
-    this.onSelected.emit(e.value);
+    this.onChange.emit(e.value);
   }
 
+  displayFilter(){
+    this.filterVisible = true
+  }
 }

@@ -17,6 +17,7 @@ import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
 import Form, { SimpleItem } from "devextreme/ui/form";
 import { PatternRule } from 'devextreme/ui/validation_rules';
+import Calendar from 'devextreme/ui/calendar'
 
 @Component({
   selector: 'app-schedule',
@@ -33,6 +34,7 @@ export class ScheduleComponent implements OnInit {
   sequenceDataSource: CustomStore;
   jobSiteDataSource: CustomStore;
 
+  filterAdded = false
 
   selectedTechs: number[] | undefined;
   selectedRegion: number | undefined;
@@ -44,10 +46,12 @@ export class ScheduleComponent implements OnInit {
       loadMode:'processed',
       load: () => {
         const requestPrams = {
-          primaryCenterRegion:4
         } as ServiceTechsListRequestParams
         return lastValueFrom(this.serviceService.serviceTechsList(requestPrams))
         .catch(() => { throw 'Error loading technicians' });
+      },
+      byKey: (key) => {
+        return lastValueFrom(this.serviceService.serviceTechRetrieve({id:key}));
       }
     });
 
@@ -59,7 +63,6 @@ export class ScheduleComponent implements OnInit {
         let requestPrams = {
           startDateTimeBefore: filter[0][1][2],
           endDateTimeAfter: filter[0][0][2],
-          addendumSequenceRegion:4
         } as ServiceSchedulesListRequestParams
         
         return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams))
@@ -86,7 +89,9 @@ export class ScheduleComponent implements OnInit {
       key: 'id',
       load: () => {
         return lastValueFrom(this.serviceService.serviceCentersList())
-        .catch(() => { throw 'Error loading Service Centers' });
+      },
+      byKey: (key) => {
+        return lastValueFrom(this.serviceService.serviceCenterRetrieve({id:key}));
       }
     });
 
@@ -131,7 +136,24 @@ export class ScheduleComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSelectedRegion(region:number) {
+  onContentReady(e:any){
+    if (this.filterAdded)  
+        return;  
+  
+    let element = document.querySelectorAll(".dx-scheduler-navigator");  
+    const container = document.createElement("div");  
+    var comp = document.createElement("app-filter");
+
+    comp.addEventListener("onChanged",  event => {  
+      console.log("filter changed")
+    });
+    container.appendChild(comp)
+    element[0].appendChild(container); 
+
+    this.filterAdded = true;  
+  }
+
+  onFilterChange(region:number) {
     this.dxScheduler.instance.beginUpdate();
     let scheduleSource = this.dxScheduler.instance.getDataSource();
     let options = scheduleSource.loadOptions()
@@ -152,14 +174,21 @@ export class ScheduleComponent implements OnInit {
 
   onAppointmentFormOpening(e:any) {
     e.popup.option('showTitle', true);
-    e.popup.option('title', e.appointmentData.text ? 
-        e.appointmentData.text : 
+    e.popup.option('title', e.appointmentData.label ? 
+        e.appointmentData.label : 
         'Create a new appointment');
 
     const form = e.form as Form;
     let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
     {
-      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "text" })
+      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "label" })
+      if (index != -1) {
+        mainGroupItems[index].visible=false;
+        
+      }
+    }
+    {
+      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
       if (index != -1) {
         mainGroupItems[index].visible=false;
         
@@ -168,7 +197,7 @@ export class ScheduleComponent implements OnInit {
 
     //editing form items for resources
     mainGroupItems.forEach((item, index) => {
-      if(item.dataField === "technicians" || item.dataField === "serviceCenter" || item.dataField === "description"){
+      if(item.dataField === "technicians" || item.dataField === "serviceCenter"){
         item.isRequired = true;
       }
     });
@@ -194,7 +223,6 @@ export class ScheduleComponent implements OnInit {
       });
       form.itemOption('mainGroup', 'items', mainGroupItems);
     }
-
   }
 
   async getAddendum(id:number) {

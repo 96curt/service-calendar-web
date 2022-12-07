@@ -13,6 +13,7 @@
 
 export interface PatchedSchedule { 
     readonly id?: number;
+    readonly label?: string;
     startDateTime?: string;
     endDateTime?: string;
     confirmed?: boolean;
