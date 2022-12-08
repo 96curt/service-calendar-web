@@ -1,0 +1,14 @@
+# https://thedatalife.com/deploying-angular-app-with-docker-and-nginx
+
+version: "3.5"
+
+services:
+  nginx:
+    image: nginx
+    build:
+      context: ../
+      dockerfile: ./prod/nginx/Dockerfile
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8081:80"
