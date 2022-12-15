@@ -172,6 +172,10 @@ export class ScheduleComponent implements OnInit {
     this.dxScheduler.instance.endUpdate();
   }
 
+  showAppointmentPopup(e:any) {
+    this.dxScheduler.instance.showAppointmentPopup();
+  }
+
   onAppointmentFormOpening(e:any) {
     e.popup.option('showTitle', true);
     e.popup.option('title', e.appointmentData.label ? 

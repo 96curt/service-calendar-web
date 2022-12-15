@@ -2,9 +2,9 @@
     <h2>Technician Schedules</h2>
     <div class="dx-card responsive-paddings">
 
-        <app-filter
+        <!-- <app-filter
             (onSelected)="selectedTechs"
-        ></app-filter>
+        ></app-filter> -->
         <!-- Configuration Options -->
         <dx-scheduler
             [dataSource]="scheduleStore"
@@ -98,6 +98,14 @@
                 </div>
             </div>
 
+
+            
         </dx-scheduler>
+        <dx-speed-dial-action
+                #speedDialAction
+                icon="plus"
+                (onClick)="showAppointmentPopup($event)"
+                >
+        </dx-speed-dial-action>
     </div>
 </div>
