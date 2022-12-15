@@ -33,18 +33,16 @@ export class AuthHelperInterceptor implements HttpInterceptor {
       newReq = request.clone({headers: request.headers.append(headerName,token)});
     }  
     
+    return next.handle(newReq)
+    .pipe(
+     catchError((error) => {
 
-     
-    return next.handle(newReq);
-    //.pipe(
-    //  catchError((error) => {
-
-    //    if ((error.status === 403 || error.status == 401) && !error.url.includes('logout')){
-    //      //this.authHelperService.logOut();
-    //      return throwError(() => Error('Authentication Error, Logging out.'));
-    //    }
-    //    return throwError(() => error);
-    //  })
-    //);
+       if ((error.status === 403 || error.status == 401) && !error.url.includes('logout')){
+         this.authHelperService.logOut();
+         return throwError(() => Error('Authentication Error, Logging out.'));
+       }
+       return throwError(() => error);
+     })
+    );
   }
 }

@@ -1,0 +1,13 @@
+# Development Stack
+
+version: '3'
+
+services:
+  web:
+    build: .
+    entrypoint: npm run ng serve --host=0.0.0.0 --poll=1
+    volumes:
+      - .:/app
+    ports:
+      - "4200:4200"
+    

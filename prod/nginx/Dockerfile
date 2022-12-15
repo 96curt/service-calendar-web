@@ -1,3 +1,5 @@
+# Production Container
+
 # implement a multi-stage build
 # 1ST STAGE: Node image for building Angular assets (dist files)
 
