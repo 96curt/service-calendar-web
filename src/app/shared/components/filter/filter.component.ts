@@ -16,6 +16,7 @@ import DataSource from 'devextreme/data/data_source';
 export class FilterComponent implements OnInit {
   @Output() onChange = new EventEmitter<Filter>();
   @Input() visible = false;
+  @Output() visibleChange = new EventEmitter<boolean>;
   @ViewChildren(DxTagBoxComponent, {}) tagBoxes!: DxTagBoxComponent[];
   regionStore: CustomStore;
   centerStore: CustomStore;
@@ -24,7 +25,6 @@ export class FilterComponent implements OnInit {
   zipStore: CustomStore;
   technicianStore: CustomStore;
   filterValues: Filter = new Filter();
-  filterVisible = false;
   clearButtonOptions: any;
   closeButtonOptions: any;
 
@@ -168,9 +168,8 @@ export class FilterComponent implements OnInit {
     this.onChange.emit(this.filterValues);
   }
 
-  displayFilter(){
-    // Unhide the Filter
-    this.visible = true;
+  onVisibleChange(){
+    this.visibleChange.emit(this.visible);
   }
 
   /*** Helper Methods ***/

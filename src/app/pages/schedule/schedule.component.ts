@@ -40,6 +40,7 @@ export class ScheduleComponent implements OnInit {
   sequenceDataSource: CustomStore;
   jobSiteDataSource: CustomStore;
   filterValues = new Filter();
+  filterVisible = false;
 
   constructor(
     private serviceService: ServiceService,
@@ -179,38 +180,42 @@ export class ScheduleComponent implements OnInit {
 
   // Adding custom elements to the scheduler component.
   onContentReady(e:any){
-    if(document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before filter-element") != null)
+    if(document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before #filter-button") != null)
       return;
 
     console.log("Loading Filter Button");
     
 
-    let toolbarBeforeElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before");
-    let toolbarContentElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before .dx-toolbar-item-content");
+    //let toolbarBeforeElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before");
+    let toolbarContentElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before .dx-buttongroup-wrapper");
 
     // Create Filter Button
-    let filterComp = document.createElement("filter-element") as NgElement & WithProperties<FilterComponent>;
-    filterComp.addEventListener('onChange', (e:any) => {
-      this.dxScheduler.instance.beginUpdate();
-      this.filterValues = e.detail;
-      this.dxScheduler.groups = [];
-      
-      this.dxScheduler.resources.forEach((resource:{dataSource:DataSource}) => {
-        resource.dataSource.reload();
-      });
-      this.dxScheduler.instance.getDataSource().reload();
-      this.dxScheduler.instance.endUpdate();
-      this.dxScheduler.groups = ['technicians'];
+    let filterBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
+    filterBtn.text = 'Filter';
+    filterBtn.setAttribute('id','filter-button');
+    filterBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
+    filterBtn.addEventListener('onClick', (e:any) => {
+      this.displayFilter();
     });
-    toolbarBeforeElement?.appendChild(filterComp);
-
+    
     // Create Today Button
     let todayBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
     todayBtn.text = 'Today';
+    todayBtn.setAttribute('id','today-button');
+    todayBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
     todayBtn.addEventListener('onClick', (e:any) => {
       this.dxScheduler.currentDate = new Date();
     });
+
     toolbarContentElement?.appendChild(todayBtn);
+    toolbarContentElement?.appendChild(filterBtn);
+  }
+
+  onFilterChange(e:any){
+    //update filter
+    this.filterValues = e.detail;
+    //reload data
+    this.reload();
   }
 
   showAppointmentPopup(e:any) {
@@ -269,4 +274,23 @@ export class ScheduleComponent implements OnInit {
       form.itemOption('mainGroup', 'items', mainGroupItems);
     }
   }
+
+  /*** Helper Methods ***/
+
+  reload(){
+      this.dxScheduler.instance.beginUpdate();
+      this.dxScheduler.groups = [];
+      this.dxScheduler.resources.forEach((resource:{dataSource:DataSource}) => {
+        resource.dataSource.reload();
+      });
+      this.dxScheduler.instance.getDataSource().reload();
+      this.dxScheduler.instance.endUpdate();
+      this.dxScheduler.groups = ['technicians'];
+  }
+
+  displayFilter() {
+    // Unhide the Filter
+    this.filterVisible = true;
+  }
+
 }

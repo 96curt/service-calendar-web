@@ -1,5 +1,9 @@
 <div class="content-block">
     <h2>Technician Schedules</h2>
+    <app-filter
+    (onChange)="onFilterChange"
+    [(visible)]="filterVisible">
+    </app-filter>
     <div class="dx-card responsive-paddings">
         <!-- Configuration Options -->
         <dx-scheduler

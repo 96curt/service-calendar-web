@@ -1,8 +1,8 @@
-<dx-button
+<!-- <dx-button
   class="button-filter"
   text="Filter"
   (onClick)="displayFilter()">
-</dx-button>
+</dx-button> -->
 <dx-popup
   [width]="500"
   [height]="700"
@@ -13,6 +13,7 @@
   [showCloseButton]="true"
   container=".dx-viewport"
   [(visible)]="visible"
+  (visibleChange)="onVisibleChange()"
   (onHiding)="onHiding($event)">
   <dxo-position at="center" my="center"></dxo-position>
   <dx-scroll-view width="100%" height="100%">
