@@ -5,20 +5,9 @@ import { AuthGuardService } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
-import {
-  DxDataGridModule,
-  DxDropDownBoxModule,
-  DxFormModule,
-  DxSchedulerModule,
-  DxTemplateHost,
-  DxTemplateModule,
-  DxSelectBoxModule,
-  DxPopupModule,
-  DxButtonModule,
-  DxSpeedDialActionModule
-} from 'devextreme-angular';
+import { DxDataGridModule, DxTemplateHost } from 'devextreme-angular';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
-import { FilterComponent } from './shared/components/filter/filter.component';
+import { ScheduleModule } from './pages/schedule/schedule.module';
 
 const routes: Routes = [
   {
@@ -55,25 +44,15 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
-    DxDataGridModule,
-    DxFormModule,
-    DxSchedulerModule,
-    DxTemplateModule,
-    DxDropDownBoxModule,
-    DxFormModule,
-    DxSelectBoxModule,
-    DxPopupModule,
-    DxButtonModule,
-    DxSpeedDialActionModule
+    ScheduleModule,
+    DxDataGridModule
   ],
-  providers: [AuthGuardService,DxTemplateHost],
+  providers: [AuthGuardService, DxTemplateHost],
   exports: [RouterModule],
   declarations: [
     HomeComponent,
     ProfileComponent,
-    TasksComponent,
-    ScheduleComponent,
-    FilterComponent
+    TasksComponent
   ]
 })
 export class AppRoutingModule { }

@@ -1,13 +1,9 @@
 export * from './auth.service';
 import { AuthService } from './auth.service';
-export * from './customer.service';
-import { CustomerService } from './customer.service';
-export * from './customers.service';
-import { CustomersService } from './customers.service';
-export * from './profile.service';
-import { ProfileService } from './profile.service';
-export * from './regions.service';
-import { RegionsService } from './regions.service';
+export * from './generic.service';
+import { GenericService } from './generic.service';
 export * from './service.service';
 import { ServiceService } from './service.service';
-export const APIS = [AuthService, CustomerService, CustomersService, ProfileService, RegionsService, ServiceService];
+export * from './user.service';
+import { UserService } from './user.service';
+export const APIS = [AuthService, GenericService, ServiceService, UserService];

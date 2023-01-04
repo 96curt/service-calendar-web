@@ -1,45 +1,110 @@
 <dx-button
-        class="button-filter"
-        text="Filter"
-        (onClick)="displayFilter()"
-></dx-button>
+  class="button-filter"
+  text="Filter"
+  (onClick)="displayFilter()">
+</dx-button>
 <dx-popup
-    [width]="400"
-    [height]="700"
-    [showTitle]="true"
-    title="Schedule Filter"
-    [dragEnabled]="false"
-    [hideOnOutsideClick]="true"
-    [showCloseButton]="true"
-    container=".dx-viewport"
-    [(visible)]="filterVisible"
->
-  <dxo-position at="center" my="center"> </dxo-position>
-  <div id="form-filter">
-    <div class="widget-container">
-      <div>Select Region:</div>
-      <dx-select-box
-        valueExpr="id"
-        displayExpr="name"
-        [dataSource]="regionStore"
-        label="Select Region"
-        [searchEnabled]="true"
-        (onValueChanged)="onValueChanged($event)"
-      ></dx-select-box>
+  [width]="500"
+  [height]="700"
+  [showTitle]="true"
+  title="Technician Filter"
+  [dragEnabled]="false"
+  [hideOnOutsideClick]="true"
+  [showCloseButton]="true"
+  container=".dx-viewport"
+  [(visible)]="visible"
+  (onHiding)="onHiding($event)">
+  <dxo-position at="center" my="center"></dxo-position>
+  <dx-scroll-view width="100%" height="100%">
+    <div id="form-filter">
+      <div class="widget-container">
+        <div>Region:</div>
+        <dx-tag-box
+          valueExpr="id"
+          displayExpr="name"
+          [dataSource]="regionStore"
+          label="Select Regions"
+          [searchEnabled]="true"
+          [showClearButton]="true"
+          (onSelectionChanged)="onRegionChanged($event)"
+          [(value)]="filterValues.regions">
+        </dx-tag-box>
+      </div>
+      <div class="widget-container">
+        <div>Territory Manager:</div>
+        <dx-tag-box
+          valueExpr="id"
+          [displayExpr]="getfullName"
+          [dataSource]="managerStore"
+          label="Select Territory Managers"
+          [searchEnabled]="true"
+          [showClearButton]="true"
+          (onSelectionChanged)="onManagerChanged($event)"
+          [(value)]="filterValues.managers">
+        </dx-tag-box>
+      </div>
+      <div class="widget-container">
+        <div>Service Center:</div>
+        <dx-tag-box
+          valueExpr="id"
+          displayExpr="name"
+          [dataSource]="centerStore"
+          label="Select Service Centers"
+          [searchEnabled]="true"
+          [showClearButton]="true"
+          (onSelectionChanged)="onCenterChanged($event)"
+          [(value)]="filterValues.centers">
+        </dx-tag-box>
+      </div>
+      <div class="widget-container">
+        <div>Cities:</div>
+        <dx-tag-box
+          valueExpr="id"
+          displayExpr="name"
+          [dataSource]="citiesStore"
+          label="Select cities"
+          [searchEnabled]="true"
+          [showClearButton]="true"
+          (onSelectionChanged)="onCityChanged($event)"
+          [(value)]="filterValues.cities">
+        </dx-tag-box>
+      </div>
+      <div class="widget-container">
+        <div>Zip Codes:</div>
+        <dx-tag-box
+          valueExpr="code"
+          displayExpr="code"
+          [dataSource]="zipStore"
+          label="Select ZipCodes"
+          [showClearButton]="true"
+          (onSelectionChanged)="onZipChanged($event)"
+          [(value)]="filterValues.zipCodes">
+        </dx-tag-box>
+      </div>
+      <div class="widget-container">
+        <div>Technicians:</div>
+        <dx-tag-box
+          valueExpr="id"
+          [displayExpr]="getfullName"
+          [dataSource]="technicianStore"
+          label="Select Technicians"
+          [searchEnabled]="true"
+          [showClearButton]="true"
+          [(value)]="filterValues.techs">
+        </dx-tag-box>
+      </div>
     </div>
-  </div>
+  </dx-scroll-view>
   <dxi-toolbar-item
-      widget="dxButton"
-      toolbar="bottom"
-      location="before"
-      [options]="emailButtonOptions"
-    >
-    </dxi-toolbar-item>
-    <dxi-toolbar-item
-      widget="dxButton"
-      toolbar="bottom"
-      location="after"
-      [options]="closeButtonOptions"
-    ></dxi-toolbar-item>
+    widget="dxButton"
+    toolbar="bottom"
+    location="before"
+    [options]="clearButtonOptions">
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+    [options]="closeButtonOptions">
+  </dxi-toolbar-item>
 </dx-popup>
-

@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CollectionNestedOptionContainerImpl, DxSchedulerComponent } from 'devextreme-angular';
-import { LoadOptions } from 'devextreme/data';
+import { Component, createComponent, EventEmitter, Injector, OnInit, ViewChild } from '@angular/core';
+import { createCustomElement, NgElement, WithProperties } from '@angular/elements';
+import { CollectionNestedOptionContainerImpl, DxButtonComponent, DxSchedulerComponent } from 'devextreme-angular';
+import { FilterDescriptor, LoadOptions } from 'devextreme/data';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import {
@@ -10,14 +11,19 @@ import {
   ServiceSchedulesListRequestParams,
   ServiceTechsListRequestParams,
   Region,
-  CustomerService,
+  GenericService,
   OrderAddendum,
+  ServiceCentersListRequestParams,
+  ServiceOrderAddendumsListRequestParams,
 } from 'openapi';
 import { filter, lastValueFrom } from 'rxjs';
 import { Value } from 'sass-embedded';
 import Form, { SimpleItem } from "devextreme/ui/form";
 import { PatternRule } from 'devextreme/ui/validation_rules';
 import Calendar from 'devextreme/ui/calendar'
+import { FilterComponent } from 'app/shared/components/filter/filter.component';
+import { Filter } from 'app/shared/models/filter.model';
+import dxButton, { ClickEvent } from 'devextreme/ui/button';
 
 @Component({
   selector: 'app-schedule',
@@ -28,41 +34,51 @@ export class ScheduleComponent implements OnInit {
   @ViewChild(DxSchedulerComponent, { static: false }) dxScheduler!: DxSchedulerComponent
 
   scheduleStore:  CustomStore;
-  techStore:  CustomStore;
-  centerStore:  CustomStore;
-  addendumStore:  CustomStore;
+  techData:  DataSource;
+  centerData:  DataSource;
+  addendumData:  DataSource;
   sequenceDataSource: CustomStore;
   jobSiteDataSource: CustomStore;
+  filterValues = new Filter();
 
-  filterAdded = false
-
-  selectedTechs: number[] | undefined;
-  selectedRegion: number | undefined;
-
-  constructor(private serviceService: ServiceService, private customerService:CustomerService) {
-
-    this.techStore = new CustomStore({
+  constructor(
+    private serviceService: ServiceService,
+    private genericService: GenericService,
+    private injector: Injector
+  ) {
+    let techStore = new CustomStore({
       key: 'id',
       loadMode:'processed',
       load: () => {
-        const requestPrams = {
-        } as ServiceTechsListRequestParams
-        return lastValueFrom(this.serviceService.serviceTechsList(requestPrams))
-        .catch(() => { throw 'Error loading technicians' });
+        const prams = {
+          centersRegionIdIn:this.filterValues.regions,
+          centersRegionManagersIdIn:this.filterValues.managers,
+          centersIdIn:this.filterValues.centers,
+          centersRegionCitiesIdIn:this.filterValues.cities,
+          centersRegionZipCodesCodeIn:this.filterValues.zipCodes,
+          idIn:this.filterValues.techs
+        } as ServiceTechsListRequestParams;
+        return lastValueFrom(this.serviceService.serviceTechsList(prams));
       },
       byKey: (key) => {
         return lastValueFrom(this.serviceService.serviceTechRetrieve({id:key}));
       }
     });
-
+    this.techData = new DataSource({
+      store: techStore
+    });
     this.scheduleStore = new CustomStore({
       key: 'id',
       loadMode:'processed',
       load: (loadOptions) => {
-        let filter = loadOptions.filter[0]
         let requestPrams = {
-          startDateTimeBefore: filter[0][1][2],
-          endDateTimeAfter: filter[0][0][2],
+          startDateTimeBefore: loadOptions.filter[0][1][2],
+          endDateTimeAfter: loadOptions.filter[0][0][2],
+          serviceCenterRegionIdIn:this.filterValues.regions,
+          serviceCenterRegionManagersIdIn:this.filterValues.managers,
+          serviceCenterIdIn:this.filterValues.centers,
+          serviceCenterRegionCitiesIdIn:this.filterValues.cities,
+          serviceCenterRegionZipCodesCodeIn:this.filterValues.zipCodes
         } as ServiceSchedulesListRequestParams
         
         return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams))
@@ -85,25 +101,43 @@ export class ScheduleComponent implements OnInit {
       }
     });
 
-    this.centerStore = new CustomStore({
+    let centerStore = new CustomStore({
       key: 'id',
       load: () => {
-        return lastValueFrom(this.serviceService.serviceCentersList())
+        const params = {
+          regionIdIn:this.filterValues.regions,
+          regionManagersIdIn:this.filterValues.managers,
+        } as ServiceCentersListRequestParams
+        return lastValueFrom(this.serviceService.serviceCentersList(params))
       },
       byKey: (key) => {
         return lastValueFrom(this.serviceService.serviceCenterRetrieve({id:key}));
       }
     });
+    this.centerData = new DataSource({
+      store:centerStore
+    })
 
-    this.addendumStore = new CustomStore({
+    let addendumStore = new CustomStore({
       key: 'id',
       load: () => {
-        return lastValueFrom(this.serviceService.serviceOrderAddendumsList({}))
+        const params = {
+          sequenceJobSiteRegionIdIn:this.filterValues.regions,
+          sequenceManagerIdIn:this.filterValues.managers,
+          sequenceJobSiteRegionCentersIdIn:this.filterValues.centers,
+          sequenceJobSiteRegionCitiesIdIn:this.filterValues.cities,
+          sequenceJobSiteRegionZipCodesCodeIn:this.filterValues.zipCodes,
+          sequenceJobSiteRegionCentersTechniciansIdIn:this.filterValues.techs
+        } as ServiceOrderAddendumsListRequestParams
+        return lastValueFrom(this.serviceService.serviceOrderAddendumsList(params))
         .catch(() => { throw 'Error loading Service Addendums' });
       },
       byKey: (key) => {
         return lastValueFrom(this.serviceService.serviceOrderAddendumRetrieve({id:key}))
       }
+    });
+    this.addendumData = new DataSource({
+      store: addendumStore
     });
 
     this.sequenceDataSource = new CustomStore({
@@ -127,49 +161,56 @@ export class ScheduleComponent implements OnInit {
         return lastValueFrom(this.serviceService.serviceJobsiteRetrieve({id:key}))
       }
     });
+
+    // Convert Component to a custom element.
+    const filterElement = createCustomElement(FilterComponent, {injector:this.injector});
+    const ButtonElement = createCustomElement(DxButtonComponent, {injector:this.injector});
+
+    // Register the custom element with the browser.
+    customElements.define('filter-element', filterElement);
+    customElements.define('dx-button', ButtonElement);
   }
 
 
   /*****  EVENTS ******/
 
-
   ngOnInit(): void {
   }
 
+  // Adding custom elements to the scheduler component.
   onContentReady(e:any){
-    if (this.filterAdded)  
-        return;  
-  
-    let element = document.querySelectorAll(".dx-scheduler-navigator");  
-    const container = document.createElement("div");  
-    var comp = document.createElement("app-filter");
+    if(document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before filter-element") != null)
+      return;
 
-    comp.addEventListener("onChanged",  event => {  
-      console.log("filter changed")
+    console.log("Loading Filter Button");
+    
+
+    let toolbarBeforeElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before");
+    let toolbarContentElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before .dx-toolbar-item-content");
+
+    // Create Filter Button
+    let filterComp = document.createElement("filter-element") as NgElement & WithProperties<FilterComponent>;
+    filterComp.addEventListener('onChange', (e:any) => {
+      this.dxScheduler.instance.beginUpdate();
+      this.filterValues = e.detail;
+      this.dxScheduler.groups = [];
+      
+      this.dxScheduler.resources.forEach((resource:{dataSource:DataSource}) => {
+        resource.dataSource.reload();
+      });
+      this.dxScheduler.instance.getDataSource().reload();
+      this.dxScheduler.instance.endUpdate();
+      this.dxScheduler.groups = ['technicians'];
     });
-    container.appendChild(comp)
-    element[0].appendChild(container); 
+    toolbarBeforeElement?.appendChild(filterComp);
 
-    this.filterAdded = true;  
-  }
-
-  onFilterChange(region:number) {
-    this.dxScheduler.instance.beginUpdate();
-    let scheduleSource = this.dxScheduler.instance.getDataSource();
-    let options = scheduleSource.loadOptions()
-    console.log(options.filter);
-    
-    this.dxScheduler.resources.forEach(({dataSource,fieldExpr})=>{
-      dataSource.load();
-    })
-
-    this.selectedRegion = region;
-    
-    
-    this.techStore.load();
-    this.scheduleStore.load();
-    scheduleSource.load();
-    this.dxScheduler.instance.endUpdate();
+    // Create Today Button
+    let todayBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
+    todayBtn.text = 'Today';
+    todayBtn.addEventListener('onClick', (e:any) => {
+      this.dxScheduler.currentDate = new Date();
+    });
+    toolbarContentElement?.appendChild(todayBtn);
   }
 
   showAppointmentPopup(e:any) {
@@ -184,66 +225,48 @@ export class ScheduleComponent implements OnInit {
 
     const form = e.form as Form;
     let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
+    // Hide label and description items
     {
       let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "label" })
       if (index != -1) {
         mainGroupItems[index].visible=false;
-        
       }
     }
     {
       let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
       if (index != -1) {
         mainGroupItems[index].visible=false;
-        
       }
     }
 
-    //editing form items for resources
+    // Set Required fields
     mainGroupItems.forEach((item, index) => {
       if(item.dataField === "technicians" || item.dataField === "serviceCenter"){
         item.isRequired = true;
       }
     });
 
-
+    // Add Travel Hours Item
     if (!mainGroupItems.find(function(i:any) { return i.dataField === "travelHours" })) {
         mainGroupItems.push({
-            colSpan: 2, 
-            label: { text: "Travel Hours" },
-            editorType: "dxTextBox",
-            dataField: "travelHours",
-            isRequired: true
+          colSpan: 2, 
+          label: { text: "Travel Hours" },
+          editorType: "dxTextBox",
+          dataField: "travelHours",
+          isRequired: true
         } as SimpleItem);
         form.itemOption('mainGroup', 'items', mainGroupItems);
     }
 
+    // Add Confirm Appointment Item
     if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirm" })) {
       mainGroupItems.push({
-          colSpan: 1, 
-          label: { text: "Confirm Appointment" },
-          editorType: "dxCheckBox",
-          dataField: "confirm",
+        colSpan: 1, 
+        label: { text: "Confirm Appointment" },
+        editorType: "dxCheckBox",
+        dataField: "confirm",
       });
       form.itemOption('mainGroup', 'items', mainGroupItems);
     }
   }
-
-  async getAddendum(id:number) {
-    let tmp = await this.addendumStore.byKey(id);
-    console.log(tmp)
-    return tmp
-  }
-  
-  getSequence(id:number){
-
-  }
-
-  getCustomer(id:number){
-    
-    
-
-  }
-       
- 
 }

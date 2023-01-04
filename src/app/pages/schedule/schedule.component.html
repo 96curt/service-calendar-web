@@ -1,10 +1,6 @@
 <div class="content-block">
     <h2>Technician Schedules</h2>
     <div class="dx-card responsive-paddings">
-
-        <!-- <app-filter
-            (onSelected)="selectedTechs"
-        ></app-filter> -->
         <!-- Configuration Options -->
         <dx-scheduler
             [dataSource]="scheduleStore"
@@ -60,21 +56,21 @@
             <dxi-resource
                 fieldExpr="technicians"    
                 label="Technicians"          
-                [dataSource]="techStore"
+                [dataSource]="techData"
                 [allowMultiple]="true"
                 displayExpr="fullName"
             ></dxi-resource> 
             <dxi-resource
                 fieldExpr="serviceCenter"    
                 label="Service Center"          
-                [dataSource]="centerStore"
+                [dataSource]="centerData"
                 [allowMultiple]="false"
                 displayExpr="name"
             ></dxi-resource>
             <dxi-resource
                 fieldExpr="addendum"    
                 label="Service Order"          
-                [dataSource]="addendumStore"
+                [dataSource]="addendumData"
                 [allowMultiple]="false"
                 displayExpr="name"
             ></dxi-resource>
@@ -97,9 +93,6 @@
                   
                 </div>
             </div>
-
-
-            
         </dx-scheduler>
         <dx-speed-dial-action
                 #speedDialAction

@@ -1,9 +1,10 @@
+export * from './city';
 export * from './comment';
 export * from './commentTypeEnum';
 export * from './customer';
 export * from './jobSite';
 export * from './login';
-export * from './managerEnum';
+export * from './manager';
 export * from './orderAddendum';
 export * from './orderItem';
 export * from './orderSequence';
@@ -19,3 +20,4 @@ export * from './technician';
 export * from './user';
 export * from './warrantyCodeEnum';
 export * from './workWeek';
+export * from './zipCode';

@@ -7,7 +7,7 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
-import { User, ProfileService } from 'openapi';
+import { User, UserService } from 'openapi';
 import {take, interval} from 'rxjs';
 @Component({
   selector: 'app-header',
@@ -44,12 +44,12 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private authService: AuthHelperService,
-    private userService: ProfileService,
+    private userService: UserService,
     private router: Router
   ) { }
 
   ngOnInit() {
-      this.userService.profileRetrieve().subscribe({
+      this.userService.userProfileRetrieve().subscribe({
         next: (response) => {
           this.user = response;
         }

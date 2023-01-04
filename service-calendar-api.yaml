@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Service Calendar API
-  version: 0.8.0
+  version: 0.10.0
   description: Mockup Service Calendar API
 paths:
   /api/auth/login:
@@ -84,9 +84,112 @@ paths:
       responses:
         '200':
           description: No response body
-  /api/customer/{id}:
+  /api/generic/cities:
     get:
-      operationId: customer_retrieve
+      operationId: generic_cities_list
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - in: query
+        name: region__centers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      tags:
+      - generic
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+          description: ''
+  /api/generic/cities{format}:
+    get:
+      operationId: generic_cities_formatted_list
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: query
+        name: name
+        schema:
+          type: string
+      - in: query
+        name: region__centers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      tags:
+      - generic
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+          description: ''
+  /api/generic/customer/{id}:
+    get:
+      operationId: generic_customer_retrieve
       parameters:
       - in: path
         name: id
@@ -94,7 +197,7 @@ paths:
           type: integer
         required: true
       tags:
-      - customer
+      - generic
       security:
       - cookieAuth: []
       responses:
@@ -104,9 +207,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
           description: ''
-  /api/customer/{id}{format}:
+  /api/generic/customer/{id}{format}:
     get:
-      operationId: customer_formatted_retrieve
+      operationId: generic_customer_formatted_retrieve
       parameters:
       - in: path
         name: format
@@ -121,7 +224,7 @@ paths:
           type: integer
         required: true
       tags:
-      - customer
+      - generic
       security:
       - cookieAuth: []
       responses:
@@ -131,11 +234,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
           description: ''
-  /api/customers:
+  /api/generic/customers:
     get:
-      operationId: customers_list
+      operationId: generic_customers_list
       tags:
-      - customers
+      - generic
       security:
       - cookieAuth: []
       responses:
@@ -147,9 +250,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Customer'
           description: ''
-  /api/customers{format}:
+  /api/generic/customers{format}:
     get:
-      operationId: customers_formatted_list
+      operationId: generic_customers_formatted_list
       parameters:
       - in: path
         name: format
@@ -159,7 +262,7 @@ paths:
           - .json
         required: true
       tags:
-      - customers
+      - generic
       security:
       - cookieAuth: []
       responses:
@@ -171,47 +274,25 @@ paths:
                 items:
                   $ref: '#/components/schemas/Customer'
           description: ''
-  /api/profile:
+  /api/generic/regions:
     get:
-      operationId: profile_retrieve
-      tags:
-      - profile
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-  /api/profile{format}:
-    get:
-      operationId: profile_formatted_retrieve
+      operationId: generic_regions_list
       parameters:
-      - in: path
-        name: format
+      - in: query
+        name: managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: name__contains
         schema:
           type: string
-          enum:
-          - .json
-        required: true
       tags:
-      - profile
-      security:
-      - cookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-  /api/regions:
-    get:
-      operationId: regions_list
-      tags:
-      - regions
+      - generic
       security:
       - cookieAuth: []
       responses:
@@ -223,9 +304,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Region'
           description: ''
-  /api/regions{format}:
+  /api/generic/regions{format}:
     get:
-      operationId: regions_formatted_list
+      operationId: generic_regions_formatted_list
       parameters:
       - in: path
         name: format
@@ -234,8 +315,21 @@ paths:
           enum:
           - .json
         required: true
+      - in: query
+        name: managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: name__contains
+        schema:
+          type: string
       tags:
-      - regions
+      - generic
       security:
       - cookieAuth: []
       responses:
@@ -246,6 +340,135 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Region'
+          description: ''
+  /api/generic/zipcodes:
+    get:
+      operationId: generic_zipcodes_list
+      parameters:
+      - in: query
+        name: cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: cities__name__contains
+        schema:
+          type: string
+      - in: query
+        name: code
+        schema:
+          type: string
+      - in: query
+        name: region__centers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      tags:
+      - generic
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ZipCode'
+          description: ''
+  /api/generic/zipcodes{format}:
+    get:
+      operationId: generic_zipcodes_formatted_list
+      parameters:
+      - in: query
+        name: cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: cities__name__contains
+        schema:
+          type: string
+      - in: query
+        name: code
+        schema:
+          type: string
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: query
+        name: region__centers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      tags:
+      - generic
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ZipCode'
           description: ''
   /api/service/center/{id}:
     get:
@@ -297,6 +520,29 @@ paths:
   /api/service/centers:
     get:
       operationId: service_centers_list
+      parameters:
+      - in: query
+        name: name__contains
+        schema:
+          type: string
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       tags:
       - service
       security:
@@ -321,6 +567,28 @@ paths:
           enum:
           - .json
         required: true
+      - in: query
+        name: name__contains
+        schema:
+          type: string
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       tags:
       - service
       security:
@@ -508,6 +776,81 @@ paths:
                 items:
                   $ref: '#/components/schemas/JobSite'
           description: ''
+  /api/service/managers:
+    get:
+      operationId: service_managers_list
+      parameters:
+      - in: query
+        name: firstName__contains
+        schema:
+          type: string
+      - in: query
+        name: lastName__contains
+        schema:
+          type: string
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Manager'
+          description: ''
+  /api/service/managers{format}:
+    get:
+      operationId: service_managers_formatted_list
+      parameters:
+      - in: query
+        name: firstName__contains
+        schema:
+          type: string
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      - in: query
+        name: lastName__contains
+        schema:
+          type: string
+      - in: query
+        name: region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      tags:
+      - service
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Manager'
+          description: ''
   /api/service/order/addendum/{id}:
     get:
       operationId: service_order_addendum_retrieve
@@ -564,11 +907,61 @@ paths:
         schema:
           type: integer
       - in: query
-        name: sequence__number
+        name: sequence__jobSite__region__centers__id__in
         schema:
-          type: integer
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       - in: query
-        name: sequence__region
+        name: sequence__jobSite__region__centers__technicians__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__jobSite__region__cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__jobSite__region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__jobSite__region__zipCodes__code__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__manager__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__number
         schema:
           type: integer
       - in: query
@@ -615,11 +1008,61 @@ paths:
         schema:
           type: integer
       - in: query
-        name: sequence__number
+        name: sequence__jobSite__region__centers__id__in
         schema:
-          type: integer
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       - in: query
-        name: sequence__region
+        name: sequence__jobSite__region__centers__technicians__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__jobSite__region__cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__jobSite__region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__jobSite__region__zipCodes__code__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__manager__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: sequence__number
         schema:
           type: integer
       - in: query
@@ -757,11 +1200,11 @@ paths:
         schema:
           type: integer
       - in: query
-        name: number
+        name: jobSite__region__id
         schema:
           type: integer
       - in: query
-        name: region
+        name: number
         schema:
           type: integer
       - in: query
@@ -801,11 +1244,11 @@ paths:
         schema:
           type: integer
       - in: query
-        name: number
+        name: jobSite__region__id
         schema:
           type: integer
       - in: query
-        name: region
+        name: number
         schema:
           type: integer
       - in: query
@@ -1058,6 +1501,14 @@ paths:
         schema:
           type: string
       - in: query
+        name: addendum__sequence__jobSite__city__contains
+        schema:
+          type: string
+      - in: query
+        name: addendum__sequence__jobSite__region__id
+        schema:
+          type: integer
+      - in: query
         name: addendum__sequence__jobSite__zipCode
         schema:
           type: string
@@ -1065,25 +1516,6 @@ paths:
         name: addendum__sequence__number
         schema:
           type: integer
-      - in: query
-        name: addendum__sequence__region
-        schema:
-          type: integer
-      - in: query
-        name: addendum__sequence__serviceCenter__manager
-        schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
       - in: query
         name: endDateTime_after
         schema:
@@ -1095,9 +1527,50 @@ paths:
           type: string
           format: date-time
       - in: query
-        name: serviceCenter
+        name: serviceCenter__id__in
         schema:
-          type: integer
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__zipCodes__code__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       - in: query
         name: startDateTime_after
         schema:
@@ -1109,12 +1582,13 @@ paths:
           type: string
           format: date-time
       - in: query
-        name: technicians
+        name: technicians__id__in
         schema:
           type: array
           items:
             type: integer
-        explode: true
+        description: Multiple values may be separated by commas.
+        explode: false
         style: form
       tags:
       - service
@@ -1167,6 +1641,14 @@ paths:
         schema:
           type: string
       - in: query
+        name: addendum__sequence__jobSite__city__contains
+        schema:
+          type: string
+      - in: query
+        name: addendum__sequence__jobSite__region__id
+        schema:
+          type: integer
+      - in: query
         name: addendum__sequence__jobSite__zipCode
         schema:
           type: string
@@ -1174,25 +1656,6 @@ paths:
         name: addendum__sequence__number
         schema:
           type: integer
-      - in: query
-        name: addendum__sequence__region
-        schema:
-          type: integer
-      - in: query
-        name: addendum__sequence__serviceCenter__manager
-        schema:
-          type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
       - in: query
         name: endDateTime_after
         schema:
@@ -1211,9 +1674,50 @@ paths:
           - .json
         required: true
       - in: query
-        name: serviceCenter
+        name: serviceCenter__id__in
         schema:
-          type: integer
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: serviceCenter__region__zipCodes__code__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       - in: query
         name: startDateTime_after
         schema:
@@ -1225,12 +1729,13 @@ paths:
           type: string
           format: date-time
       - in: query
-        name: technicians
+        name: technicians__id__in
         schema:
           type: array
           items:
             type: integer
-        explode: true
+        description: Multiple values may be separated by commas.
+        explode: false
         style: form
       tags:
       - service
@@ -1330,28 +1835,67 @@ paths:
       operationId: service_techs_list
       parameters:
       - in: query
-        name: primaryCenter
+        name: centers__id__in
         schema:
-          type: integer
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       - in: query
-        name: primaryCenter__manager
+        name: centers__region__cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: centers__region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: centers__region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: centers__region__zipCodes__code__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: firstName__contains
         schema:
           type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
       - in: query
-        name: primaryCenter__region
+        name: id__in
         schema:
-          type: integer
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: lastName__contains
+        schema:
+          type: string
       - in: query
         name: qualifier
         schema:
@@ -1381,6 +1925,55 @@ paths:
     get:
       operationId: service_techs_formatted_list
       parameters:
+      - in: query
+        name: centers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: centers__region__cities__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: centers__region__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: centers__region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: centers__region__zipCodes__code__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: firstName__contains
+        schema:
+          type: string
       - in: path
         name: format
         schema:
@@ -1389,28 +1982,18 @@ paths:
           - .json
         required: true
       - in: query
-        name: primaryCenter
+        name: id__in
         schema:
-          type: integer
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       - in: query
-        name: primaryCenter__manager
+        name: lastName__contains
         schema:
           type: string
-          enum:
-          - '1'
-          - '10'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-          - '7'
-          - '8'
-          - '9'
-      - in: query
-        name: primaryCenter__region
-        schema:
-          type: integer
       - in: query
         name: qualifier
         schema:
@@ -1436,8 +2019,69 @@ paths:
                 items:
                   $ref: '#/components/schemas/Technician'
           description: ''
+  /api/user/profile:
+    get:
+      operationId: user_profile_retrieve
+      tags:
+      - user
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/user/profile{format}:
+    get:
+      operationId: user_profile_formatted_retrieve
+      parameters:
+      - in: path
+        name: format
+        schema:
+          type: string
+          enum:
+          - .json
+        required: true
+      tags:
+      - user
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
 components:
   schemas:
+    City:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        state:
+          $ref: '#/components/schemas/StateEnum'
+        country:
+          type: string
+          maxLength: 2
+        county:
+          type: string
+          nullable: true
+          maxLength: 128
+        region:
+          type: integer
+      required:
+      - id
+      - name
+      - region
+      - state
     Comment:
       type: object
       properties:
@@ -1592,19 +2236,27 @@ components:
       required:
       - password
       - username
-    ManagerEnum:
-      enum:
-      - '1'
-      - '2'
-      - '3'
-      - '4'
-      - '5'
-      - '6'
-      - '7'
-      - '8'
-      - '9'
-      - '10'
-      type: string
+    Manager:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        firstName:
+          type: string
+          maxLength: 64
+        lastName:
+          type: string
+          maxLength: 64
+        region:
+          type: array
+          items:
+            type: integer
+      required:
+      - firstName
+      - id
+      - lastName
+      - region
     OrderAddendum:
       type: object
       properties:
@@ -1694,17 +2346,25 @@ components:
           type: integer
           readOnly: true
         region:
-          type: integer
+          type: string
+          readOnly: true
         jobSite:
           type: integer
+        name:
+          type: string
+          readOnly: true
         serviceCenter:
           type: integer
         billingCust:
           type: integer
+        manager:
+          type: integer
+          nullable: true
       required:
       - billingCust
       - id
       - jobSite
+      - name
       - number
       - region
       - serviceCenter
@@ -1780,8 +2440,13 @@ components:
         name:
           type: string
           maxLength: 128
+        managers:
+          type: array
+          items:
+            type: integer
       required:
       - id
+      - managers
       - name
     Schedule:
       type: object
@@ -1843,51 +2508,20 @@ components:
         id:
           type: integer
           readOnly: true
-        street:
-          type: string
-          maxLength: 1024
-        street2:
-          type: string
-          maxLength: 1024
-        city:
-          type: string
-          maxLength: 1024
-        state:
-          $ref: '#/components/schemas/StateEnum'
-        zipCode:
-          type: string
-          maxLength: 10
-        country:
-          type: string
-          maxLength: 2
-        county:
-          type: string
-          maxLength: 128
-        latitude:
-          type: number
-          format: double
-          nullable: true
-        longitute:
-          type: number
-          format: double
-          nullable: true
         name:
           type: string
           maxLength: 128
-        manager:
-          $ref: '#/components/schemas/ManagerEnum'
         region:
           type: integer
+        technicians:
+          type: array
+          items:
+            type: integer
       required:
-      - city
-      - county
       - id
-      - manager
       - name
       - region
-      - state
-      - street
-      - zipCode
+      - technicians
     ServiceCodeEnum:
       enum:
       - '1'
@@ -2024,9 +2658,10 @@ components:
         id:
           type: integer
           readOnly: true
-        primaryCenter:
-          type: integer
-          nullable: true
+        centers:
+          type: array
+          items:
+            type: integer
         qualifier:
           type: string
           maxLength: 1
@@ -2046,10 +2681,16 @@ components:
           $ref: '#/components/schemas/WorkWeek'
         active:
           type: boolean
+        schedules:
+          type: array
+          items:
+            type: integer
       required:
+      - centers
       - firstName
       - fullName
       - id
+      - schedules
       - workWeek
     User:
       type: object
@@ -2109,6 +2750,22 @@ components:
           type: boolean
         sunday:
           type: boolean
+    ZipCode:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 10
+        region:
+          type: integer
+        cities:
+          type: array
+          items:
+            type: integer
+      required:
+      - cities
+      - code
+      - region
   securitySchemes:
     cookieAuth:
       type: apiKey

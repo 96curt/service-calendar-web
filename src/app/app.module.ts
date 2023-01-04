@@ -11,6 +11,7 @@ import { ApiModule, ConfigurationParameters, Configuration} from 'openapi/index'
 import { environment } from 'environments/environment';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHelperInterceptor } from './shared/services/auth-helper.interceptor';
+import { FilterModule } from './shared/components/filter/filter.module';
 
 
 export function apiConfigFactory (): Configuration {
@@ -35,7 +36,7 @@ export function apiConfigFactory (): Configuration {
     UnauthenticatedContentModule,
     AppRoutingModule,
     HttpClientModule,
-    ApiModule.forRoot(apiConfigFactory)
+    ApiModule.forRoot(apiConfigFactory),
 
   ],
   providers: [
