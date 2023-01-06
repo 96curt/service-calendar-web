@@ -11,7 +11,6 @@ import {
   ServiceSchedulesListRequestParams,
   ServiceTechsListRequestParams,
   Region,
-  GenericService,
   OrderAddendum,
   ServiceCentersListRequestParams,
   ServiceOrderAddendumsListRequestParams,
@@ -44,9 +43,37 @@ export class ScheduleComponent implements OnInit {
 
   constructor(
     private serviceService: ServiceService,
-    private genericService: GenericService,
     private injector: Injector
   ) {
+    this.scheduleStore = new CustomStore({
+      key: 'id',
+      loadMode:'processed',
+      load: (loadOptions:LoadOptions) => {
+        let requestPrams = {
+          startDateTimeBefore: loadOptions.filter[0][1][2],
+          endDateTimeAfter: loadOptions.filter[0][0][2],
+          serviceCenterRegionIdIn:this.filterValues.regions,
+          serviceCenterRegionManagersIdIn:this.filterValues.managers,
+          serviceCenterIdIn:this.filterValues.centers,
+          serviceCenterRegionCitiesIdIn:this.filterValues.cities,
+          serviceCenterRegionZipCodesCodeIn:this.filterValues.zipCodes
+        } as ServiceSchedulesListRequestParams
+        return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams));
+      },
+      byKey: (key:number) => {
+        return lastValueFrom(this.serviceService.serviceScheduleRetrieve({id:key}));
+      },
+      insert: (schedule:Schedule) => {
+        return lastValueFrom(this.serviceService.serviceSchedulesCreate({schedule:schedule}));
+      },
+      update: (key:number, schedule:Schedule) => {
+        return lastValueFrom(this.serviceService.serviceScheduleUpdate({id:key, schedule:schedule}));
+      },
+      remove: (key:number) => {
+        return lastValueFrom(this.serviceService.serviceScheduleDestroy({id:key}));
+      }
+    });
+
     let techStore = new CustomStore({
       key: 'id',
       loadMode:'processed',
@@ -68,40 +95,7 @@ export class ScheduleComponent implements OnInit {
     this.techData = new DataSource({
       store: techStore
     });
-    this.scheduleStore = new CustomStore({
-      key: 'id',
-      loadMode:'processed',
-      load: (loadOptions) => {
-        let requestPrams = {
-          startDateTimeBefore: loadOptions.filter[0][1][2],
-          endDateTimeAfter: loadOptions.filter[0][0][2],
-          serviceCenterRegionIdIn:this.filterValues.regions,
-          serviceCenterRegionManagersIdIn:this.filterValues.managers,
-          serviceCenterIdIn:this.filterValues.centers,
-          serviceCenterRegionCitiesIdIn:this.filterValues.cities,
-          serviceCenterRegionZipCodesCodeIn:this.filterValues.zipCodes
-        } as ServiceSchedulesListRequestParams
-        
-        return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams))
-        .catch(() => { throw 'Error Loading Appointments' });
-      },
-      byKey: (key) => {
-        return lastValueFrom(this.serviceService.serviceScheduleRetrieve({id:key}));
-      },
-      insert: (schedule:Schedule) => {
-        return lastValueFrom(this.serviceService.serviceSchedulesCreate({schedule:schedule}))
-        .catch(() => { throw 'Error Creating Appointment: ' + schedule.description });
-      },
-      update: (key:number, schedule:Schedule) => {
-        return lastValueFrom(this.serviceService.serviceScheduleUpdate({id:key, schedule:schedule}))
-        .catch(() => { throw 'Error Updating Appointment: ' + key });
-      },
-      remove: (key:number) => {
-        return lastValueFrom(this.serviceService.serviceScheduleDestroy({id:key}))
-        .catch(() => { throw 'Error Removing Appointment: ' + key})
-      }
-    });
-
+    
     let centerStore = new CustomStore({
       key: 'id',
       load: () => {

@@ -907,59 +907,9 @@ paths:
         schema:
           type: integer
       - in: query
-        name: sequence__jobSite__region__centers__id__in
+        name: sequence__jobSite__region__id
         schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__centers__technicians__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__cities__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__zipCodes__code__in
-        schema:
-          type: array
-          items:
-            type: string
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__manager__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
+          type: integer
       - in: query
         name: sequence__number
         schema:
@@ -1008,59 +958,9 @@ paths:
         schema:
           type: integer
       - in: query
-        name: sequence__jobSite__region__centers__id__in
+        name: sequence__jobSite__region__id
         schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__centers__technicians__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__cities__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__jobSite__region__zipCodes__code__in
-        schema:
-          type: array
-          items:
-            type: string
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: sequence__manager__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
+          type: integer
       - in: query
         name: sequence__number
         schema:
@@ -1517,6 +1417,16 @@ paths:
         schema:
           type: integer
       - in: query
+        name: endDateTime__range
+        schema:
+          type: array
+          items:
+            type: string
+            format: date-time
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
         name: endDateTime_after
         schema:
           type: string
@@ -1527,47 +1437,16 @@ paths:
           type: string
           format: date-time
       - in: query
-        name: serviceCenter__id__in
+        name: serviceCenter__id
         schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
+          type: integer
       - in: query
-        name: serviceCenter__region__cities__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: serviceCenter__region__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: serviceCenter__region__managers__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: serviceCenter__region__zipCodes__code__in
+        name: startDateTime__range
         schema:
           type: array
           items:
             type: string
+            format: date-time
         description: Multiple values may be separated by commas.
         explode: false
         style: form
@@ -1657,6 +1536,16 @@ paths:
         schema:
           type: integer
       - in: query
+        name: endDateTime__range
+        schema:
+          type: array
+          items:
+            type: string
+            format: date-time
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
         name: endDateTime_after
         schema:
           type: string
@@ -1674,47 +1563,16 @@ paths:
           - .json
         required: true
       - in: query
-        name: serviceCenter__id__in
+        name: serviceCenter__id
         schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
+          type: integer
       - in: query
-        name: serviceCenter__region__cities__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: serviceCenter__region__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: serviceCenter__region__managers__id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
-        name: serviceCenter__region__zipCodes__code__in
+        name: startDateTime__range
         schema:
           type: array
           items:
             type: string
+            format: date-time
         description: Multiple values may be separated by commas.
         explode: false
         style: form
@@ -1884,15 +1742,6 @@ paths:
         schema:
           type: string
       - in: query
-        name: id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
-      - in: query
         name: lastName__contains
         schema:
           type: string
@@ -1981,15 +1830,6 @@ paths:
           enum:
           - .json
         required: true
-      - in: query
-        name: id__in
-        schema:
-          type: array
-          items:
-            type: integer
-        description: Multiple values may be separated by commas.
-        explode: false
-        style: form
       - in: query
         name: lastName__contains
         schema:
