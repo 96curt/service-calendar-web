@@ -1,7 +1,7 @@
-import { Component, createComponent, EventEmitter, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Injector, OnInit, ViewChild } from '@angular/core';
 import { createCustomElement, NgElement, WithProperties } from '@angular/elements';
-import { CollectionNestedOptionContainerImpl, DxButtonComponent, DxSchedulerComponent } from 'devextreme-angular';
-import { FilterDescriptor, LoadOptions } from 'devextreme/data';
+import { DxButtonComponent, DxSchedulerComponent } from 'devextreme-angular';
+import { LoadOptions } from 'devextreme/data';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import {
@@ -15,14 +15,10 @@ import {
   ServiceCentersListRequestParams,
   ServiceOrderAddendumsListRequestParams,
 } from 'openapi';
-import { filter, lastValueFrom } from 'rxjs';
-import { Value } from 'sass-embedded';
+import { lastValueFrom } from 'rxjs';
 import Form, { SimpleItem } from "devextreme/ui/form";
-import { PatternRule } from 'devextreme/ui/validation_rules';
-import Calendar from 'devextreme/ui/calendar'
 import { FilterComponent } from 'app/shared/components/filter/filter.component';
 import { Filter } from 'app/shared/models/filter.model';
-import dxButton, { ClickEvent } from 'devextreme/ui/button';
 
 @Component({
   selector: 'app-schedule',
