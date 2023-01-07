@@ -67,12 +67,27 @@ export class ScheduleComponent implements OnInit {
       },
       remove: (key:number) => {
         return lastValueFrom(this.serviceService.serviceScheduleDestroy({id:key}));
-      }
+      },
+      onLoaded: (schedules: Schedule[]) => {
+        // schedules.forEach((schedule) => {
+        //   let travelEnd = new Date(schedule.startDateTime);
+        //   let travelStart = new Date(travelEnd);
+        //   travelEnd.setHours(travelEnd.getMinutes() - 1);
+        //   travelStart.setHours(travelStart.getHours() - parseFloat(schedule.travelHours));
+        //   schedules.push({
+        //     startDateTime:travelStart.toDateString(),
+        //     endDateTime:travelEnd.toDateString(),
+        //     label:"travel Time: " + schedule.travelHours
+        //   } as Schedule);
+
+        // });
+
+      },
     });
 
     let techStore = new CustomStore({
       key: 'id',
-      loadMode:'processed',
+      loadMode: 'processed',
       load: () => {
         const prams = {
           centersRegionIdIn:this.filterValues.regions,
@@ -268,14 +283,15 @@ export class ScheduleComponent implements OnInit {
   /*** Helper Methods ***/
 
   reload(){
-      this.dxScheduler.instance.beginUpdate();
+      //this.dxScheduler.instance.beginUpdate();
       this.dxScheduler.groups = [];
       this.dxScheduler.resources.forEach((resource:{dataSource:DataSource}) => {
         resource.dataSource.reload();
+        resource.dataSource.items()
       });
       this.dxScheduler.instance.getDataSource().reload();
-      this.dxScheduler.instance.endUpdate();
-      this.dxScheduler.groups = ['technicians'];
+      //this.dxScheduler.instance.endUpdate();
+      //this.dxScheduler.groups = ['technicians'];
   }
 
   displayFilter() {

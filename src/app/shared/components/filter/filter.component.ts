@@ -32,21 +32,20 @@ export class FilterComponent implements OnInit {
     private genericService: GenericService,
     private serviceService: ServiceService,
   ) {
-    const that = this; // https://js.devexpress.com/Demos/WidgetsGallery/Demo/Popup/Overview/
     this.clearButtonOptions = {
       icon: 'clear',
       text: 'Clear All',
-      onClick(){
-        that.filterValues.clear();
-        that.reload();
+      onClick: () => {
+        this.filterValues.clear();
+        this.reload();
       }
     }
 
     this.closeButtonOptions = {
       icon: 'close',
       text: 'Close',
-      onClick(){
-        that.visible = false;
+      onClick: () => {
+        this.visible = false;
       }
     };
 
