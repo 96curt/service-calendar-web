@@ -1,12 +1,7 @@
 import { Component, EventEmitter, Injector, OnInit, ViewChild } from '@angular/core';
 import { createCustomElement, NgElement, WithProperties } from '@angular/elements';
-<<<<<<< HEAD
-import { CollectionNestedOptionContainerImpl, DxButtonComponent, DxSchedulerComponent } from 'devextreme-angular';
-import { FilterDescriptor, LoadOptions, } from 'devextreme/data';
-=======
 import { DxButtonComponent, DxSchedulerComponent } from 'devextreme-angular';
 import { LoadOptions } from 'devextreme/data';
->>>>>>> e73a6fe05abb7f7f8ee52c3219d915901d340792
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
 import {
@@ -24,11 +19,8 @@ import { lastValueFrom } from 'rxjs';
 import Form, { SimpleItem } from "devextreme/ui/form";
 import { FilterComponent } from 'app/shared/components/filter/filter.component';
 import { Filter } from 'app/shared/models/filter.model';
-<<<<<<< HEAD
 import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment } from 'devextreme/ui/scheduler';
 import notify from 'devextreme/ui/notify';
-=======
->>>>>>> e73a6fe05abb7f7f8ee52c3219d915901d340792
 
 @Component({
   selector: 'app-schedule',
