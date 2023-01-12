@@ -4,20 +4,33 @@ import { LoginFormComponent} from './shared/components';
 import { AuthGuardService } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxTemplateHost } from 'devextreme-angular';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { ScheduleModule } from './pages/schedule/schedule.module';
+import { SpreadsheetComponent } from './pages/spreadsheet/spreadsheet.component';
+import { SpreadsheetModule } from './pages/spreadsheet/spreadsheet.module';
+import { TechSchedulingComponent } from './pages/tech-scheduling/tech-scheduling.component';
+import { ServiceOrdersComponent } from './pages/service-orders/service-orders.component';
 
 const routes: Routes = [
   {
-    path: 'pages/schedule',
-    component: ScheduleComponent,
+    path: 'pages/service-orders',
+    component: ServiceOrdersComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'tasks',
-    component: TasksComponent,
+    path: 'pages/tech-scheduling',
+    component: TechSchedulingComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'pages/spreadsheet',
+    component: SpreadsheetComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'pages/schedule',
+    component: ScheduleComponent,
     canActivate: [ AuthGuardService ]
   },
   {
@@ -45,14 +58,15 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
     ScheduleModule,
-    DxDataGridModule
+    SpreadsheetModule
   ],
   providers: [AuthGuardService, DxTemplateHost],
   exports: [RouterModule],
   declarations: [
     HomeComponent,
     ProfileComponent,
-    TasksComponent
+    TechSchedulingComponent,
+    ServiceOrdersComponent
   ]
 })
 export class AppRoutingModule { }

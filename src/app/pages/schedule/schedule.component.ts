@@ -19,6 +19,8 @@ import { lastValueFrom } from 'rxjs';
 import Form, { SimpleItem } from "devextreme/ui/form";
 import { FilterComponent } from 'app/shared/components/filter/filter.component';
 import { Filter } from 'app/shared/models/filter.model';
+import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment } from 'devextreme/ui/scheduler';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-schedule',
@@ -36,6 +38,7 @@ export class ScheduleComponent implements OnInit {
   jobSiteDataSource: CustomStore;
   filterValues = new Filter();
   filterVisible = false;
+  currentView = 'Vertical Week'
 
   constructor(
     private serviceService: ServiceService,
@@ -227,19 +230,28 @@ export class ScheduleComponent implements OnInit {
     this.dxScheduler.instance.showAppointmentPopup();
   }
 
-  onAppointmentFormOpening(e:any) {
+  onAppointmentFormOpening(e:AppointmentFormOpeningEvent) {
+    if (e.appointmentData == undefined)
+      return;
+    const tech = e.appointmentData['technicians'];
+    const startDate = new Date(e.appointmentData['startDateTime']);
+    if(this.isTravelTime(tech, startDate)){
+      e.cancel = true;
+      this.notifyDisableDate();
+    }
+
     e.popup.option('showTitle', true);
-    e.popup.option('title', e.appointmentData.label ? 
-        e.appointmentData.label : 
+    e.popup.option('title', e.appointmentData['label'] ? 
+        e.appointmentData['label'] : 
         'Create a new appointment');
 
-    const form = e.form as Form;
+    const form = e.form;
     let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
     // Hide label and description items
     {
       let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "label" })
       if (index != -1) {
-        mainGroupItems[index].visible=false;
+        mainGroupItems[index].visible = false;
       }
     }
     {
@@ -280,6 +292,23 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
+  onAppointmentAdding(e: any) {
+    const isValidAppointment = this.isValidAppointment(e.component, e.appointmentData);
+    if (!isValidAppointment) {
+      e.cancel = true;
+      this.notifyDisableDate();
+    }
+  }
+
+  onAppointmentUpdating(e: any) {
+    const isValidAppointment = this.isValidAppointment(e.component, e.newData);
+    if (!isValidAppointment) {
+      e.cancel = true;
+      this.notifyDisableDate();
+    }
+  }
+
+
   /*** Helper Methods ***/
 
   reload(){
@@ -298,5 +327,102 @@ export class ScheduleComponent implements OnInit {
     // Unhide the Filter
     this.filterVisible = true;
   }
+
+  notifyDisableDate() {
+    notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
+  }
+
+  isHoliday(date: Date) {
+    //const localeDate = date.toLocaleDateString();
+    //const holidays = this.dataService.getHolidays();
+    //return holidays.filter((holiday) => holiday.toLocaleDateString() === localeDate).length > 0;
+    return false;
+  }
+
+  isWeekend(date: Date) {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  }
+
+  /**
+     * Checks if technician is traveling at this time.
+     */
+  isTravelTime(technician: Technician, date: Date) {
+    const appointments = this.dxScheduler.instance.getDataSource().items() as Schedule[];
+    
+    for(let appointment of appointments) {
+      // Appointment travel time
+      const travelEnd = new Date(appointment.startDateTime);
+      const travelStart = new Date(travelEnd);
+      travelStart.setHours(travelStart.getHours() - parseFloat(appointment.travelHours));
+      // is date in travel block
+      if(date >= travelStart && date < travelEnd)
+        return true;
+    };
+    return false;
+  }
+  isDisableDate(date: Date) {
+    return this.isHoliday(date) || this.isWeekend(date);
+  }
+
+  isDisabledDateCell(date: Date) {
+    return this.currentView === 'month'
+      ? this.isHoliday(date)
+      : this.isDisableDate(date);
+  }
+
+  // isDinner(date: Date) {
+  //   const hours = date.getHours();
+  //   const dinnerTime = this.dataService.getDinnerTime();
+  //   return hours >= dinnerTime.from && hours < dinnerTime.to;
+  // }
+
+  // hasCoffeeCupIcon(date: Date) {
+  //   const hours = date.getHours();
+  //   const minutes = date.getMinutes();
+  //   const dinnerTime = this.dataService.getDinnerTime();
+
+  //   return hours === dinnerTime.from && minutes === 0;
+  // }
+
+  isValidAppointment(component: any, appointmentData: any) {
+    const startDate = new Date(appointmentData.startDate);
+    const endDate = new Date(appointmentData.endDate);
+    const cellDuration = component.option('cellDuration');
+    return this.isValidAppointmentInterval(startDate, endDate, cellDuration);
+  }
+
+  isValidAppointmentInterval(startDate: Date, endDate: Date, cellDuration: number) {
+    const edgeEndDate = new Date(endDate.getTime() - 1);
+
+    // if (!this.isValidAppointmentTime(edgeEndDate)) {
+    //   return false;
+    // }
+
+    // const durationInMs = cellDuration * 60 * 1000;
+    // const date = startDate;
+    // while (date <= endDate) {
+    //   if (!this.isValidAppointmentTime(date)) {
+    //     return false;
+    //   }
+    //   const newDateTime = date.getTime() + durationInMs - 1;
+    //   date.setTime(newDateTime);
+    // }
+
+    return true;
+  }
+
+  isValidAppointmentTimeInterval(tech:Technician, startDate:Date, endDate:Date) {
+    return !this.isTravelTime(tech, startDate) && !this.isTravelTime(tech, endDate);
+  }
+
+  // applyDisableDatesToDateEditors(form: any) {
+  //   const holidays = this.dataService.getHolidays();
+  //   const startDateEditor = form.getEditor('startDate');
+  //   startDateEditor.option('disabledDates', holidays);
+
+  //   const endDateEditor = form.getEditor('endDate');
+  //   endDateEditor.option('disabledDates', holidays);
+  // }
 
 }

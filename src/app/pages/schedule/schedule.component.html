@@ -1,11 +1,11 @@
 <div class="content-block">
     <h2>Technician Schedules</h2>
-    <app-filter
-    (onChange)="onFilterChange($event)"
-    [(visible)]="filterVisible">
-    </app-filter>
     <div class="dx-card responsive-paddings">
-        <!-- Configuration Options -->
+        <app-filter
+            (onChange)="onFilterChange($event)"
+            [(visible)]="filterVisible">
+        </app-filter>
+        <!-- Scheduler Configuration -->
         <dx-scheduler
             [dataSource]="scheduleStore"
             timeZone="America/Los_Angeles"
@@ -13,14 +13,17 @@
             descriptionExpr="description"
             startDateExpr="startDateTime"
             endDateExpr="endDateTime"
-            currentView="Vertical Work Week Timeline"
+            [(currentView)]="currentView"
             [groups]="['technicians']"
             (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
             [startDayHour]="6"
             [endDayHour]="18"
             [remoteFiltering]="true"
-            height="600"
+            [height]="600"
+            appointmentTemplate="appointment-template"
+
             (onContentReady)="onContentReady($event)"
+
             >
 
             <!-- Views -->
@@ -80,6 +83,19 @@
             ></dxi-resource>
 
             <!-- Custom Templates -->
+
+            <div *dxTemplate="let model of 'appointment-template'">
+                <div class="dx-scheduler-appointment-title">
+                    {{ model.targetedAppointmentData.label }}
+                </div>
+                <div class="dx-scheduler-appointment-content-details">
+                    <div class="dx-scheduler-appointment-content-date">
+                        
+                        {{ model.targetedAppointmentData.startDateTime}}
+                    </div>
+                </div>
+            </div>
+
             <div *dxTemplate="let technician of 'resourceCellTemplate'">
                 <div class="name">
                     {{ technician.data.firstName }} {{ technician.data.lastName }}
@@ -91,12 +107,7 @@
                 </div>
             </div>
             
-            <div *dxTemplate="let appointment of 'appointment-template'">
-                <div class="showtime-preview">
-                  <div>{{ appointment.targetedAppointmentData.description }}</div>
-                  
-                </div>
-            </div>
+            
         </dx-scheduler>
         <dx-speed-dial-action
                 #speedDialAction

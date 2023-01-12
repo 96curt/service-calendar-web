@@ -1,0 +1,77 @@
+<h2 class="content-block">Spreadsheet</h2>
+<div class="content-block">
+    <div class="dx-card responsive-paddings">
+        <dx-data-grid class="dx-card wide-card"
+            [dataSource]="appointmentsDataSource"
+            [showBorders]="false"
+            [focusedRowEnabled]="true"
+            [focusedRowIndex]="0"
+            [columnAutoWidth]="true"
+            [columnHidingEnabled]="true">
+
+            <dxo-paging [pageSize]="10"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+            <dxi-column
+                dataField="technicians"
+                caption="Technician"
+                [hidingPriority]="5">
+                <dxo-lookup
+                [dataSource]="technicianDataSource"
+                valueExpr="value"
+                displayExpr="name">
+                </dxo-lookup>
+            </dxi-column>
+            <dxi-column
+                dataField="startDateTime"
+                caption="Start"
+                [width]="90"
+                [hidingPriority]="2"
+                dataType="date">
+            </dxi-column>
+            <dxi-column
+                dataField="travelHours"
+                [width]="190"
+                caption="Travel To"
+                [hidingPriority]="8">
+            </dxi-column>
+            <dxi-column
+                [dataField]="getOnSiteTime"
+                caption="On Site"
+                [hidingPriority]="6">
+            </dxi-column>
+            
+            <dxi-column
+                dataField="endDateTime"
+                caption="End"
+                dataType="date"
+                [hidingPriority]="7">
+            </dxi-column>
+            <dxi-column
+                dataField=""
+                caption="Start Date"
+                dataType="date"
+                [hidingPriority]="3">
+            </dxi-column>
+            <!-- <dxi-column
+                dataField="Task_Due_Date"
+                caption="Due Date"
+                dataType="date"
+                [hidingPriority]="4">
+            </dxi-column>
+            <dxi-column
+                dataField="Task_Priority"
+                caption="Priority"
+                name="Priority"
+                [hidingPriority]="1">
+            </dxi-column>
+            <dxi-column
+                dataField="Task_Completion"
+                caption="Completion"
+                [hidingPriority]="0">
+            </dxi-column> -->
+
+        </dx-data-grid>
+    </div>
+</div>
