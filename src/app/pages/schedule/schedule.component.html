@@ -2,7 +2,7 @@
     <h2>Technician Schedules</h2>
     <div class="dx-card responsive-paddings">
         <app-filter
-            (onChange)="onFilterChange"
+            (onChange)="onFilterChange($event)"
             [(visible)]="filterVisible">
         </app-filter>
         <!-- Scheduler Configuration -->
@@ -15,17 +15,18 @@
             endDateExpr="endDateTime"
             [(currentView)]="currentView"
             [groups]="['technicians']"
-            (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
-            [startDayHour]="6"
-            [endDayHour]="18"
+            [startDayHour]="startDayHour"
+            [endDayHour]="endDayHour"
             [remoteFiltering]="true"
             [height]="600"
+            (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+            (onAppointmentAdding)="onAppointmentAdding($event)"
+            (onAppointmentUpdating)="onAppointmentUpdating($event)"
+            (onAppointmentRendered)="onAppointmentRendered($event)"
             appointmentTemplate="appointment-template"
-
             (onContentReady)="onContentReady($event)"
-
             >
-
+            
             <!-- Views -->
             <dxi-view
                 name="Vertical Day Timeline"
@@ -63,34 +64,41 @@
             <dxi-resource
                 fieldExpr="technicians"    
                 label="Technicians"          
-                [dataSource]="techData"
+                [dataSource]="techDataSource"
                 [allowMultiple]="true"
                 displayExpr="fullName"
             ></dxi-resource> 
             <dxi-resource
                 fieldExpr="serviceCenter"    
                 label="Service Center"          
-                [dataSource]="centerData"
+                [dataSource]="centerDataSource"
                 [allowMultiple]="false"
                 displayExpr="name"
             ></dxi-resource>
             <dxi-resource
                 fieldExpr="addendum"    
                 label="Service Order"          
-                [dataSource]="addendumData"
+                [dataSource]="addendumDataSource"
                 [allowMultiple]="false"
                 displayExpr="name"
+            ></dxi-resource>
+            <dxi-resource
+                fieldExpr="type"    
+                label="Appointment Type"          
+                [dataSource]="appointmentTypeDataSource"
+                [allowMultiple]="false"
+                displayExpr="type"
+                [useColorAsDefault]="true"
             ></dxi-resource>
 
             <!-- Custom Templates -->
 
             <div *dxTemplate="let model of 'appointment-template'">
                 <div class="dx-scheduler-appointment-title">
-                    {{ model.targetedAppointmentData.label }}
+                    {{ model.targetedAppointmentData.label }} 
                 </div>
                 <div class="dx-scheduler-appointment-content-details">
                     <div class="dx-scheduler-appointment-content-date">
-                        
                         {{ model.targetedAppointmentData.startDateTime}}
                     </div>
                 </div>
@@ -106,14 +114,13 @@
                     Qualifier: {{technician.data.qualifier}} 
                 </div>
             </div>
-            
-            
+
         </dx-scheduler>
         <dx-speed-dial-action
-                #speedDialAction
-                icon="plus"
-                (onClick)="showAppointmentPopup($event)"
-                >
+            #speedDialAction
+            icon="plus"
+            (onClick)="showAppointmentPopup($event)"
+            >
         </dx-speed-dial-action>
     </div>
 </div>
