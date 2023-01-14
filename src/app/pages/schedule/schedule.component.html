@@ -1,6 +1,7 @@
 <div class="content-block">
-    <h2>Technician Schedules</h2>
+    
     <div class="dx-card responsive-paddings">
+        <div class="dx-theme-material-typography"><h2 style="margin: 0;">Technician Schedules</h2></div>
         <app-filter
             (onChange)="onFilterChange($event)"
             [(visible)]="filterVisible">
@@ -18,13 +19,14 @@
             [startDayHour]="startDayHour"
             [endDayHour]="endDayHour"
             [remoteFiltering]="true"
-            [height]="600"
+            allDayPanelMode="hidden"
             (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
             (onAppointmentAdding)="onAppointmentAdding($event)"
             (onAppointmentUpdating)="onAppointmentUpdating($event)"
             (onAppointmentRendered)="onAppointmentRendered($event)"
             appointmentTemplate="appointment-template"
             (onContentReady)="onContentReady($event)"
+            height='75vh'
             >
             
             <!-- Views -->
@@ -54,7 +56,7 @@
                 name="Vertical Week"
                 type="week"
                 groupOrientation="vertical"
-                [cellDuration]="60"
+                [cellDuration]="30"
             ></dxi-view>
             <dxi-view
                 type="month">

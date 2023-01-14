@@ -26,7 +26,8 @@ import { AppointmentType, AppointmentTypeService } from './appointmentType.servi
 import { formatDate } from '@angular/common';
 
 type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
-const dateFormat = 'YYYY-MM-ddThh:mm';
+
+const dateFormat = 'YYYY-MM-ddTHH:mm';
 
 @Component({
   selector: 'app-schedule',
@@ -49,7 +50,6 @@ export class ScheduleComponent implements OnInit {
 
   constructor(
     private serviceService: ServiceService,
-    private injector: Injector,
     private appointmentTypeService: AppointmentTypeService
   ) {
     this.scheduleStore = new CustomStore({
@@ -80,17 +80,17 @@ export class ScheduleComponent implements OnInit {
         return lastValueFrom(this.serviceService.serviceScheduleDestroy({id:key}));
       },
       onLoaded: (schedule:Array<Appointment>) => {
+        const length = schedule.length;
         //Create travel time blocks
-        for(let appointment of schedule) {
+        for(let i = 0; i < length; i++) {
+          const appointment = schedule[i];
           const travel = this.getTravelTimeRange(appointment);
-          //console.log(formatDate(travel.start, dateFormat, 'en-US'))
-          //console.log(formatDate(travel.end, dateFormat, 'en-US'),)
           schedule.push({
             id: schedule.at(-1)!.id + 1,
             parentId:appointment.id,
             technicians: appointment.technicians,
-            startDateTime: '',
-            endDateTime: '',
+            startDateTime: formatDate(travel.start, dateFormat, 'en-US'),
+            endDateTime: formatDate(travel.end, dateFormat, 'en-US'),
             label: "travel Time: " + appointment.travelHours,
             type: TypeEnum.Trvl,
             disabled: true,
@@ -161,10 +161,6 @@ export class ScheduleComponent implements OnInit {
     this.appointmentTypeDataSource = new DataSource({
       load: () => this.appointmentTypeService.getAppointmentTypes()
     })
-    // Convert Component to a custom element.
-    const ButtonElement = createCustomElement(DxButtonComponent, {injector:this.injector});
-    // Register the custom element with the browser.
-    customElements.define('dx-button', ButtonElement);
   }
 
   /*****  EVENTS ******/
@@ -195,9 +191,8 @@ export class ScheduleComponent implements OnInit {
   */
   onAppointmentAdding(e: AppointmentAddingEvent) {
     const isValidAppointment = this.isValidAppointment(e.appointmentData as Appointment);
-    if (!isValidAppointment.result) {
+    if (!isValidAppointment) {
       e.cancel = true;
-      notify("Error Updating Appointment: ${isValidAppointment.result}");
     }
   }
 
@@ -303,9 +298,8 @@ export class ScheduleComponent implements OnInit {
   */
   onAppointmentUpdating(e:AppointmentUpdatingEvent) {
     const isValidAppointment = this.isValidAppointment(e.newData);
-    if (!isValidAppointment.result) {
+    if (!isValidAppointment) {
       e.cancel = true;
-      this.notifyDisableDate();
     }
   }  
 
@@ -382,7 +376,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   isDisableDate(date: Date) {
-    return this.isHoliday(date)// || this.isWeekend(date);
+    return this.isHoliday(date) // || this.isWeekend(date);
   }
 
   isDisabledDateCell(date: Date) {
@@ -394,21 +388,31 @@ export class ScheduleComponent implements OnInit {
   /**
    * Checks if appointment is valid
    */
-  isValidAppointment(appointmentData: Appointment) {
-    return this.isValidAppointmentInterval(appointmentData);
+  isValidAppointment(appointment: Appointment) {
+    return this.isValidAppointmentInterval(appointment);
   }
 
   /**
    * Checks if appointment time interval is valid for all technicians.
+   * Also Tries to resolve out of bounds and appointment conflicts
    */
   isValidAppointmentInterval(newAppointment: Appointment) {
     const newEnd = new Date(newAppointment.endDateTime);
     const newStart = this.getTravelTimeRange(newAppointment).start;
-    const edgeNewEnd = new Date(newEnd.getTime() - 1);
+    newEnd.setTime(newEnd.getTime() - 1);
     const schedule = this.dxScheduler.instance.getDataSource().items() as Appointment[];
-    //Check if appointment is out of bounds
-    if(newStart.getHours() < this.startDayHour || edgeNewEnd.getHours() > this.endDayHour) {
-      return {result:false,error:'out-of-bounds'};
+    // Check if appointment is out of bounds, if so move appointment
+    if(newStart.getHours() < this.startDayHour) {
+      const diff = this.startDayHour * 60 - newStart.getMinutes();
+      newStart.setMinutes(this.startDayHour * 60);
+      newEnd.setMinutes(newEnd.getMinutes() + diff);
+      return false;
+    }
+    if(newEnd.getHours() >= this.endDayHour) {
+      const diff = newEnd.getMinutes() - this.endDayHour;
+      newEnd.setMinutes(this.endDayHour * 60);
+      newStart.setMinutes(newStart.getMinutes() + diff);
+      return false;
     }
     // Check if appointment conflicts with other appointments
     for(let appointment of schedule) {
@@ -419,11 +423,32 @@ export class ScheduleComponent implements OnInit {
       for(let technician of newAppointment.technicians) {
         if(!this.isTechAssignedToAppointment(technician, appointment))
           continue;
-        if(edgeNewEnd > start && newStart < end){        
-          return {result:false, error:'conflict',technician:technician,appointment:appointment};
+        if(newEnd > start && newStart < end) {
+          //try to move appointment then validate again?
+          return false;
         }
       }
     }
-    return {result:true};
+    return true;
+  }
+  /** 
+   * find a valid interval for an appointment with an invalid interval.
+   */
+  findValidInterval(appointment:Appointment, start:Date, end:Date){
+    
+  }
+
+  isAppointmentInBounds(){
+
+  }
+  /**
+   * Does Appointment time interval conflict with other appointments
+   * if there is a conflict return the appoinmtent thet conflicts
+   */
+  doesAppointmentConflict(newAppointment:Appointment,newStart:Date,newEnd:Date){
+    const schedule = this.dxScheduler.instance.getDataSource().items() as Appointment[];
+    
+    return true;
   }
 }
+

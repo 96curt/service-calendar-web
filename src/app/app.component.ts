@@ -1,4 +1,6 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, Injector } from '@angular/core';
+import { createCustomElement } from '@angular/elements';
+import { DxButtonComponent } from 'devextreme-angular';
 import { AuthHelperService, ScreenService, AppInfoService } from './shared/services';
 
 @Component({
@@ -11,7 +13,17 @@ export class AppComponent  {
     return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
   }
 
-  constructor(private authService: AuthHelperService, private screen: ScreenService, public appInfo: AppInfoService) { }
+  constructor(
+    private authService: AuthHelperService,
+    private screen: ScreenService,
+    public appInfo: AppInfoService,
+    private injector: Injector,
+    ) {
+        // Convert Component to a custom element.
+        const ButtonElement = createCustomElement(DxButtonComponent, {injector:this.injector});
+        // Register the custom element with the browser.
+        customElements.define('dx-button', ButtonElement); //button used for scheduler in OnContentReady method.
+   }
 
   isAuthenticated() {
     return this.authService.loggedIn;

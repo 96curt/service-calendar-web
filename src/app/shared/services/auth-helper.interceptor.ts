@@ -10,6 +10,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { AuthHelperService } from './auth-helper.service';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
+import notify from 'devextreme/ui/notify';
 
 @Injectable()
 export class AuthHelperInterceptor implements HttpInterceptor {
@@ -24,7 +25,7 @@ export class AuthHelperInterceptor implements HttpInterceptor {
     const token = this.cookieService.get('csrf-token');
     let newReq = request.clone();
 
-    if ((request.url.includes('http') || request.url.includes('https'))
+    if((request.url.includes('http') || request.url.includes('https'))
       && (request.method === 'POST' || request.method === 'PUT' || request.method === 'PATCH' || request.method === 'DELETE')
       && !request.url.includes('auth')
       && token !== null
@@ -34,15 +35,18 @@ export class AuthHelperInterceptor implements HttpInterceptor {
     }  
     
     return next.handle(newReq)
-    .pipe(
-     catchError((error) => {
-
-       if ((error.status === 403 || error.status == 401) && !error.url.includes('logout')){
-         this.authHelperService.logOut();
-         return throwError(() => Error('Authentication Error, Logging out.'));
-       }
-       return throwError(() => error);
-     })
-    );
+    .pipe(catchError((error) => {
+      switch(error.status) {
+        case 0:
+          notify(`error: ${error.url} is unreachable`, 'error');
+          break;
+        case 403:
+        case 401:
+          if(error.url.includes('logout'))
+            this.authHelperService.logOut();
+          break;
+      }
+      return throwError(() => error);
+    }));
   }
 }

@@ -1,18 +1,21 @@
-.dx-scheduler {
-    .dx-scheduler-appointment-title {
-        white-space: normal;
-    }
-    .dx-scheduler-date-table-cell {  
-        min-width: 300px;  
-    }  
-    .dx-scheduler-appointment {  
-        box-sizing: content-box;  
-        padding-right: 0px;  
-    }  
-    .dx-scheduler-timeline .dx-scheduler-appointment,  
-    .dx-scheduler-work-space-month .dx-scheduler-appointment,  
-    .dx-scheduler-all-day-appointment .dx-scheduler-appointment {  
-        box-sizing: border-box;  
-        padding-right: 0;  
-    }
+
+.dx-scheduler-appointment-title {
+    white-space: normal;
 }
+// .dx-scheduler-date-table-cell {  
+//     min-width: 300px;  
+// }  
+// .dx-scheduler-appointment {  
+//     box-sizing: content-box;  
+//     padding-right: 0px;
+// }
+.dx-scheduler-appointment.dx-state-disabled{
+    opacity: 1;
+}
+
+// .dx-scheduler-timeline .dx-scheduler-appointment,  
+// .dx-scheduler-work-space-month .dx-scheduler-appointment,  
+// .dx-scheduler-all-day-appointment .dx-scheduler-appointment {  
+//     box-sizing: border-box;  
+//     padding-right: 0;  
+// }
