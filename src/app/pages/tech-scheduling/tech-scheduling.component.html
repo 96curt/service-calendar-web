@@ -1,0 +1,37 @@
+<div class="content-block">
+    <div class="dx-card responsive-paddings">
+        <app-filter
+            (onChange)="onFilterChange($event)"
+            [(visible)]="filterVisible">
+        </app-filter>
+        <div class="dx-theme-material-typography"><h2 style="margin: 0;">{{viewTitle}}</h2></div>
+        <dx-button
+            text="Filter"
+            (onClick)="displayFilter()">
+        </dx-button>
+        <app-schedule
+        [scheduleResource]="scheduleStore"
+        [technicianResource]="technicianStore"
+        [centerResource]="centerStore"
+        [addendumResource]="addendumStore"
+        >
+        </app-schedule>
+        <app-spreadsheet
+        [scheduleResource]="scheduleStore"
+        [technicianResource]="technicianStore"
+        [centerResource]="centerStore"
+        [addendumResource]="addendumStore"
+        >
+        <dx-button
+            text="Filter"
+            (onClick)="displayFilter()">
+        </dx-button>
+        </app-spreadsheet>
+        <!-- <dx-speed-dial-action
+            #speedDialAction
+            icon="plus"
+            (onClick)="showAppointmentPopup($event)"
+            >
+        </dx-speed-dial-action> -->
+    </div>
+</div>

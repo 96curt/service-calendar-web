@@ -25,6 +25,8 @@ I am leveraging the preformance of Javascript and a REST API to build a fast and
 2. git clone https://github.com/96curt/service-calendar-web
 3. cd service-calendar-web
 4. npm install
+5. npm run build-themes
+6. npm run gen-api
 
 ## Development server
 1. Run `npm start` for a dev server.

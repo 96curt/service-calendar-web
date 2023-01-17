@@ -1,0 +1,80 @@
+<dx-data-grid class="dx-card wide-card"
+    [dataSource]="scheduleResource"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="true">
+
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+    <!-- <dxi-column
+        dataField="startDateTime"
+        caption="Week Of"
+        dataType="date">
+    </dxi-column> -->
+    <dxi-column
+        dataField="serviceCenter"
+        caption="Service Center">
+        <dxo-lookup
+            [dataSource]="technicianResource"
+            valueExpr="id"
+            displayExpr="fullName">
+        </dxo-lookup>
+    </dxi-column>
+    <dxi-column
+        dataField="technicians"
+        caption="Technician">
+        <dxo-lookup
+            [dataSource]="technicianResource"
+            valueExpr="id"
+            displayExpr="fullName">
+        </dxo-lookup>
+    </dxi-column>
+    <dxi-column
+        dataField="startDateTime"
+        caption="Start Time"
+        dataType="date">
+    </dxi-column>
+    <dxi-column
+        dataField="travelHours"
+        caption="Travel To Hours">
+    </dxi-column>
+    <dxi-column
+        [dataField]="getOnSiteTime"
+        caption="On Site Hours">
+    </dxi-column>
+    <dxi-column
+        dataField="returnHours"
+        caption="Travel From Hours">
+    </dxi-column>
+    <dxi-column
+        dataField="endDateTime"
+        caption="End Time"
+        dataType="date">
+    </dxi-column>
+    <dxi-column
+        dataField="addendumName"
+        caption="Service Order">
+    </dxi-column>
+    <!-- <dxi-column
+        dataField="Contact"
+        caption="Due Date"
+        dataType="date"
+        [hidingPriority]="4">
+    </dxi-column>
+    <dxi-column
+        dataField="Task_Priority"
+        caption="Priority"
+        name="Priority"
+        [hidingPriority]="1">
+    </dxi-column>
+    <dxi-column
+        dataField="Task_Completion"
+        caption="Completion"
+        [hidingPriority]="0">
+    </dxi-column> -->
+
+</dx-data-grid>

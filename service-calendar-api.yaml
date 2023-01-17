@@ -2393,6 +2393,10 @@ components:
           type: string
           format: decimal
           pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        returnHours:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
         allDay:
           type: boolean
         recurrenceRule:
@@ -2487,6 +2491,10 @@ components:
           type: string
           format: decimal
           pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        returnHours:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
         allDay:
           type: boolean
         recurrenceRule:
@@ -2530,6 +2538,7 @@ components:
       - endDateTime
       - id
       - label
+      - returnHours
       - serviceCenter
       - startDateTime
       - technicians

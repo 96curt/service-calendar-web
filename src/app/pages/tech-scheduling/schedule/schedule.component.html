@@ -1,0 +1,169 @@
+<!-- Scheduler Configuration -->
+<dx-scheduler
+    [dataSource]="scheduleResource"
+    timeZone="America/Los_Angeles"
+    textExpr="label"
+    descriptionExpr="description"
+    startDateExpr="startDateTime"
+    endDateExpr="endDateTime"
+    [(currentView)]="currentView"
+    [groups]="['technicians']"
+    [startDayHour]="startDayHour"
+    [endDayHour]="endDayHour"
+    [remoteFiltering]="true"
+    allDayPanelMode="hidden"
+    (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+    (onAppointmentAdding)="onAppointmentAdding($event)"
+    (onAppointmentUpdating)="onAppointmentUpdating($event)"
+    (onAppointmentRendered)="onAppointmentRendered($event)"
+    (onAppointmentClick)="onAppointmentClick($event)"
+    appointmentTemplate="appointment-template"
+    appointmentTooltipTemplate="tooltip-template"
+    (onContentReady)="onContentReady($event)"
+    height='75vh'
+    >
+    
+    <!-- Views -->
+    <dxi-view
+        name="Vertical Day Timeline"
+        type="timelineDay"
+        groupOrientation="vertical"
+        [cellDuration]="120"
+    ></dxi-view>
+    <dxi-view
+        name="Vertical Work Week Timeline"
+        type="timelineWorkWeek"
+        groupOrientation="vertical"
+        [cellDuration]="180"
+        
+    ></dxi-view>
+    <dxi-view
+        name="Day"
+        type="day">
+    </dxi-view>
+    <dxi-view
+        type="workWeek">
+        [crossScrollingEnabled]="true"
+        [maxAppointmentsPerCell]="1"
+    </dxi-view>
+    <dxi-view
+        name="Vertical Week"
+        type="week"
+        groupOrientation="vertical"
+        [cellDuration]="60"
+    ></dxi-view>
+    <dxi-view
+        type="month">
+    </dxi-view>
+    
+    <!-- Resourses -->
+    <dxi-resource
+        fieldExpr="type"    
+        label="Appointment Type"          
+        [dataSource]="appointmentTypeData"
+        [allowMultiple]="false"
+        displayExpr="desc"
+        [useColorAsDefault]="true"
+    ></dxi-resource>
+    <dxi-resource
+        fieldExpr="technicians"    
+        label="Technicians"          
+        [dataSource]="technicianResource"
+        [allowMultiple]="true"
+        displayExpr="fullName"
+    ></dxi-resource> 
+    <dxi-resource
+        fieldExpr="serviceCenter"    
+        label="Service Center"          
+        [dataSource]="centerResource"
+        [allowMultiple]="false"
+        displayExpr="name"
+    ></dxi-resource>
+    <dxi-resource
+        fieldExpr="addendum"    
+        label="Service Order"          
+        [dataSource]="addendumResource"
+        [allowMultiple]="false"
+        displayExpr="name"
+    ></dxi-resource>
+    
+
+    <!-- <dxo-appointment-dragging
+        [group]="draggingGroupName"
+        [onRemove]="onAppointmentRemove"
+        [onAdd]="onAppointmentAdd"
+    >
+    </dxo-appointment-dragging> -->
+    <!-- Custom Templates -->
+
+    <div *dxTemplate="let model of 'appointment-template'">
+        <div class="dx-scheduler-appointment-title">
+            {{ model.targetedAppointmentData.label }} 
+        </div>
+        <div class="dx-scheduler-appointment-content-details">
+            <div class="dx-scheduler-appointment-content-date">
+                {{ model.targetedAppointmentData.displayStartDate | date: "shortTime" }} - {{ model.targetedAppointmentData.displayEndDate | date: "shortTime" }}
+            </div>
+        </div>
+    </div>
+
+    <div *dxTemplate="let technician of 'resourceCellTemplate'">
+        <div class="name">
+            {{ technician.data.firstName }} {{ technician.data.lastName }}
+        </div>
+        <div class="info">
+            Service Center: {{ technician.data.primaryCenter }}
+            <br />
+            Qualifier: {{technician.data.qualifier}} 
+        </div>
+    </div>
+
+    <div *dxTemplate="let model of 'tooltip-template'">
+        <div class="form">
+            <div class="dx-fieldset">
+                <div class="dx-field">
+                    <div class="dx-field-label">Customer Name:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.billingCustName}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Service Order #:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.addendumName}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Jobsite Address:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.JobsiteAddress}}</div>
+                </div>
+                <div class="dx-field" *ngIf="model.targetedAppointmentData.confirmed">
+                    <div class="dx-field-label">Confirmed by:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.confirmedBy}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Technicians:</div>
+                    <div class="dx-field-value-static">
+                        <ul>
+                            <li *ngFor="let tech of tooltipData.technicians">
+                                {{tech.fullName}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Labor Hours:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.addendumLaborHours}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Scheduled By:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.scheduledBy}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Phone number:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.scheduledBy}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Comment:</div>
+                    <div class="dx-field-value-static">{{model.targetedAppointmentData.description}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</dx-scheduler>

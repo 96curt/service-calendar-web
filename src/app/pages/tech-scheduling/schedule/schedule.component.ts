@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { createCustomElement, NgElement, WithProperties } from '@angular/elements';
 import { DxButtonComponent, DxSchedulerComponent } from 'devextreme-angular';
 import { LoadOptions } from 'devextreme/data';
@@ -22,7 +22,7 @@ import { FilterComponent } from 'app/shared/components/filter/filter.component';
 import { Filter } from 'app/shared/models/filter.model';
 import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment as dxSchedulerAppointment, AppointmentRenderedEvent, ContentReadyEvent, AppointmentDraggingRemoveEvent, AppointmentClickEvent } from 'devextreme/ui/scheduler';
 import notify from 'devextreme/ui/notify';
-import { AppointmentType, AppointmentTypeService } from './appointmentType.service';
+import { AppointmentType, AppointmentTypeService } from 'app/shared/services/appointmentType.service';
 import { formatDate } from '@angular/common';
 
 type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
@@ -35,17 +35,16 @@ const dateFormat = 'YYYY-MM-ddTHH:mm';
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.scss']
 })
-export class ScheduleComponent implements OnInit {
+export class ScheduleComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) dxScheduler!: DxSchedulerComponent
-
-  scheduleStore:  CustomStore;
-  techDataSource:  DataSource;
-  centerDataSource:  DataSource;
-  addendumDataSource:  DataSource;
-  filterValues = new Filter();
-  filterVisible = false;
+  @Input() scheduleResource:CustomStore = new CustomStore;
+  @Input() technicianResource:CustomStore = new CustomStore;
+  @Input() centerResource:CustomStore = new CustomStore;
+  @Input() addendumResource:CustomStore = new CustomStore;
+  @Input() filterVisible = false;
+  @Output() filterVisibleChange = new EventEmitter<boolean>;
   currentView = 'Vertical Week'
-  appointmentTypeData;
+  appointmentTypeData = this.appointmentTypeService.getAppointmentTypes();
   startDayHour = 5;
   endDayHour = 19;
   tooltipData = {} as ToolTipData;
@@ -53,137 +52,10 @@ export class ScheduleComponent implements OnInit {
     private serviceService: ServiceService,
     private appointmentTypeService: AppointmentTypeService
   ) {
-    this.scheduleStore = new CustomStore({
-      key: 'id',
-      loadMode:'processed',
-      load: (loadOptions:LoadOptions) => {
-        let requestPrams = {
-          startDateTimeBefore: loadOptions.filter[0][1][2],
-          endDateTimeAfter: loadOptions.filter[0][0][2],
-          serviceCenterRegionIdIn:this.filterValues.regions,
-          serviceCenterRegionManagersIdIn:this.filterValues.managers,
-          serviceCenterIdIn:this.filterValues.centers,
-          serviceCenterRegionCitiesIdIn:this.filterValues.cities,
-          serviceCenterRegionZipCodesCodeIn:this.filterValues.zipCodes
-        } as ServiceSchedulesListRequestParams
-        return lastValueFrom(this.serviceService.serviceSchedulesList(requestPrams,'body')) as  Promise<Array<Appointment>>;
-      },
-      byKey: (key:number) => {
-        return lastValueFrom(this.serviceService.serviceScheduleRetrieve({id:key})) as  Promise<Appointment>;
-      },
-      insert: (appointment:Appointment) => {
-        return lastValueFrom(this.serviceService.serviceSchedulesCreate({schedule:appointment})) as Promise<Appointment>;
-      },
-      update: (key:number, appointment:Appointment) => {
-        return lastValueFrom(this.serviceService.serviceScheduleUpdate({id:key, schedule:appointment})) as Promise<Appointment>;
-      },
-      remove: (key:number) => {
-        return lastValueFrom(this.serviceService.serviceScheduleDestroy({id:key}));
-      },
-      onLoaded: (schedule:Array<Appointment>) => {
-        const length = schedule.length;
-        //Create travel time blocks
-        for(let i = 0; i < length; i++) {
-          const appointment = schedule[i];
-          const travel = this.getTravelTimeRange(appointment);
-          schedule.push({
-            id: schedule.at(-1)!.id + 1,
-            parentId:appointment.id,
-            technicians: appointment.technicians,
-            startDateTime: formatDate(travel.start, dateFormat, 'en-US'),
-            endDateTime: formatDate(travel.end, dateFormat, 'en-US'),
-            label: "Travel Time: " + appointment.travelHours,
-            type: TypeEnum.Trvl,
-            disabled: false,
-            travelHours: '',
-            serviceCenter: 0,
-            addendumLaborHours: '',
-            addendumName: '',
-            billingCustName: '',
-            JobsiteAddress: '',
-          });
-        }
-      },
-      errorHandler: (error:any) => {
-        notify(error.message, 'error', 5000)
-      }
-    });
-    this.techDataSource = new DataSource({
-      key: 'id',
-      loadMode:'processed',
-      load: () => {
-        const prams = {
-          centersRegionIdIn:this.filterValues.regions,
-          centersRegionManagersIdIn:this.filterValues.managers,
-          centersIdIn:this.filterValues.centers,
-          centersRegionCitiesIdIn:this.filterValues.cities,
-          centersRegionZipCodesCodeIn:this.filterValues.zipCodes,
-          idIn:this.filterValues.techs
-        } as ServiceTechsListRequestParams;
-        return lastValueFrom(this.serviceService.serviceTechsList(prams));
-      },
-      byKey: (key) => {
-        return lastValueFrom(this.serviceService.serviceTechRetrieve({id:key}));
-      }
-    });
-    this.centerDataSource = new DataSource({
-      key: 'id',
-      loadMode:'processed',
-      load: () => {
-        const params = {
-          regionIdIn:this.filterValues.regions,
-          regionManagersIdIn:this.filterValues.managers,
-        } as ServiceCentersListRequestParams
-        return lastValueFrom(this.serviceService.serviceCentersList(params))
-      },
-      byKey: (key) => {
-        return lastValueFrom(this.serviceService.serviceCenterRetrieve({id:key}));
-      }
-    });
-    this.addendumDataSource = new DataSource({
-      key: 'id',
-      loadMode:'processed',
-      load: () => {
-        const params = {
-          sequenceJobSiteRegionIdIn:this.filterValues.regions,
-          sequenceManagerIdIn:this.filterValues.managers,
-          sequenceJobSiteRegionCentersIdIn:this.filterValues.centers,
-          sequenceJobSiteRegionCitiesIdIn:this.filterValues.cities,
-          sequenceJobSiteRegionZipCodesCodeIn:this.filterValues.zipCodes,
-          sequenceJobSiteRegionCentersTechniciansIdIn:this.filterValues.techs
-        } as ServiceOrderAddendumsListRequestParams
-        return lastValueFrom(this.serviceService.serviceOrderAddendumsList(params))
-        .catch(() => { throw 'Error loading Service Addendums' });
-      },
-      byKey: (key) => {
-        return lastValueFrom(this.serviceService.serviceOrderAddendumRetrieve({id:key}))
-      }
-    });
-    this.appointmentTypeData = this.appointmentTypeService.getAppointmentTypes();
   }
 
   /*****  EVENTS ******/
-
-  ngOnInit(): void {
-  }
-
-  /*
-  * Filter Component OnChange Event Handler
-  */
-  onFilterChange(e:any){
-    //update filter
-    this.filterValues = e.detail;
-    //reload data
-    this.reload();
-  }
-
-  /*
-  * dx-speed-dial-action onClick Event Handler.
-  */
-  showAppointmentPopup(e:any) {
-    this.dxScheduler.instance.showAppointmentPopup();
-  }
-
+ 
   /*
   * DxScheduler OnAppointmentAdding Event Handler. 
   * 
@@ -205,25 +77,16 @@ export class ScheduleComponent implements OnInit {
     });
     this.tooltipData.startDate = new Date(appointment.startDateTime);
     this.tooltipData.endDate = new Date(appointment.endDateTime);
-    
   }
 
   /**
    * DxScheduler OnContentReady Event Handler. 
    * Using to add custom elements to the scheduler component.
    */
-  onContentReady(e: ContentReadyEvent){
+  onContentReady(e: ContentReadyEvent) {
     if(document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before #filter-button") != null)
       return;
     let toolbarContentElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before .dx-buttongroup-wrapper");
-    // Create Filter Button
-    let filterBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
-    filterBtn.text = 'Filter';
-    filterBtn.setAttribute('id','filter-button');
-    filterBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
-    filterBtn.addEventListener('onClick', (e:any) => {
-      this.displayFilter();
-    });
     // Create Today Button
     let todayBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
     todayBtn.text = 'Today';
@@ -233,7 +96,15 @@ export class ScheduleComponent implements OnInit {
       this.dxScheduler.currentDate = new Date();
     });
     toolbarContentElement?.appendChild(todayBtn);
-    toolbarContentElement?.appendChild(filterBtn);
+    // Create Filter Button
+    // let filterBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
+    // filterBtn.text = 'Filter';
+    // filterBtn.setAttribute('id','filter-button');
+    // filterBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
+    // filterBtn.addEventListener('onClick', (e:any) => {
+    //   this.displayFilter();
+    // });
+    //toolbarContentElement?.appendChild(filterBtn);
   }
 
   /*
@@ -275,7 +146,7 @@ export class ScheduleComponent implements OnInit {
     // Add Travel Hours Item
     if (!mainGroupItems.find(function(i:any) { return i.dataField === "travelHours" })) {
         mainGroupItems.push({
-          colSpan: 2, 
+          colSpan: 1, 
           label: { text: "Travel Hours" },
           editorType: "dxTextBox",
           dataField: "travelHours",
@@ -283,6 +154,18 @@ export class ScheduleComponent implements OnInit {
         } as SimpleItem);
         form.itemOption('mainGroup', 'items', mainGroupItems);
     }
+    // Add Return Travel Hours Item
+    if (!mainGroupItems.find(function(i:any) { return i.dataField === "returnHours" })) {
+      mainGroupItems.push({
+        colSpan: 2, 
+        label: { text: "Return Hours" },
+        editorType: "dxTextBox",
+        dataField: "returnHours",
+        default: 0.0,
+        isRequired: true
+      } as SimpleItem);
+      form.itemOption('mainGroup', 'items', mainGroupItems);
+  }
     // Add Confirm Appointment Item
     if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirmed" })) {
       mainGroupItems.push({
@@ -335,7 +218,7 @@ export class ScheduleComponent implements OnInit {
   * Unhide the Filter
   */
   displayFilter() {
-    this.filterVisible = true;
+    this.filterVisibleChange.emit(true);
   }
 
   /**

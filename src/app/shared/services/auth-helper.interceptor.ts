@@ -15,7 +15,6 @@ import notify from 'devextreme/ui/notify';
 @Injectable()
 export class AuthHelperInterceptor implements HttpInterceptor {
 
-
   constructor(
     private authHelperService: AuthHelperService,
     private cookieService: CookieService) {}

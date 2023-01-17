@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FilterModule } from 'app/shared/components/filter/filter.module';
 import { DxButtonModule, DxDropDownBoxModule, DxFormModule, DxListModule, DxPopupModule, DxSchedulerModule, DxSelectBoxModule, DxSpeedDialActionModule, DxTemplateModule } from 'devextreme-angular';
 import { ScheduleComponent } from './schedule.component';
-import { AppointmentTypeService } from './appointmentType.service';
+import { AppointmentTypeService } from 'app/shared/services/appointmentType.service';
 
 
 
@@ -23,7 +23,6 @@ import { AppointmentTypeService } from './appointmentType.service';
     DxSelectBoxModule,
     DxPopupModule,
     DxButtonModule,
-    DxSpeedDialActionModule,
     DxListModule
   ],
   providers: [
