@@ -24,7 +24,9 @@
             (onAppointmentAdding)="onAppointmentAdding($event)"
             (onAppointmentUpdating)="onAppointmentUpdating($event)"
             (onAppointmentRendered)="onAppointmentRendered($event)"
+            (onAppointmentClick)="onAppointmentClick($event)"
             appointmentTemplate="appointment-template"
+            appointmentTooltipTemplate="tooltip-template"
             (onContentReady)="onContentReady($event)"
             height='75vh'
             >
@@ -56,13 +58,21 @@
                 name="Vertical Week"
                 type="week"
                 groupOrientation="vertical"
-                [cellDuration]="30"
+                [cellDuration]="60"
             ></dxi-view>
             <dxi-view
                 type="month">
             </dxi-view>
             
             <!-- Resourses -->
+            <dxi-resource
+                fieldExpr="type"    
+                label="Appointment Type"          
+                [dataSource]="appointmentTypeData"
+                [allowMultiple]="false"
+                displayExpr="desc"
+                [useColorAsDefault]="true"
+            ></dxi-resource>
             <dxi-resource
                 fieldExpr="technicians"    
                 label="Technicians"          
@@ -84,15 +94,14 @@
                 [allowMultiple]="false"
                 displayExpr="name"
             ></dxi-resource>
-            <dxi-resource
-                fieldExpr="type"    
-                label="Appointment Type"          
-                [dataSource]="appointmentTypeDataSource"
-                [allowMultiple]="false"
-                displayExpr="type"
-                [useColorAsDefault]="true"
-            ></dxi-resource>
+            
 
+            <!-- <dxo-appointment-dragging
+                [group]="draggingGroupName"
+                [onRemove]="onAppointmentRemove"
+                [onAdd]="onAppointmentAdd"
+            >
+            </dxo-appointment-dragging> -->
             <!-- Custom Templates -->
 
             <div *dxTemplate="let model of 'appointment-template'">
@@ -101,7 +110,7 @@
                 </div>
                 <div class="dx-scheduler-appointment-content-details">
                     <div class="dx-scheduler-appointment-content-date">
-                        {{ model.targetedAppointmentData.startDateTime}}
+                        {{ model.targetedAppointmentData.displayStartDate | date: "shortTime" }} - {{ model.targetedAppointmentData.displayEndDate | date: "shortTime" }}
                     </div>
                 </div>
             </div>
@@ -117,6 +126,54 @@
                 </div>
             </div>
 
+            <div *dxTemplate="let model of 'tooltip-template'">
+                <div class="form">
+                    <div class="dx-fieldset">
+                        <div class="dx-field">
+                            <div class="dx-field-label">Customer Name:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.billingCustName}}</div>
+                        </div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Service Order #:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.addendumName}}</div>
+                        </div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Jobsite Address:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.JobsiteAddress}}</div>
+                        </div>
+                        <div class="dx-field" *ngIf="model.targetedAppointmentData.confirmed">
+                            <div class="dx-field-label">Confirmed by:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.confirmedBy}}</div>
+                        </div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Technicians:</div>
+                            <div class="dx-field-value-static">
+                                <ul>
+                                    <li *ngFor="let tech of tooltipData.technicians">
+                                        {{tech.fullName}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Labor Hours:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.addendumLaborHours}}</div>
+                        </div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Scheduled By:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.scheduledBy}}</div>
+                        </div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Phone number:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.scheduledBy}}</div>
+                        </div>
+                        <div class="dx-field">
+                            <div class="dx-field-label">Comment:</div>
+                            <div class="dx-field-value-static">{{model.targetedAppointmentData.description}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </dx-scheduler>
         <dx-speed-dial-action
             #speedDialAction

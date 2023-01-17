@@ -3,24 +3,24 @@ import { TypeEnum } from 'openapi'
 
 export interface AppointmentType {
     id: TypeEnum,
-    type: string,
+    desc: string,
     color: string
 }
 
 const appointmentTypes: AppointmentType[] = [{
     id: TypeEnum.Ordr,
-    type: 'service-order',
-    color: '#cb6bb2'
+    desc: 'Service Order',
+    color: '#1e90ff'
 },
 {
     id: TypeEnum.Trvl,
-    type: 'travel-time',
-    color: '#56ca85'
+    desc: 'Travel Time',
+    color: '#8ccc8c'
 },
 {
     id: TypeEnum.Misc,
-    type: 'misc',
-    color: '#1e90ff'
+    desc: 'Misc',
+    color: '#c890ff'
 }]
 
 @Injectable()

@@ -20,12 +20,13 @@ import { lastValueFrom, Observable } from 'rxjs';
 import Form, { SimpleItem } from "devextreme/ui/form";
 import { FilterComponent } from 'app/shared/components/filter/filter.component';
 import { Filter } from 'app/shared/models/filter.model';
-import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment as dxSchedulerAppointment, AppointmentRenderedEvent, ContentReadyEvent } from 'devextreme/ui/scheduler';
+import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment as dxSchedulerAppointment, AppointmentRenderedEvent, ContentReadyEvent, AppointmentDraggingRemoveEvent, AppointmentClickEvent } from 'devextreme/ui/scheduler';
 import notify from 'devextreme/ui/notify';
 import { AppointmentType, AppointmentTypeService } from './appointmentType.service';
 import { formatDate } from '@angular/common';
 
 type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
+type ToolTipData = {technicians?:Technician[],startDate?:Date,endDate?:Date};
 
 const dateFormat = 'YYYY-MM-ddTHH:mm';
 
@@ -44,10 +45,10 @@ export class ScheduleComponent implements OnInit {
   filterValues = new Filter();
   filterVisible = false;
   currentView = 'Vertical Week'
-  appointmentTypeDataSource: DataSource<any, any>;
+  appointmentTypeData;
   startDayHour = 5;
   endDayHour = 19;
-
+  tooltipData = {} as ToolTipData;
   constructor(
     private serviceService: ServiceService,
     private appointmentTypeService: AppointmentTypeService
@@ -91,15 +92,15 @@ export class ScheduleComponent implements OnInit {
             technicians: appointment.technicians,
             startDateTime: formatDate(travel.start, dateFormat, 'en-US'),
             endDateTime: formatDate(travel.end, dateFormat, 'en-US'),
-            label: "travel Time: " + appointment.travelHours,
+            label: "Travel Time: " + appointment.travelHours,
             type: TypeEnum.Trvl,
-            disabled: true,
+            disabled: false,
             travelHours: '',
             serviceCenter: 0,
             addendumLaborHours: '',
             addendumName: '',
             billingCustName: '',
-            JobsiteAddress: ''
+            JobsiteAddress: '',
           });
         }
       },
@@ -158,9 +159,7 @@ export class ScheduleComponent implements OnInit {
         return lastValueFrom(this.serviceService.serviceOrderAddendumRetrieve({id:key}))
       }
     });
-    this.appointmentTypeDataSource = new DataSource({
-      load: () => this.appointmentTypeService.getAppointmentTypes()
-    })
+    this.appointmentTypeData = this.appointmentTypeService.getAppointmentTypes();
   }
 
   /*****  EVENTS ******/
@@ -196,10 +195,23 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  /*
-  * DxScheduler OnContentReady Event Handler. 
-  * Using to add custom elements to the scheduler component.
-  */
+  /**
+   * DxScheduler OnAppointmentClick Event Handler.
+   */
+  onAppointmentClick(e:AppointmentClickEvent){
+    const appointment = e.appointmentData as Appointment;
+    this.techniciansLookup(appointment.technicians).then((value) => {
+      this.tooltipData.technicians = value;
+    });
+    this.tooltipData.startDate = new Date(appointment.startDateTime);
+    this.tooltipData.endDate = new Date(appointment.endDateTime);
+    
+  }
+
+  /**
+   * DxScheduler OnContentReady Event Handler. 
+   * Using to add custom elements to the scheduler component.
+   */
   onContentReady(e: ContentReadyEvent){
     if(document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before #filter-button") != null)
       return;
@@ -272,12 +284,12 @@ export class ScheduleComponent implements OnInit {
         form.itemOption('mainGroup', 'items', mainGroupItems);
     }
     // Add Confirm Appointment Item
-    if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirm" })) {
+    if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirmed" })) {
       mainGroupItems.push({
         colSpan: 1, 
         label: { text: "Confirm Appointment" },
         editorType: "dxCheckBox",
-        dataField: "confirm",
+        dataField: "confirmed",
       });
       form.itemOption('mainGroup', 'items', mainGroupItems);
     }
@@ -287,9 +299,9 @@ export class ScheduleComponent implements OnInit {
   * DxScheduler OnAppointmentRendered Event. 
   * https://supportcenter.devexpress.com/ticket/details/t1126054/scheduler-how-to-set-the-appointments-width-to-100
   */
-  onAppointmentRendered(e:any) {
-    const width = e.element.querySelector('.dx-scheduler-date-table-cell').clientWidth; // get a cell's width
-    e.appointmentElement.style.width = `${width}px`;
+  onAppointmentRendered(e:AppointmentRenderedEvent) {
+    const width = e.element.querySelector('.dx-scheduler-date-table-cell')!.clientWidth; // get a cell's width
+    e.appointmentElement.style.width = `${width}px`;   
   }
   
   /*
@@ -301,7 +313,7 @@ export class ScheduleComponent implements OnInit {
     if (!isValidAppointment) {
       e.cancel = true;
     }
-  }  
+  }
 
   /*** Helper Methods ***/
 
@@ -325,18 +337,6 @@ export class ScheduleComponent implements OnInit {
   displayFilter() {
     this.filterVisible = true;
   }
-
-  notifyDisableDate() {
-    notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
-  }
-
-  isHoliday(date: Date) {
-    //const localeDate = date.toLocaleDateString();
-    //const holidays = this.dataService.getHolidays();
-    //return holidays.filter((holiday) => holiday.toLocaleDateString() === localeDate).length > 0;
-    return false;
-  }
-
 
   /**
   * Checks if technician is traveling at this time.
@@ -375,16 +375,6 @@ export class ScheduleComponent implements OnInit {
     return {start, end};
   }
 
-  isDisableDate(date: Date) {
-    return this.isHoliday(date) // || this.isWeekend(date);
-  }
-
-  isDisabledDateCell(date: Date) {
-    return this.currentView === 'month'
-      ? this.isHoliday(date)
-      : this.isDisableDate(date);
-  }
-
   /**
    * Checks if appointment is valid
    */
@@ -402,18 +392,18 @@ export class ScheduleComponent implements OnInit {
     newEnd.setTime(newEnd.getTime() - 1);
     const schedule = this.dxScheduler.instance.getDataSource().items() as Appointment[];
     // Check if appointment is out of bounds, if so move appointment
-    if(newStart.getHours() < this.startDayHour) {
-      const diff = this.startDayHour * 60 - newStart.getMinutes();
-      newStart.setMinutes(this.startDayHour * 60);
-      newEnd.setMinutes(newEnd.getMinutes() + diff);
+    if(newStart.getHours() < this.startDayHour || newEnd.getHours() >= this.endDayHour) {
       return false;
+      // const diff = this.startDayHour * 60 - newStart.getMinutes();
+      // newStart.setMinutes(this.startDayHour * 60);
+      // newEnd.setMinutes(newEnd.getMinutes() + diff);
     }
-    if(newEnd.getHours() >= this.endDayHour) {
-      const diff = newEnd.getMinutes() - this.endDayHour;
-      newEnd.setMinutes(this.endDayHour * 60);
-      newStart.setMinutes(newStart.getMinutes() + diff);
-      return false;
-    }
+    //else if(newEnd.getHours() >= this.endDayHour) {
+      //return false;
+      // const diff = newEnd.getMinutes() - this.endDayHour;
+      // newEnd.setMinutes(this.endDayHour * 60);
+      // newStart.setMinutes(newStart.getMinutes() + diff);
+    //}
     // Check if appointment conflicts with other appointments
     for(let appointment of schedule) {
       if(appointment.id == newAppointment.id || appointment.parentId == newAppointment.id)
@@ -424,31 +414,15 @@ export class ScheduleComponent implements OnInit {
         if(!this.isTechAssignedToAppointment(technician, appointment))
           continue;
         if(newEnd > start && newStart < end) {
-          //try to move appointment then validate again?
           return false;
         }
       }
     }
     return true;
   }
-  /** 
-   * find a valid interval for an appointment with an invalid interval.
-   */
-  findValidInterval(appointment:Appointment, start:Date, end:Date){
-    
-  }
 
-  isAppointmentInBounds(){
-
-  }
-  /**
-   * Does Appointment time interval conflict with other appointments
-   * if there is a conflict return the appoinmtent thet conflicts
-   */
-  doesAppointmentConflict(newAppointment:Appointment,newStart:Date,newEnd:Date){
-    const schedule = this.dxScheduler.instance.getDataSource().items() as Appointment[];
-    
-    return true;
+  async techniciansLookup(technicians:number[]){
+    return await lastValueFrom(this.serviceService.serviceTechsList({idIn:technicians}));
   }
 }
 
