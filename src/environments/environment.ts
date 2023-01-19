@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:8888',
   csrfHeader: 'x-csrftoken',
-  csrfCookie: 'csrftoken'
+  csrfCookie: 'csrftoken',
+  bingKey: 'AhOUebU0tnxaW_RperDFssD8xrJ2Hd_9O5m3F_Hwdf0D1mQvzGhJRyc5L2vJAX-B'
 };
 
 /*

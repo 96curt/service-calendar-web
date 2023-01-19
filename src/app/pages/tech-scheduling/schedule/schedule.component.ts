@@ -84,6 +84,7 @@ export class ScheduleComponent {
    * Using to add custom elements to the scheduler component.
    */
   onContentReady(e: ContentReadyEvent) {
+    
     if(document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before #filter-button") != null)
       return;
     let toolbarContentElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before .dx-buttongroup-wrapper");
@@ -97,14 +98,14 @@ export class ScheduleComponent {
     });
     toolbarContentElement?.appendChild(todayBtn);
     // Create Filter Button
-    // let filterBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
-    // filterBtn.text = 'Filter';
-    // filterBtn.setAttribute('id','filter-button');
-    // filterBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
-    // filterBtn.addEventListener('onClick', (e:any) => {
-    //   this.displayFilter();
-    // });
-    //toolbarContentElement?.appendChild(filterBtn);
+    let filterBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
+    filterBtn.text = 'Filter';
+    filterBtn.setAttribute('id','filter-button');
+    filterBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
+    filterBtn.addEventListener('onClick', (e:any) => {
+      this.displayFilter();
+    });
+    toolbarContentElement?.appendChild(filterBtn);
   }
 
   /*
