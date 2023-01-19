@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Filter } from 'app/shared/models/filter.model';
 import CustomStore from 'devextreme/data/custom_store';
 import { Schedule, ServiceCentersListRequestParams, ServiceOrderAddendumsListRequestParams, ServiceSchedulesListRequestParams, ServiceService, ServiceTechsListRequestParams, Technician, TypeEnum } from 'openapi';
@@ -8,6 +8,8 @@ import { LoadOptions } from 'devextreme/data';
 import { lastValueFrom } from 'rxjs';
 import { formatDate } from '@angular/common';
 import notify from 'devextreme/ui/notify';
+import { ScheduleComponent } from './schedule/schedule.component';
+import DataSource from 'devextreme/data/data_source';
 
 type Appointment = Schedule & dxSchedulerAppointment & { parentId?:number };
 type ToolTipData = { technicians?:Technician[], startDate?:Date, endDate?:Date };
@@ -18,10 +20,14 @@ type ToolTipData = { technicians?:Technician[], startDate?:Date, endDate?:Date }
   styleUrls: ['./tech-scheduling.component.scss']
 })
 export class TechSchedulingComponent {
+  @ViewChild(ScheduleComponent, { static: false }) appScheduler!: ScheduleComponent;
   scheduleStore:  CustomStore;
   technicianStore:  CustomStore;
   centerStore:  CustomStore;
   addendumStore:  CustomStore;
+  technicianDataSource: DataSource;
+  centerDataSource: DataSource;
+  addendumDataSource: DataSource;
   filterValues = new Filter();
   filterVisible = false;
   currentView = 'Vertical Week'
@@ -75,7 +81,7 @@ export class TechSchedulingComponent {
             endDateTime: formatDate(travel.end, 'YYYY-MM-ddTHH:mm', 'en-US'),
             label: "Travel Time: " + appointment.travelHours,
             type: TypeEnum.Trvl,
-            disabled: false,
+            disabled: true,
             travelHours: '',
             returnHours: '',
             serviceCenter: 0,
@@ -142,6 +148,9 @@ export class TechSchedulingComponent {
       }
     });
     this.appointmentTypeData = this.appointmentTypeService.getAppointmentTypes();
+    this.technicianDataSource = new DataSource({store:this.technicianStore});
+    this.centerDataSource = new DataSource({store:this.centerStore});
+    this.addendumDataSource = new DataSource({store:this.addendumStore});
   }
 
   /*** Event Handlers ***/
@@ -159,8 +168,9 @@ export class TechSchedulingComponent {
    */
   onFilterChange(e:any){
     //update filter
-    this.filterValues = e.detail;
+    this.filterValues = e;
     //reload data
+    this.appScheduler.reload();
     //this.reload();
   }
 

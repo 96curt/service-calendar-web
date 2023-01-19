@@ -45,7 +45,8 @@ export class FilterComponent implements OnInit {
       icon: 'close',
       text: 'Close',
       onClick: () => {
-        this.visible = false;
+        //this.visible = false;
+        this.visibleChange.emit(false);
       }
     };
 

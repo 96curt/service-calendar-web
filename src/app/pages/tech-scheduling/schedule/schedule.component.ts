@@ -35,14 +35,15 @@ const dateFormat = 'YYYY-MM-ddTHH:mm';
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.scss']
 })
-export class ScheduleComponent {
+export class ScheduleComponent implements OnInit {
   @ViewChild(DxSchedulerComponent, { static: false }) dxScheduler!: DxSchedulerComponent
   @Input() scheduleResource:CustomStore = new CustomStore;
-  @Input() technicianResource:CustomStore = new CustomStore;
-  @Input() centerResource:CustomStore = new CustomStore;
-  @Input() addendumResource:CustomStore = new CustomStore;
+  @Input() technicianResource = {};
+  @Input() centerResource = {};
+  @Input() addendumResource = {};
   @Input() filterVisible = false;
   @Output() filterVisibleChange = new EventEmitter<boolean>;
+  
   currentView = 'Vertical Week'
   appointmentTypeData = this.appointmentTypeService.getAppointmentTypes();
   startDayHour = 5;
@@ -52,6 +53,10 @@ export class ScheduleComponent {
     private serviceService: ServiceService,
     private appointmentTypeService: AppointmentTypeService
   ) {
+
+  }
+  ngOnInit(): void {
+    
   }
 
   /*****  EVENTS ******/
@@ -199,17 +204,21 @@ export class ScheduleComponent {
     }
   }
 
-  /*** Helper Methods ***/
 
-  /*
-  * Reload DataSources and refresh scheduler
-  */
+  /**
+   * Reload data sources and refresh scheduler
+   */
   reload(){
     this.dxScheduler.instance.beginUpdate();
     this.dxScheduler.groups = [];
-    this.dxScheduler.resources.forEach((resource:{dataSource:DataSource}) => {
-      resource.dataSource.reload();
-    });
+    // this.dxScheduler.resources.forEach((resource:{dataSource:DataSource}) => {
+    //   resource.dataSource.reload();
+    // });
+    for(let resource of this.dxScheduler.resources){
+      if(resource.fieldExpr == "technicians"){
+        resource.dataSource.reload();
+      }
+    }
     this.dxScheduler.instance.getDataSource().reload();
     this.dxScheduler.instance.endUpdate();
     this.dxScheduler.groups = ['technicians'];
