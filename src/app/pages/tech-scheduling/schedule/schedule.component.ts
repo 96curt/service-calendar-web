@@ -20,12 +20,14 @@ import { lastValueFrom, Observable } from 'rxjs';
 import Form, { SimpleItem } from "devextreme/ui/form";
 import { FilterComponent } from 'app/shared/components/filter/filter.component';
 import { Filter } from 'app/shared/models/filter.model';
-import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment as dxSchedulerAppointment, AppointmentRenderedEvent, ContentReadyEvent, AppointmentDraggingRemoveEvent, AppointmentClickEvent } from 'devextreme/ui/scheduler';
+import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment as dxSchedulerAppointment, AppointmentRenderedEvent, ContentReadyEvent, AppointmentDraggingRemoveEvent, AppointmentClickEvent, AppointmentDblClickEvent } from 'devextreme/ui/scheduler';
 import notify from 'devextreme/ui/notify';
 import { AppointmentType, AppointmentTypeService } from 'app/shared/services/appointmentType.service';
+import { AppointmentService, Appointment} from 'app/shared/services/appointment.service';
 import { formatDate } from '@angular/common';
+import { flush } from '@angular/core/testing';
 
-type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
+
 type ToolTipData = {technicians?:Technician[],startDate?:Date,endDate?:Date};
 
 const dateFormat = 'YYYY-MM-ddTHH:mm';
@@ -49,17 +51,21 @@ export class ScheduleComponent {
   startDayHour = 5;
   endDayHour = 19;
   tooltipData = {} as ToolTipData;
+  editAppointmentData = {} as Appointment;
+  customAppointmentFormVisible = false;
   constructor(
     private serviceService: ServiceService,
-    private appointmentTypeService: AppointmentTypeService
+    private appointmentTypeService: AppointmentTypeService,
+    private appointmentService: AppointmentService
   ) {
   }
+
   /*
   * DxScheduler OnAppointmentAdding Event Handler. 
   * 
   */
   onAppointmentAdding(e: AppointmentAddingEvent) {
-    const isValidAppointment = this.isValidAppointment(e.appointmentData as Appointment);
+    const isValidAppointment = this.appointmentService.isValidAppointment(e.appointmentData as Appointment,this.dxScheduler);
     if (!isValidAppointment) {
       e.cancel = true;
     }
@@ -67,6 +73,7 @@ export class ScheduleComponent {
 
   /**
    * DxScheduler OnAppointmentClick Event Handler.
+   * Show ToolTip
    */
   onAppointmentClick(e:AppointmentClickEvent){
     const appointment = e.appointmentData as Appointment;
@@ -79,6 +86,14 @@ export class ScheduleComponent {
     });
     this.tooltipData.startDate = new Date(appointment.startDateTime);
     this.tooltipData.endDate = new Date(appointment.endDateTime);
+  }
+
+  /**
+   * DxScheduler OnAppointmentClick Event Handler.
+   * Show Appointment Details Form
+   */
+  onAppointmentDblClick(e:AppointmentDblClickEvent){
+
   }
 
   /**
@@ -102,68 +117,71 @@ export class ScheduleComponent {
   * 
   */
   onAppointmentFormOpening(e:AppointmentFormOpeningEvent) {
+    e.cancel=true;
     let appointment = e.appointmentData as Appointment;
-    if(appointment.type=="TRVL"){
-        e.cancel = true;
-    }
-    e.popup.option('showTitle', true);
-    e.popup.option('title', appointment.label ? 
-        appointment.label : 
-        'Create a new appointment');
-    const form = e.form;
-    let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
-    // Hide label and description items
-    {
-      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "label" })
-      if (index != -1) {
-        mainGroupItems[index].visible = false;
-      }
-    }
-    {
-      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
-      if (index != -1) {
-        mainGroupItems[index].visible=false;
-      }
-    }
-    // Set Required fields
-    mainGroupItems.forEach((item, index) => {
-      if(item.dataField === "technicians" || item.dataField === "serviceCenter"){
-        item.isRequired = true;
-      }
-    });
-    // Add Travel Hours Item
-    if (!mainGroupItems.find(function(i:any) { return i.dataField === "travelHours" })) {
-        mainGroupItems.push({
-          colSpan: 1, 
-          label: { text: "Travel Hours" },
-          editorType: "dxTextBox",
-          dataField: "travelHours",
-          isRequired: true
-        } as SimpleItem);
-        form.itemOption('mainGroup', 'items', mainGroupItems);
-    }
-    // Add Return Travel Hours Item
-    if (!mainGroupItems.find(function(i:any) { return i.dataField === "returnHours" })) {
-      mainGroupItems.push({
-        colSpan: 2, 
-        label: { text: "Return Hours" },
-        editorType: "dxTextBox",
-        dataField: "returnHours",
-        default: 0.0,
-        isRequired: true
-      } as SimpleItem);
-      form.itemOption('mainGroup', 'items', mainGroupItems);
-  }
-    // Add Confirm Appointment Item
-    if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirmed" })) {
-      mainGroupItems.push({
-        colSpan: 1, 
-        label: { text: "Confirm Appointment" },
-        editorType: "dxCheckBox",
-        dataField: "confirmed",
-      });
-      form.itemOption('mainGroup', 'items', mainGroupItems);
-    }
+    if(appointment.type=="TRVL")
+      return;
+    this.customAppointmentFormVisible = true;
+
+
+  //   e.popup.option('showTitle', true);
+  //   e.popup.option('title', appointment.label ? 
+  //       appointment.label : 
+  //       'Create a new appointment');
+  //   const form = e.form;
+  //   let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
+  //   // Hide label and description items
+  //   {
+  //     let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "label" })
+  //     if (index != -1) {
+  //       mainGroupItems[index].visible = false;
+  //     }
+  //   }
+  //   {
+  //     let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
+  //     if (index != -1) {
+  //       mainGroupItems[index].visible=false;
+  //     }
+  //   }
+  //   // Set Required fields
+  //   mainGroupItems.forEach((item, index) => {
+  //     if(item.dataField === "technicians" || item.dataField === "serviceCenter"){
+  //       item.isRequired = true;
+  //     }
+  //   });
+  //   // Add Travel Hours Item
+  //   if (!mainGroupItems.find(function(i:any) { return i.dataField === "travelHours" })) {
+  //       mainGroupItems.push({
+  //         colSpan: 1, 
+  //         label: { text: "Travel Hours" },
+  //         editorType: "dxTextBox",
+  //         dataField: "travelHours",
+  //         isRequired: true
+  //       } as SimpleItem);
+  //       form.itemOption('mainGroup', 'items', mainGroupItems);
+  //   }
+  //   // Add Return Travel Hours Item
+  //   if (!mainGroupItems.find(function(i:any) { return i.dataField === "returnHours" })) {
+  //     mainGroupItems.push({
+  //       colSpan: 2, 
+  //       label: { text: "Return Hours" },
+  //       editorType: "dxTextBox",
+  //       dataField: "returnHours",
+  //       default: 0.0,
+  //       isRequired: true
+  //     } as SimpleItem);
+  //     form.itemOption('mainGroup', 'items', mainGroupItems);
+  // }
+  //   // Add Confirm Appointment Item
+  //   if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirmed" })) {
+  //     mainGroupItems.push({
+  //       colSpan: 1, 
+  //       label: { text: "Confirm Appointment" },
+  //       editorType: "dxCheckBox",
+  //       dataField: "confirmed",
+  //     });
+  //     form.itemOption('mainGroup', 'items', mainGroupItems);
+  //   }
   }
 
   /*
@@ -171,8 +189,16 @@ export class ScheduleComponent {
   * https://supportcenter.devexpress.com/ticket/details/t1126054/scheduler-how-to-set-the-appointments-width-to-100
   */
   onAppointmentRendered(e:AppointmentRenderedEvent) {
+    const appointment = e.appointmentData as Appointment;
     const width = e.element.querySelector('.dx-scheduler-date-table-cell')!.clientWidth; // get a cell's width
-    e.appointmentElement.style.width = `${width}px`;   
+    e.appointmentElement.style.width = `${width}px`;
+    e.appointmentElement.classList.replace('dx-state-disabled','dx-state-travel');
+    if(appointment.confirmed)
+      e.appointmentElement.classList.add("dx-state-confirmed");
+    if(appointment.type=="MISC")
+      e.appointmentElement.classList.add("dx-state-misc");
+
+
   }
   
   /*
@@ -180,7 +206,7 @@ export class ScheduleComponent {
   * 
   */
   onAppointmentUpdating(e:AppointmentUpdatingEvent) {
-    const isValidAppointment = this.isValidAppointment(e.newData);
+    const isValidAppointment = this.appointmentService.isValidAppointment(e.newData,this.dxScheduler);
     if (!isValidAppointment) {
       e.cancel = true;
     }
@@ -230,80 +256,6 @@ export class ScheduleComponent {
   */
   displayFilter() {
     this.filterVisibleChange.emit(true);
-  }
-
-  /**
-  * Checks if technician is traveling at this time.
-  */
-  isTravelTime(technician: number, date: Date) {
-    const schedule = this.dxScheduler.instance.getDataSource().items() as Appointment[];
-    for(let appointment of schedule) {
-      if(!this.isTechAssignedToAppointment(technician, appointment))
-        continue;
-      // get appointment travel time
-      const travel = this.getTravelTimeRange(appointment);
-      // is date in travel block
-      if(date >= travel.start && date < travel.end)
-        return true;
-    };
-    return false;
-  }
-
-  /**
-  * Checks if technician is assigned to the appointment.
-  */
-  isTechAssignedToAppointment(technician:number, appointment:Appointment) {
-    return appointment.technicians.find((value) => {
-      return value == technician;
-    });
-  }
-
-  /**
-  * Get Appointment Travel Time Range
-  */
-  getTravelTimeRange(appointment:Appointment) {
-    let end = new Date(appointment.startDateTime);
-    let start = new Date(end);
-    end.setMinutes(end.getMinutes() - 1);
-    start.setMinutes(start.getMinutes() - parseFloat(appointment.travelHours) * 60);
-    return {start, end};
-  }
-
-  /**
-   * Checks if appointment is valid
-   */
-  isValidAppointment(appointment: Appointment) {
-    return this.isValidAppointmentInterval(appointment);
-  }
-
-  /**
-   * Checks if appointment time interval is valid for all technicians.
-   * Also Tries to resolve out of bounds and appointment conflicts
-   */
-  isValidAppointmentInterval(newAppointment: Appointment) {
-    const newEnd = new Date(newAppointment.endDateTime);
-    const newStart = this.getTravelTimeRange(newAppointment).start;
-    newEnd.setTime(newEnd.getTime() - 1);
-    const schedule = this.dxScheduler.instance.getDataSource().items() as Appointment[];
-    // Check if appointment is out of bounds, if so move appointment
-    if(newStart.getHours() < this.startDayHour || newEnd.getHours() >= this.endDayHour) {
-      return false;
-    }
-    // Check if appointment conflicts with other appointments
-    for(let appointment of schedule) {
-      if(appointment.id == newAppointment.id || appointment.parentId == newAppointment.id)
-        continue;
-      const start = new Date(appointment.startDateTime);
-      const end = new Date(appointment.endDateTime);
-      for(let technician of newAppointment.technicians) {
-        if(!this.isTechAssignedToAppointment(technician, appointment))
-          continue;
-        if(newEnd > start && newStart < end) {
-          return false;
-        }
-      }
-    }
-    return true;
   }
 
   async techniciansLookup(technicians:number[]){

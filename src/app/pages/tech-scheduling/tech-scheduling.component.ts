@@ -10,8 +10,8 @@ import { formatDate } from '@angular/common';
 import notify from 'devextreme/ui/notify';
 import { ScheduleComponent } from './schedule/schedule.component';
 import DataSource from 'devextreme/data/data_source';
+import { AppointmentService, Appointment } from 'app/shared/services/appointment.service';
 
-type Appointment = Schedule & dxSchedulerAppointment & { parentId?:number };
 type ToolTipData = { technicians?:Technician[], startDate?:Date, endDate?:Date };
 
 @Component({
@@ -39,7 +39,8 @@ export class TechSchedulingComponent {
   views:any;
   constructor(
     private serviceService: ServiceService,
-    private appointmentTypeService: AppointmentTypeService
+    private appointmentTypeService: AppointmentTypeService,
+    private appointmentService: AppointmentService
   ) {
     this.scheduleStore = new CustomStore({
       key: 'id',
@@ -73,46 +74,14 @@ export class TechSchedulingComponent {
         //Create travel time blocks
         for(let i = 0; i < length; i++) {
           const appointment = schedule[i];
-          const travelTime = this.getTravelTimeRange(appointment);
-          const returnTime = this.getReturnTimeRange(appointment);
-          schedule.push({
-            id: schedule.at(-1)!.id + 1,
-            parentId:appointment.id,
-            technicians: appointment.technicians,
-            startDateTime: formatDate(travelTime.start,'YYYY-MM-ddTHH:mm', 'en-US'),
-            endDateTime: formatDate(travelTime.end, 'YYYY-MM-ddTHH:mm', 'en-US'),
-            label: "Travel Time: " + appointment.travelHours,
-            type: TypeEnum.Trvl,
-            disabled: true,
-            travelHours: '',
-            returnHours: '',
-            serviceCenter: 0,
-            addendumLaborHours: '',
-            addendumName: '',
-            billingCustName: '',
-            JobsiteAddress: '',
-          });
-          schedule.push({
-            id: schedule.at(-1)!.id + 1,
-            parentId:appointment.id,
-            technicians: appointment.technicians,
-            startDateTime: formatDate(returnTime.start,'YYYY-MM-ddTHH:mm', 'en-US'),
-            endDateTime: formatDate(returnTime.end, 'YYYY-MM-ddTHH:mm', 'en-US'),
-            label: "Return Time: " + appointment.returnHours,
-            type: TypeEnum.Trvl,
-            disabled: true,
-            travelHours: '',
-            returnHours: '',
-            serviceCenter: 0,
-            addendumLaborHours: '',
-            addendumName: '',
-            billingCustName: '',
-            JobsiteAddress: '',
+          this.appointmentService.createTravelAppointments(appointment,schedule.at(-1)!.id + 1)
+          .forEach((appointment)=>{
+            schedule.push(appointment);
           });
         }
       },
       errorHandler: (error:any) => {
-        notify(error.message, 'error', 5000)
+        notify(error.message, 'error', 5000);
       }
     });
     this.technicianStore = new CustomStore({
@@ -195,10 +164,7 @@ export class TechSchedulingComponent {
     this.filterValues = e;
     //reload data
     this.appCalendar.reload();
-    //this.reload();
   }
-
-  /*** Helper Methods ***/
 
   /*
   * Unhide the Filter
@@ -216,25 +182,4 @@ export class TechSchedulingComponent {
     });
   }
 
-  /**
-  * Get Appointment "Traveling To Site" Time Range
-  */
-  getTravelTimeRange(appointment:Appointment) {
-    let end = new Date(appointment.startDateTime);
-    let start = new Date(end);
-    end.setMinutes(end.getMinutes() - 1);
-    start.setMinutes(start.getMinutes() - parseFloat(appointment.travelHours) * 60);
-    return {start, end};
-  }
-
-  /**
-  * Get Appointment "Traveling To Site" Time Range
-  */
-  getReturnTimeRange(appointment:Appointment) {
-    let start = new Date(appointment.endDateTime);
-    let end = new Date(start);
-    start.setMinutes(start.getMinutes() + 1);
-    end.setMinutes(end.getMinutes() + parseFloat(appointment.returnHours) * 60);
-    return {start, end};
-  }
 }

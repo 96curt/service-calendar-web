@@ -4,8 +4,7 @@ import { FilterModule } from 'app/shared/components/filter/filter.module';
 import { DxButtonModule, DxDropDownBoxModule, DxFormModule, DxListModule, DxPopupModule, DxSchedulerModule, DxSelectBoxModule, DxSpeedDialActionModule, DxTemplateModule, DxToolbarModule } from 'devextreme-angular';
 import { ScheduleComponent } from './schedule.component';
 import { AppointmentTypeService } from 'app/shared/services/appointmentType.service';
-
-
+import { AppointmentFormModule } from 'app/shared/components/appointment-form/appointment-form.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,8 @@ import { AppointmentTypeService } from 'app/shared/services/appointmentType.serv
     DxPopupModule,
     DxButtonModule,
     DxListModule,
-    DxToolbarModule
+    DxToolbarModule,
+    AppointmentFormModule
   ],
   providers: [
     AppointmentTypeService

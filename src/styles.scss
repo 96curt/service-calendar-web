@@ -1,12 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
-// html {
-//     margin: 0px;
-//     padding: 0px;
-//     height: 100vh;
-// }
-// body {
-//     margin: 0px;
-//     padding: 0px;
-//     overflow:hidden;
-//     height: 100%;
-// }
+.dx-scheduler-appointment {
+    background-color: #1e90ff !important;
+}
+.dx-state-travel {
+    cursor: default;
+    opacity: 1;
+    pointer-events: auto;
+    background-color: #1e8d91 !important;
+}
+.dx-state-confirmed {
+    background-color: #419e41 !important;
+
+}
+.dx-state-misc {
+    background-color: #ba8f63 !important;
+
+}

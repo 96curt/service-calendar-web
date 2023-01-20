@@ -1,10 +1,16 @@
-<!-- Scheduler Configuration -->
+<!-- Appointment Editing Form Popup, not visible until onAppointmentOpening() -->
+<app-appointment-form
+    [(visible)]="customAppointmentFormVisible"
+    [(editAppointmentData)]="editAppointmentData">
+</app-appointment-form>
+<!-- Today Button, moved in onContentReady() -->
 <dx-button
     id="today-button"
     class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard"
     text="Today"
     (onClick)="onTodayClick($event)">
 </dx-button>
+<!-- Scheduler Configuration -->
 <dx-scheduler
     [dataSource]="scheduleResource"
     timeZone="America/Los_Angeles"
@@ -41,7 +47,6 @@
         type="timelineWorkWeek"
         groupOrientation="vertical"
         [cellDuration]="180"
-        
     ></dxi-view>
     <dxi-view
         name="Day"
@@ -69,7 +74,7 @@
         [dataSource]="appointmentTypeData"
         [allowMultiple]="false"
         displayExpr="desc"
-        [useColorAsDefault]="true"
+        
     ></dxi-resource>
     <dxi-resource
         fieldExpr="technicians"    
@@ -93,15 +98,7 @@
         displayExpr="name"
     ></dxi-resource>
     
-
-    <!-- <dxo-appointment-dragging
-        [group]="draggingGroupName"
-        [onRemove]="onAppointmentRemove"
-        [onAdd]="onAppointmentAdd"
-    >
-    </dxo-appointment-dragging> -->
-    <!-- Custom Templates -->
-
+    <!-- Custom Appointment Template -->
     <div *dxTemplate="let model of 'appointment-template'">
         <div class="dx-scheduler-appointment-title">
             {{ model.targetedAppointmentData.label }} 
@@ -112,7 +109,7 @@
             </div>
         </div>
     </div>
-
+    <!-- Custom Resource Template -->
     <div *dxTemplate="let technician of 'resourceCellTemplate'">
         <div class="name">
             {{ technician.data.firstName }} {{ technician.data.lastName }}
@@ -123,7 +120,7 @@
             Qualifier: {{technician.data.qualifier}} 
         </div>
     </div>
-
+    <!-- Custom Tooltip Template -->
     <div *dxTemplate="let model of 'tooltip-template'">
         <dx-toolbar>
             <dxi-item 

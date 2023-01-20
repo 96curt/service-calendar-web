@@ -1,0 +1,21 @@
+<dx-popup
+  [width]="500"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [title]="editAppointmentData.label"
+  (onHiding)="onHiding($event)">
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view 
+      width="100%" 
+      height="100%">
+      
+    </dx-scroll-view>
+  </div>
+
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+    >
+  </dxi-toolbar-item>
+</dx-popup>
