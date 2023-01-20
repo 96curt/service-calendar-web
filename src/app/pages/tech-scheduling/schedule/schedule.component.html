@@ -125,6 +125,26 @@
     </div>
 
     <div *dxTemplate="let model of 'tooltip-template'">
+        <dx-toolbar>
+            <dxi-item 
+                location="center" 
+                widget="dxButton" 
+                >
+                <dxo-options
+                    icon="edit"
+                    (onClick)="onEditClick($event,model.targetedAppointmentData)"
+                ></dxo-options> 
+            </dxi-item>
+            <dxi-item
+              location="center"
+              widget="dxButton"
+              >
+              <dxo-options
+                icon="trash"
+                (onClick)="onDeleteClick($event,model.targetedAppointmentData)"
+                ></dxo-options> 
+            </dxi-item>
+        </dx-toolbar>
         <div class="form">
             <div class="dx-fieldset">
                 <div class="dx-field">

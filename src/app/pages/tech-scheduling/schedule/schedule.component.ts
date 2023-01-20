@@ -35,7 +35,7 @@ const dateFormat = 'YYYY-MM-ddTHH:mm';
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.scss']
 })
-export class ScheduleComponent implements OnInit {
+export class ScheduleComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) dxScheduler!: DxSchedulerComponent
   @Input() scheduleResource:CustomStore = new CustomStore;
   @Input() technicianResource = {};
@@ -53,12 +53,7 @@ export class ScheduleComponent implements OnInit {
     private serviceService: ServiceService,
     private appointmentTypeService: AppointmentTypeService
   ) {
-
   }
-  ngOnInit(): void {
-    
-  }
- 
   /*
   * DxScheduler OnAppointmentAdding Event Handler. 
   * 
@@ -111,7 +106,6 @@ export class ScheduleComponent implements OnInit {
     if(appointment.type=="TRVL"){
         e.cancel = true;
     }
-    
     e.popup.option('showTitle', true);
     e.popup.option('title', appointment.label ? 
         appointment.label : 
@@ -197,6 +191,20 @@ export class ScheduleComponent implements OnInit {
    */
   onTodayClick(e:any){
     this.dxScheduler.currentDate = new Date();
+  }
+
+  /**
+   * Remove Appointment dxButton Event Handler
+   */
+  onDeleteClick(e:any,appointment:Appointment){
+    this.dxScheduler.instance.deleteAppointment(appointment);
+  }
+
+  /**
+   * Remove Appointment dxButton Event Handler
+   */
+  onEditClick(e:any,appointment:Appointment){
+    this.dxScheduler.instance.showAppointmentPopup(appointment);
   }
 
   /**
