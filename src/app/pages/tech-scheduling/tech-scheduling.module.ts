@@ -4,7 +4,7 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { SpreadsheetModule } from './spreadsheet/spreadsheet.module';
 import { TechSchedulingComponent } from './tech-scheduling.component';
 import { FilterModule } from 'app/shared/components/filter/filter.module';
-import { DxButtonModule, DxSpeedDialActionModule } from 'devextreme-angular';
+import { DxButtonModule, DxSpeedDialActionModule, DxTabPanelModule } from 'devextreme-angular';
 import { MapModule } from './map/map.module';
 
 @NgModule({
@@ -17,7 +17,8 @@ import { MapModule } from './map/map.module';
     FilterModule,
     DxSpeedDialActionModule,
     DxButtonModule,
-    MapModule
+    MapModule,
+    DxTabPanelModule
   ]
 })
 export class TechSchedulingModule { }

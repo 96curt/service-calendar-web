@@ -20,7 +20,7 @@ type ToolTipData = { technicians?:Technician[], startDate?:Date, endDate?:Date }
   styleUrls: ['./tech-scheduling.component.scss']
 })
 export class TechSchedulingComponent {
-  @ViewChild(ScheduleComponent, { static: false }) appScheduler!: ScheduleComponent;
+  @ViewChild(ScheduleComponent, { static: false }) appCalendar!: ScheduleComponent;
   scheduleStore:  CustomStore;
   technicianStore:  CustomStore;
   centerStore:  CustomStore;
@@ -36,6 +36,7 @@ export class TechSchedulingComponent {
   endDayHour = 19;
   tooltipData = {} as ToolTipData;
   viewTitle = "Calendar"
+  views:any;
   constructor(
     private serviceService: ServiceService,
     private appointmentTypeService: AppointmentTypeService
@@ -72,14 +73,32 @@ export class TechSchedulingComponent {
         //Create travel time blocks
         for(let i = 0; i < length; i++) {
           const appointment = schedule[i];
-          const travel = this.getTravelTimeRange(appointment);
+          const travelTime = this.getTravelTimeRange(appointment);
+          const returnTime = this.getReturnTimeRange(appointment);
           schedule.push({
             id: schedule.at(-1)!.id + 1,
             parentId:appointment.id,
             technicians: appointment.technicians,
-            startDateTime: formatDate(travel.start,'YYYY-MM-ddTHH:mm', 'en-US'),
-            endDateTime: formatDate(travel.end, 'YYYY-MM-ddTHH:mm', 'en-US'),
+            startDateTime: formatDate(travelTime.start,'YYYY-MM-ddTHH:mm', 'en-US'),
+            endDateTime: formatDate(travelTime.end, 'YYYY-MM-ddTHH:mm', 'en-US'),
             label: "Travel Time: " + appointment.travelHours,
+            type: TypeEnum.Trvl,
+            disabled: true,
+            travelHours: '',
+            returnHours: '',
+            serviceCenter: 0,
+            addendumLaborHours: '',
+            addendumName: '',
+            billingCustName: '',
+            JobsiteAddress: '',
+          });
+          schedule.push({
+            id: schedule.at(-1)!.id + 1,
+            parentId:appointment.id,
+            technicians: appointment.technicians,
+            startDateTime: formatDate(returnTime.start,'YYYY-MM-ddTHH:mm', 'en-US'),
+            endDateTime: formatDate(returnTime.end, 'YYYY-MM-ddTHH:mm', 'en-US'),
+            label: "Return Time: " + appointment.returnHours,
             type: TypeEnum.Trvl,
             disabled: true,
             travelHours: '',
@@ -151,6 +170,11 @@ export class TechSchedulingComponent {
     this.technicianDataSource = new DataSource({store:this.technicianStore});
     this.centerDataSource = new DataSource({store:this.centerStore});
     this.addendumDataSource = new DataSource({store:this.addendumStore});
+    this.views = [
+      {id:0,title:"Calendar"},
+      {id:1,title:"SpreadSheet"},
+      {id:2,title:"Map"}
+    ]
   }
 
   /*** Event Handlers ***/
@@ -158,9 +182,9 @@ export class TechSchedulingComponent {
   /*
    * dx-speed-dial-action onClick Event Handler.
    */
-  //  showAppointmentPopup(e:any) {
-  //   this.dxScheduler.instance.showAppointmentPopup();
-  // }
+   showAppointmentPopup(e:any) {
+    this.appCalendar.showAppointmentPopup();
+  }
 
 
   /*
@@ -170,7 +194,7 @@ export class TechSchedulingComponent {
     //update filter
     this.filterValues = e;
     //reload data
-    this.appScheduler.reload();
+    this.appCalendar.reload();
     //this.reload();
   }
 
@@ -193,7 +217,7 @@ export class TechSchedulingComponent {
   }
 
   /**
-  * Get Appointment Travel Time Range
+  * Get Appointment "Traveling To Site" Time Range
   */
   getTravelTimeRange(appointment:Appointment) {
     let end = new Date(appointment.startDateTime);
@@ -203,5 +227,14 @@ export class TechSchedulingComponent {
     return {start, end};
   }
 
-
+  /**
+  * Get Appointment "Traveling To Site" Time Range
+  */
+  getReturnTimeRange(appointment:Appointment) {
+    let start = new Date(appointment.endDateTime);
+    let end = new Date(start);
+    start.setMinutes(start.getMinutes() + 1);
+    end.setMinutes(end.getMinutes() + parseFloat(appointment.returnHours) * 60);
+    return {start, end};
+  }
 }

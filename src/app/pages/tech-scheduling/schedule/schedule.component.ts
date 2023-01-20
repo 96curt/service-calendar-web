@@ -58,8 +58,6 @@ export class ScheduleComponent implements OnInit {
   ngOnInit(): void {
     
   }
-
-  /*****  EVENTS ******/
  
   /*
   * DxScheduler OnAppointmentAdding Event Handler. 
@@ -77,6 +75,10 @@ export class ScheduleComponent implements OnInit {
    */
   onAppointmentClick(e:AppointmentClickEvent){
     const appointment = e.appointmentData as Appointment;
+    if(appointment.type=="TRVL"){
+      e.cancel=true;
+      return;
+    }
     this.techniciansLookup(appointment.technicians).then((value) => {
       this.tooltipData.technicians = value;
     });
@@ -89,41 +91,27 @@ export class ScheduleComponent implements OnInit {
    * Using to add custom elements to the scheduler component.
    */
   onContentReady(e: ContentReadyEvent) {
-    
-    if(document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before #filter-button") != null)
-      return;
+    let todayBtn = document.getElementById('today-button');
     let toolbarContentElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before .dx-buttongroup-wrapper");
-    // Create Today Button
-    let todayBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
-    todayBtn.text = 'Today';
-    todayBtn.setAttribute('id','today-button');
-    todayBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
-    todayBtn.addEventListener('onClick', (e:any) => {
-      this.dxScheduler.currentDate = new Date();
-    });
-    toolbarContentElement?.appendChild(todayBtn);
-    // Create Filter Button
-    let filterBtn = document.createElement("dx-button") as NgElement & WithProperties<DxButtonComponent>;
-    filterBtn.text = 'Filter';
-    filterBtn.setAttribute('id','filter-button');
-    filterBtn.setAttribute('class','dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard');
-    filterBtn.addEventListener('onClick', (e:any) => {
-      this.displayFilter();
-    });
-    toolbarContentElement?.appendChild(filterBtn);
+    if(todayBtn && toolbarContentElement){  
+      toolbarContentElement.appendChild(todayBtn);
+    }
+    let filterBtn = document.getElementById('filter-button');
+    if(filterBtn && toolbarContentElement) {  
+      toolbarContentElement.appendChild(filterBtn);
+    }
   }
 
   /*
-  * DxScheduler OnAppointmentFormOpening Event. 
+  * DxScheduler OnAppointmentFormOpening Event Handler. 
   * 
   */
   onAppointmentFormOpening(e:AppointmentFormOpeningEvent) {
     let appointment = e.appointmentData as Appointment;
-    const tech = appointment.technicians[0];
-    const startDate = new Date(appointment.startDateTime);
-    if(this.isTravelTime(tech, startDate)) {
-      e.cancel = true;
+    if(appointment.type=="TRVL"){
+        e.cancel = true;
     }
+    
     e.popup.option('showTitle', true);
     e.popup.option('title', appointment.label ? 
         appointment.label : 
@@ -185,7 +173,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   /*
-  * DxScheduler OnAppointmentRendered Event. 
+  * DxScheduler OnAppointmentRendered Event Handler. 
   * https://supportcenter.devexpress.com/ticket/details/t1126054/scheduler-how-to-set-the-appointments-width-to-100
   */
   onAppointmentRendered(e:AppointmentRenderedEvent) {
@@ -194,7 +182,7 @@ export class ScheduleComponent implements OnInit {
   }
   
   /*
-  * DxScheduler OnAppointmentUpdating Event. 
+  * DxScheduler OnAppointmentUpdating Event Handler. 
   * 
   */
   onAppointmentUpdating(e:AppointmentUpdatingEvent) {
@@ -204,6 +192,12 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
+  /**
+   * Today DxButton OnClick Event Handler.
+   */
+  onTodayClick(e:any){
+    this.dxScheduler.currentDate = new Date();
+  }
 
   /**
    * Reload data sources and refresh scheduler
@@ -211,11 +205,10 @@ export class ScheduleComponent implements OnInit {
   reload(){
     this.dxScheduler.instance.beginUpdate();
     this.dxScheduler.groups = [];
-    // this.dxScheduler.resources.forEach((resource:{dataSource:DataSource}) => {
-    //   resource.dataSource.reload();
-    // });
     for(let resource of this.dxScheduler.resources){
-      if(resource.fieldExpr == "technicians"){
+      if(resource.fieldExpr == "technicians"
+      || resource.fieldExpr == "serviceCenter"
+      || resource.fieldExpr == "addendum"){
         resource.dataSource.reload();
       }
     }
@@ -287,16 +280,7 @@ export class ScheduleComponent implements OnInit {
     // Check if appointment is out of bounds, if so move appointment
     if(newStart.getHours() < this.startDayHour || newEnd.getHours() >= this.endDayHour) {
       return false;
-      // const diff = this.startDayHour * 60 - newStart.getMinutes();
-      // newStart.setMinutes(this.startDayHour * 60);
-      // newEnd.setMinutes(newEnd.getMinutes() + diff);
     }
-    //else if(newEnd.getHours() >= this.endDayHour) {
-      //return false;
-      // const diff = newEnd.getMinutes() - this.endDayHour;
-      // newEnd.setMinutes(this.endDayHour * 60);
-      // newStart.setMinutes(newStart.getMinutes() + diff);
-    //}
     // Check if appointment conflicts with other appointments
     for(let appointment of schedule) {
       if(appointment.id == newAppointment.id || appointment.parentId == newAppointment.id)
@@ -316,6 +300,10 @@ export class ScheduleComponent implements OnInit {
 
   async techniciansLookup(technicians:number[]){
     return await lastValueFrom(this.serviceService.serviceTechsList({idIn:technicians}));
+  }
+
+  showAppointmentPopup(){
+    this.dxScheduler.instance.showAppointmentPopup();
   }
 }
 

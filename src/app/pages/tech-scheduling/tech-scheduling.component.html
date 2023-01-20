@@ -1,34 +1,55 @@
 <div class="content-block">
     <div class="dx-card responsive-paddings">
         <app-filter
-            (onChange)="onFilterChange($event)"
-            [(visible)]="filterVisible">
+                (onChange)="onFilterChange($event)"
+                [(visible)]="filterVisible">
         </app-filter>
-        <div class="dx-theme-material-typography"><h2 style="margin: 0;">{{viewTitle}}</h2></div>
-        <dx-button
-            text="Filter"
-            (onClick)="displayFilter()">
-        </dx-button>
-        <app-schedule
-        [scheduleResource]="scheduleStore"
-        [technicianResource]="technicianDataSource"
-        [centerResource]="centerStore"
-        [addendumResource]="addendumStore"
-        >
-        </app-schedule>
-        <!-- <app-spreadsheet
-        [scheduleResource]="scheduleStore"
-        [technicianResource]="technicianStore"
-        [centerResource]="centerStore"
-        [addendumResource]="addendumStore"
-        >
-        </app-spreadsheet>
-        <app-map></app-map> -->
-        <!-- <dx-speed-dial-action
-            #speedDialAction
-            icon="plus"
-            (onClick)="showAppointmentPopup($event)"
-            >
-        </dx-speed-dial-action> -->
+        <dx-tab-panel
+            #tabPanel
+            [dataSource]="views"
+            [loop]="false"
+            [animationEnabled]="true">
+            <!-- Tab Panel Title Template -->
+            <div *dxTemplate="let view of 'title'">
+                <span>{{ view.title }}</span>
+            </div>
+            <!-- Tab Panel Item Template -->
+            <div *dxTemplate="let view of 'item'">
+                <div class="tabpanel-item">
+                    <dx-button
+                        id="filter-button"
+                        class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard"
+                        text="Filter"
+                        (onClick)="displayFilter()">
+                    </dx-button>
+                    <div [hidden]="view.id!=0">
+                        <app-schedule
+                        [scheduleResource]="scheduleStore"
+                        [technicianResource]="technicianDataSource"
+                        [centerResource]="centerDataSource"
+                        [addendumResource]="addendumDataSource"
+                        >
+                        </app-schedule>
+                    </div>
+                    <div [hidden]="view.id!=1">
+                        <app-spreadsheet
+                            [scheduleResource]="scheduleStore"
+                            [technicianResource]="technicianStore"
+                            [centerResource]="centerStore"
+                            [addendumResource]="addendumStore">
+                        </app-spreadsheet>
+                    </div>
+                    <div [hidden]="view.id!=2">
+                        <app-map></app-map>
+                    </div>
+                </div>
+            </div>
+        </dx-tab-panel>
+            <dx-speed-dial-action
+                #speedDialAction
+                icon="plus"
+                (onClick)="showAppointmentPopup($event)"
+                >
+            </dx-speed-dial-action>
     </div>
 </div>

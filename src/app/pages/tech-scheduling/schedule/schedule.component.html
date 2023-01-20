@@ -1,5 +1,10 @@
 <!-- Scheduler Configuration -->
-
+<dx-button
+    id="today-button"
+    class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard"
+    text="Today"
+    (onClick)="onTodayClick($event)">
+</dx-button>
 <dx-scheduler
     [dataSource]="scheduleResource"
     timeZone="America/Los_Angeles"
