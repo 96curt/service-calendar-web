@@ -1,10 +1,35 @@
 import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { DxSchedulerComponent } from 'devextreme-angular';
+import { template } from 'devextreme/core/templates/template';
 import { Appointment as dxSchedulerAppointment } from 'devextreme/ui/scheduler';
 import { Schedule, TypeEnum } from 'openapi';
 
 export type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
+export class EditAppointment implements Schedule {
+  id: number = 0;
+  label: string = 'Create a new appointment';
+  startDateTime: string = "";
+  endDateTime: string = "";
+  confirmed?: boolean | undefined;
+  description?: string | null | undefined;
+  travelHours: string = "0.0";
+  returnHours: string = "0.0";
+  allDay?: boolean | undefined;
+  recurrenceRule?: string | null | undefined;
+  addendum?: number | null | undefined;
+  serviceCenter: number = 0;
+  scheduledBy?: number | null | undefined;
+  confirmedBy?: number | null | undefined;
+  technicians: number[] = [];
+  type?: TypeEnum | undefined;
+  addendumLaborHours: string = "";
+  addendumName: string = "";
+  billingCustName: string = "";
+  JobsiteAddress: string = "";
+  startDate: Date = new Date();
+  endDate: Date = new Date();
+}
 
 @Injectable({
   providedIn: 'root'

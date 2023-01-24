@@ -23,14 +23,13 @@ import { Filter } from 'app/shared/models/filter.model';
 import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment as dxSchedulerAppointment, AppointmentRenderedEvent, ContentReadyEvent, AppointmentDraggingRemoveEvent, AppointmentClickEvent, AppointmentDblClickEvent } from 'devextreme/ui/scheduler';
 import notify from 'devextreme/ui/notify';
 import { AppointmentType, AppointmentTypeService } from 'app/shared/services/appointmentType.service';
-import { AppointmentService, Appointment} from 'app/shared/services/appointment.service';
+import { AppointmentService, Appointment, EditAppointment} from 'app/shared/services/appointment.service';
 import { formatDate } from '@angular/common';
 import { flush } from '@angular/core/testing';
 
 
 type ToolTipData = {technicians?:Technician[],startDate?:Date,endDate?:Date};
 
-const dateFormat = 'YYYY-MM-ddTHH:mm';
 
 @Component({
   selector: 'app-schedule',
@@ -51,7 +50,7 @@ export class ScheduleComponent {
   startDayHour = 5;
   endDayHour = 19;
   tooltipData = {} as ToolTipData;
-  editAppointmentData = {} as Appointment;
+  editAppointmentData = new EditAppointment();
   customAppointmentFormVisible = false;
   constructor(
     private serviceService: ServiceService,
@@ -103,7 +102,7 @@ export class ScheduleComponent {
   onContentReady(e: ContentReadyEvent) {
     let todayBtn = document.getElementById('today-button');
     let toolbarContentElement = document.querySelector(".dx-scheduler-header.dx-widget .dx-toolbar-before .dx-buttongroup-wrapper");
-    if(todayBtn && toolbarContentElement){  
+    if(todayBtn && toolbarContentElement) {  
       toolbarContentElement.appendChild(todayBtn);
     }
     let filterBtn = document.getElementById('filter-button');
@@ -121,6 +120,7 @@ export class ScheduleComponent {
     let appointment = e.appointmentData as Appointment;
     if(appointment.type=="TRVL")
       return;
+    this.editAppointmentData = e.appointmentData as EditAppointment;
     this.customAppointmentFormVisible = true;
 
 

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppointmentFormComponent } from './appointment-form.component';
-import { DxPopupModule } from 'devextreme-angular';
+import { DxButtonModule, DxCheckBoxModule, DxDateBoxModule, DxFormModule, DxPopupModule, DxScrollViewModule, DxSelectBoxModule, DxTagBoxModule, DxTextBoxModule } from 'devextreme-angular';
 
 
 
@@ -13,7 +13,14 @@ import { DxPopupModule } from 'devextreme-angular';
   imports: [
     CommonModule,
     DxPopupModule,
-    
+    DxScrollViewModule,
+    DxFormModule,
+    DxTextBoxModule,
+    DxSelectBoxModule,
+    DxCheckBoxModule,
+    DxDateBoxModule,
+    DxButtonModule,
+    DxTagBoxModule
   ]
 })
 export class AppointmentFormModule { }

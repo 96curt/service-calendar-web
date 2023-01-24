@@ -1,14 +1,85 @@
 <dx-popup
   [width]="500"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
-  [title]="editAppointmentData.label"
-  (onHiding)="onHiding($event)">
+  [title]="title"
+  (onHiding)="onHiding($event)"
+  [showTitle]="true">
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view 
       width="100%" 
       height="100%">
-      
+      <dx-form
+        id="form"
+        [formData]="editAppointmentData"
+        colCount=2>
+        <dxi-item
+          dataField="startDate"
+          editorType="dxDateBox"
+          [isRequired]="true"
+          [editorOptions]="dateEditorOptions"
+          >
+        </dxi-item>
+        <dxi-item
+          dataField="endDate"
+          editorType="dxDateBox"
+          [isRequired]="true"
+          [editorOptions]="dateEditorOptions"
+          >
+        </dxi-item>
+        <dxi-item
+          dataField="appointmentType"
+          editorType="dxSelectBox"
+          [isRequired]="true"
+          [editorOptions]="{
+            dataSource:typeDataSource,
+            displayExpr: 'desc',
+            valueExpr: 'id'
+          }">
+        </dxi-item>
+        <dxi-item
+          dataField="technicians"
+          editorType="dxTagBox"
+          [isRequired]="true"
+          [editorOptions]="{
+            dataSource:techniciansDataSource,
+            displayExpr:getfullName
+          }">
+        </dxi-item>
+        <dxi-item
+          dataField="serviceCenter"
+          editorType="dxSelectBox"
+          [isRequired]="true"
+          [editorOptions]="{
+            dataSource:centerDataSource,
+            displayExpr:'name',
+            valueExpr: 'id'
+          }">
+        </dxi-item>
+        <dxi-item
+          dataField="addendum"
+          editorType="dxSelectBox"
+          [isRequired]="true"
+          [editorOptions]="{
+            dataSource:addendumDataSource,
+            displayExpr: 'name'
+          }">
+        </dxi-item>
+        <dxi-item
+          dataField="travelHours"
+          editorType="dxTextBox"
+          [isRequired]="true">
+        </dxi-item>
+        <dxi-item
+          dataField="returnHours"
+          editorType="dxTextBox"
+          [isRequired]="true">
+        </dxi-item>
+        <dxi-item
+          dataField="confirmed"
+          editorType="dxCheckBox"
+          ></dxi-item>
+      </dx-form>
     </dx-scroll-view>
   </div>
 
@@ -16,6 +87,11 @@
     widget="dxButton"
     toolbar="bottom"
     location="after"
+    [options]="{
+      text:'Submit',
+      onClick: 
+    }"
     >
+    
   </dxi-toolbar-item>
 </dx-popup>

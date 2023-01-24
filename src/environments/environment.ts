@@ -7,7 +7,8 @@ export const environment = {
   apiBaseUrl: 'http://localhost:8888',
   csrfHeader: 'x-csrftoken',
   csrfCookie: 'csrftoken',
-  bingKey: 'AhOUebU0tnxaW_RperDFssD8xrJ2Hd_9O5m3F_Hwdf0D1mQvzGhJRyc5L2vJAX-B'
+  bingKey: 'AhOUebU0tnxaW_RperDFssD8xrJ2Hd_9O5m3F_Hwdf0D1mQvzGhJRyc5L2vJAX-B',
+  dateTimeFormat: 'YYYY-MM-ddTHH:mm'
 };
 
 /*
