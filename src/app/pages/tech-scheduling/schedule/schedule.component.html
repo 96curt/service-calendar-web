@@ -1,7 +1,8 @@
 <!-- Appointment Editing Form Popup, not visible until onAppointmentOpening() -->
 <app-appointment-form
     [(visible)]="customAppointmentFormVisible"
-    [(editAppointmentData)]="editAppointmentData">
+    [(appointmentData)]="appointmentData"
+    [techniciansDataSource]="technicianResource">
 </app-appointment-form>
 <!-- Today Button, moved in onContentReady() -->
 <dx-button

@@ -1,5 +1,4 @@
 <dx-popup
-  [width]="500"
   [hideOnOutsideClick]="true"
   [(visible)]="visible"
   [title]="title"
@@ -11,7 +10,8 @@
       height="100%">
       <dx-form
         id="form"
-        [formData]="editAppointmentData"
+        [formData]="formData"
+        
         colCount=2>
         <dxi-item
           dataField="startDate"
@@ -32,7 +32,7 @@
           editorType="dxSelectBox"
           [isRequired]="true"
           [editorOptions]="{
-            dataSource:typeDataSource,
+            dataSource: typeDataSource,
             displayExpr: 'desc',
             valueExpr: 'id'
           }">
@@ -42,8 +42,9 @@
           editorType="dxTagBox"
           [isRequired]="true"
           [editorOptions]="{
-            dataSource:techniciansDataSource,
-            displayExpr:getfullName
+            dataSource: techniciansDataSource,
+            displayExpr: getfullName,
+            valueExpr: 'id'
           }">
         </dxi-item>
         <dxi-item
@@ -62,7 +63,8 @@
           [isRequired]="true"
           [editorOptions]="{
             dataSource:addendumDataSource,
-            displayExpr: 'name'
+            displayExpr: 'name',
+            valueExpr: 'id'
           }">
         </dxi-item>
         <dxi-item
@@ -79,19 +81,33 @@
           dataField="confirmed"
           editorType="dxCheckBox"
           ></dxi-item>
+          
+          
+          <div class="dx-fieldset">
+            <dx-validation-summary id="summary"></dx-validation-summary>
+        
+            <dx-button
+              width="100%"
+              id="button"
+              text="Register"
+              type="success"
+              [useSubmitBehavior]="true"
+            >
+            </dx-button>
+          </div>
       </dx-form>
     </dx-scroll-view>
   </div>
-
   <dxi-toolbar-item
     widget="dxButton"
     toolbar="bottom"
     location="after"
-    [options]="{
-      text:'Submit',
-      onClick: 
-    }"
-    >
-    
+    [options]="submitButtonOptions">
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+    [options]="cancelButtonOptions">
   </dxi-toolbar-item>
 </dx-popup>

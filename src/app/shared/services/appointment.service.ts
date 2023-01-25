@@ -6,29 +6,28 @@ import { Appointment as dxSchedulerAppointment } from 'devextreme/ui/scheduler';
 import { Schedule, TypeEnum } from 'openapi';
 
 export type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
-export class EditAppointment implements Schedule {
-  id: number = 0;
+export class EditAppointment {
+  id: number | undefined;
   label: string = 'Create a new appointment';
-  startDateTime: string = "";
-  endDateTime: string = "";
-  confirmed?: boolean | undefined;
+  startDateTime: string | undefined;
+  endDateTime: string | undefined;
+  confirmed?: boolean = false;
   description?: string | null | undefined;
   travelHours: string = "0.0";
   returnHours: string = "0.0";
-  allDay?: boolean | undefined;
-  recurrenceRule?: string | null | undefined;
   addendum?: number | null | undefined;
-  serviceCenter: number = 0;
+  serviceCenter: number | undefined;
   scheduledBy?: number | null | undefined;
   confirmedBy?: number | null | undefined;
   technicians: number[] = [];
-  type?: TypeEnum | undefined;
-  addendumLaborHours: string = "";
-  addendumName: string = "";
-  billingCustName: string = "";
-  JobsiteAddress: string = "";
-  startDate: Date = new Date();
-  endDate: Date = new Date();
+  type?: TypeEnum = "ORDR";
+  startDate: Date;
+  endDate: Date;
+  constructor() {
+    this.startDate = new Date();
+    this.endDate = new Date(this.startDate);
+    this.endDate.setHours(this.endDate.getHours() + 1);
+  }
 }
 
 @Injectable({

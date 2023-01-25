@@ -50,7 +50,7 @@ export class ScheduleComponent {
   startDayHour = 5;
   endDayHour = 19;
   tooltipData = {} as ToolTipData;
-  editAppointmentData = new EditAppointment();
+  appointmentData: Appointment | null = null;
   customAppointmentFormVisible = false;
   constructor(
     private serviceService: ServiceService,
@@ -116,72 +116,72 @@ export class ScheduleComponent {
   * 
   */
   onAppointmentFormOpening(e:AppointmentFormOpeningEvent) {
-    e.cancel=true;
+    e.cancel=true; // disable default form
     let appointment = e.appointmentData as Appointment;
     if(appointment.type=="TRVL")
       return;
-    this.editAppointmentData = e.appointmentData as EditAppointment;
-    this.customAppointmentFormVisible = true;
+    this.appointmentData = appointment;
+    this.customAppointmentFormVisible = true; // display custom form
+    return;
 
-
-  //   e.popup.option('showTitle', true);
-  //   e.popup.option('title', appointment.label ? 
-  //       appointment.label : 
-  //       'Create a new appointment');
-  //   const form = e.form;
-  //   let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
-  //   // Hide label and description items
-  //   {
-  //     let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "label" })
-  //     if (index != -1) {
-  //       mainGroupItems[index].visible = false;
-  //     }
-  //   }
-  //   {
-  //     let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
-  //     if (index != -1) {
-  //       mainGroupItems[index].visible=false;
-  //     }
-  //   }
-  //   // Set Required fields
-  //   mainGroupItems.forEach((item, index) => {
-  //     if(item.dataField === "technicians" || item.dataField === "serviceCenter"){
-  //       item.isRequired = true;
-  //     }
-  //   });
-  //   // Add Travel Hours Item
-  //   if (!mainGroupItems.find(function(i:any) { return i.dataField === "travelHours" })) {
-  //       mainGroupItems.push({
-  //         colSpan: 1, 
-  //         label: { text: "Travel Hours" },
-  //         editorType: "dxTextBox",
-  //         dataField: "travelHours",
-  //         isRequired: true
-  //       } as SimpleItem);
-  //       form.itemOption('mainGroup', 'items', mainGroupItems);
-  //   }
-  //   // Add Return Travel Hours Item
-  //   if (!mainGroupItems.find(function(i:any) { return i.dataField === "returnHours" })) {
-  //     mainGroupItems.push({
-  //       colSpan: 2, 
-  //       label: { text: "Return Hours" },
-  //       editorType: "dxTextBox",
-  //       dataField: "returnHours",
-  //       default: 0.0,
-  //       isRequired: true
-  //     } as SimpleItem);
-  //     form.itemOption('mainGroup', 'items', mainGroupItems);
-  // }
-  //   // Add Confirm Appointment Item
-  //   if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirmed" })) {
-  //     mainGroupItems.push({
-  //       colSpan: 1, 
-  //       label: { text: "Confirm Appointment" },
-  //       editorType: "dxCheckBox",
-  //       dataField: "confirmed",
-  //     });
-  //     form.itemOption('mainGroup', 'items', mainGroupItems);
-  //   }
+    e.popup.option('showTitle', true);
+    e.popup.option('title', appointment.label ? 
+        appointment.label : 
+        'Create a new appointment');
+    const form = e.form;
+    let mainGroupItems = form.itemOption('mainGroup').items as Array<any>;
+    // Hide label and description items
+    {
+      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "label" })
+      if (index != -1) {
+        mainGroupItems[index].visible = false;
+      }
+    }
+    {
+      let index = mainGroupItems.findIndex(function(i:any) { return i.dataField === "description" })
+      if (index != -1) {
+        mainGroupItems[index].visible=false;
+      }
+    }
+    // Set Required fields
+    mainGroupItems.forEach((item, index) => {
+      if(item.dataField === "technicians" || item.dataField === "serviceCenter"){
+        item.isRequired = true;
+      }
+    });
+    // Add Travel Hours Item
+    if (!mainGroupItems.find(function(i:any) { return i.dataField === "travelHours" })) {
+        mainGroupItems.push({
+          colSpan: 1, 
+          label: { text: "Travel Hours" },
+          editorType: "dxTextBox",
+          dataField: "travelHours",
+          isRequired: true
+        } as SimpleItem);
+        form.itemOption('mainGroup', 'items', mainGroupItems);
+    }
+    // Add Return Travel Hours Item
+    if (!mainGroupItems.find(function(i:any) { return i.dataField === "returnHours" })) {
+      mainGroupItems.push({
+        colSpan: 2, 
+        label: { text: "Return Hours" },
+        editorType: "dxTextBox",
+        dataField: "returnHours",
+        default: 0.0,
+        isRequired: true
+      } as SimpleItem);
+      form.itemOption('mainGroup', 'items', mainGroupItems);
+  }
+    // Add Confirm Appointment Item
+    if (!mainGroupItems.find(function(i:any) { return i.dataField === "confirmed" })) {
+      mainGroupItems.push({
+        colSpan: 1, 
+        label: { text: "Confirm Appointment" },
+        editorType: "dxCheckBox",
+        dataField: "confirmed",
+      });
+      form.itemOption('mainGroup', 'items', mainGroupItems);
+    }
   }
 
   /*

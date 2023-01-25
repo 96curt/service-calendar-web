@@ -25,7 +25,7 @@ const appointmentTypes: AppointmentType[] = [{
 
 @Injectable()
 export class AppointmentTypeService {
-    getAppointmentTypes(){
+    getAppointmentTypes() {
         return appointmentTypes;
     }
 }

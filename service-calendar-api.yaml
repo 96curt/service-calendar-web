@@ -543,6 +543,15 @@ paths:
         description: Multiple values may be separated by commas.
         explode: false
         style: form
+      - in: query
+        name: technicians__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       tags:
       - service
       security:
@@ -582,6 +591,15 @@ paths:
         style: form
       - in: query
         name: region__managers__id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: technicians__id__in
         schema:
           type: array
           items:
