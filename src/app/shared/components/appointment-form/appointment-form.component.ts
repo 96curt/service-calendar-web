@@ -1,8 +1,9 @@
 // https://github.com/DevExpress-Examples/scheduler-how-to-create-custom-editing-form/
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Filter } from 'app/shared/models/filter.model';
 import { Appointment, EditAppointment } from 'app/shared/services/appointment.service';
 import { AppointmentTypeService } from 'app/shared/services/appointmentType.service';
-import { DxFormComponent } from 'devextreme-angular';
+import { DxFormComponent, DxSelectBoxComponent, DxTagBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { formatDate} from 'devextreme/localization';
 import { ClickEvent, dxButtonOptions } from 'devextreme/ui/button';
@@ -19,13 +20,14 @@ import { lastValueFrom } from 'rxjs';
 })
 export class AppointmentFormComponent implements OnChanges {
   @ViewChild(DxFormComponent, { static: false }) formComponent!: DxFormComponent;
+  @ViewChildren('dx-selectbox', {}) selectBoxes!: (DxTagBoxComponent | DxSelectBoxComponent)[] ;
   @Input() visible = false; // DxPopup Visibility
   @Output() visibleChange = new EventEmitter<boolean>;
   @Input() appointmentData: Appointment | null = null; // Data for appointment form
   @Output() appointmentDataChange = new EventEmitter<Appointment>;
-  @Input() techniciansDataSource = {};
+  @Input() filterValues = new Filter();
   typeDataSource;
-  
+  techniciansDataSource: DataSource;
   centerDataSource: DataSource;
   addendumDataSource: DataSource;
   title = 'Create a new appointment'; // DxPopup title
@@ -53,7 +55,24 @@ export class AppointmentFormComponent implements OnChanges {
       type:'datetime'
     } as dxDateBoxOptions;
     this.typeDataSource = this.typeService.getAppointmentTypes();
-    
+    this.techniciansDataSource = new DataSource({
+      key: 'id',
+      loadMode: 'processed',
+      load: () => {
+        const prams = {
+          centersRegionIdIn:this.filterValues.regions,
+          centersRegionManagersIdIn:this.filterValues.managers,
+          centersIdIn:this.filterValues.centers,
+          centersRegionCitiesIdIn:this.filterValues.cities,
+          centersRegionZipCodesCodeIn:this.filterValues.zipCodes,
+          idIn:this.filterValues.techs
+        } as ServiceTechsListRequestParams;
+        return lastValueFrom(this.serviceService.serviceTechsList(prams));
+      },
+      byKey: (key) => {
+        return lastValueFrom(this.serviceService.serviceTechRetrieve({id:key}));
+      }
+    });
     this.centerDataSource = new DataSource({
       key: 'id',
       load: () => {
@@ -83,9 +102,14 @@ export class AppointmentFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['visible']) {
-      if(changes['visible'].currentValue)
+    if(changes['visible'] && changes['appointmentData']) {
+      if(changes['visible'].currentValue && changes['appointmentData'].currentValue != null){
+        Object.assign(this.formData, changes['appointmentData'].currentValue);
         this.unserializeDates();
+        for(let box of this.selectBoxes){
+          box.instance.getDataSource().reload();
+        }
+      }
     } 
   }
 
@@ -99,19 +123,19 @@ export class AppointmentFormComponent implements OnChanges {
   }
 
   onAppointmentTypeChange(e:any) {
-    
+    console.log("appointmentType");
   }
 
   onTechniciansChange(e:any) {
-
+    console.log("Technician");
   }
 
   onCenterChange(e:any) {
-
+    console.log("Center");
   }
 
   onAddendumChange(e:any) {
-
+    console.log("Addendum");
   }
 
   unserializeDates() {

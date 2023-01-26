@@ -42,6 +42,7 @@ export class ScheduleComponent {
   @Input() technicianResource = {};
   @Input() centerResource = {};
   @Input() addendumResource = {};
+  @Input() filterValues = new Filter();
   @Input() filterVisible = false;
   @Output() filterVisibleChange = new EventEmitter<boolean>;
   
@@ -52,6 +53,7 @@ export class ScheduleComponent {
   tooltipData = {} as ToolTipData;
   appointmentData: Appointment | null = null;
   customAppointmentFormVisible = false;
+  customTooltipVisible = false;
   constructor(
     private serviceService: ServiceService,
     private appointmentTypeService: AppointmentTypeService,
@@ -75,11 +77,13 @@ export class ScheduleComponent {
    * Show ToolTip
    */
   onAppointmentClick(e:AppointmentClickEvent){
+    e.cancel=true;
     const appointment = e.appointmentData as Appointment;
     if(appointment.type=="TRVL"){
-      e.cancel=true;
+      
       return;
     }
+
     this.techniciansLookup(appointment.technicians).then((value) => {
       this.tooltipData.technicians = value;
     });
@@ -87,14 +91,7 @@ export class ScheduleComponent {
     this.tooltipData.endDate = new Date(appointment.endDateTime);
   }
 
-  /**
-   * DxScheduler OnAppointmentClick Event Handler.
-   * Show Appointment Details Form
-   */
-  onAppointmentDblClick(e:AppointmentDblClickEvent){
-
-  }
-
+  
   /**
    * DxScheduler OnContentReady Event Handler. 
    * Using to add custom elements to the scheduler component.
@@ -121,6 +118,7 @@ export class ScheduleComponent {
     if(appointment.type=="TRVL")
       return;
     this.appointmentData = appointment;
+    
     this.customAppointmentFormVisible = true; // display custom form
     return;
 

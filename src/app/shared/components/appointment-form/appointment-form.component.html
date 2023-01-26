@@ -32,7 +32,9 @@
           editorType="dxSelectBox"
           [isRequired]="true"
           [editorOptions]="{
+            
             dataSource: typeDataSource,
+            onvalueChanged: onAppointmentTypeChange,
             displayExpr: 'desc',
             valueExpr: 'id'
           }">
@@ -43,6 +45,7 @@
           [isRequired]="true"
           [editorOptions]="{
             dataSource: techniciansDataSource,
+            onvalueChanged: onTechniciansChange,
             displayExpr: getfullName,
             valueExpr: 'id'
           }">
@@ -53,6 +56,7 @@
           [isRequired]="true"
           [editorOptions]="{
             dataSource:centerDataSource,
+            onvalueChanged: onCenterChange,
             displayExpr:'name',
             valueExpr: 'id'
           }">
@@ -63,6 +67,7 @@
           [isRequired]="true"
           [editorOptions]="{
             dataSource:addendumDataSource,
+            onvalueChanged: onAddendumChange,
             displayExpr: 'name',
             valueExpr: 'id'
           }">

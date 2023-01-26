@@ -28,6 +28,7 @@ export class EditAppointment {
     this.endDate = new Date(this.startDate);
     this.endDate.setHours(this.endDate.getHours() + 1);
   }
+  
 }
 
 @Injectable({
