@@ -4,6 +4,11 @@
     [(appointmentData)]="appointmentData"
     [filterValues]="filterValues">
 </app-appointment-form>
+<app-scheduler-tooltip
+    [appointmentData]="appointmentData"
+    (onDeleteClick)="onDeleteClick
+    (onEditClick)="onEditClick">
+</app-scheduler-tooltip>
 <!-- Today Button, moved in onContentReady() -->
 <dx-button
     id="today-button"
@@ -122,7 +127,7 @@
         </div>
     </div>
     <!-- Custom Tooltip Template -->
-    <div *dxTemplate="let model of 'tooltip-template'">
+    <!-- <div *dxTemplate="let model of 'tooltip-template'">
         <dx-toolbar>
             <dxi-item 
                 location="center" 
@@ -189,5 +194,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </dx-scheduler>

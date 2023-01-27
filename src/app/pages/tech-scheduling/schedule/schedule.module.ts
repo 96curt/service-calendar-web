@@ -5,6 +5,7 @@ import { DxButtonModule, DxDropDownBoxModule, DxFormModule, DxListModule, DxPopu
 import { ScheduleComponent } from './schedule.component';
 import { AppointmentTypeService } from 'app/shared/services/appointmentType.service';
 import { AppointmentFormModule } from 'app/shared/components/appointment-form/appointment-form.module';
+import { SchedulerTooltipModule } from 'app/shared/components/scheduler-tooltip/scheduler-tooltip.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AppointmentFormModule } from 'app/shared/components/appointment-form/ap
     DxButtonModule,
     DxListModule,
     DxToolbarModule,
-    AppointmentFormModule
+    AppointmentFormModule,
+    SchedulerTooltipModule
   ],
   providers: [
     AppointmentTypeService

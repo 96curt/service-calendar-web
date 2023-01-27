@@ -1,0 +1,67 @@
+
+<dx-popover>
+    <dxi-toolbar-item
+        location="center" 
+        widget="dxButton" 
+        [options]="{
+            icon:'edit',
+            onclick: onEditClick
+        }">
+    </dxi-toolbar-item>
+    <dxi-toolbar-item
+        location="center"
+        widget="dxButton"
+        [options]="{
+            icon: 'trash',
+            onclick: onDeleteClick
+        }">
+    </dxi-toolbar-item>
+    <dx-scroll-view>
+        <div class="form">
+            <div class="dx-fieldset">
+                <div class="dx-field">
+                    <div class="dx-field-label">Customer Name:</div>
+                    <div class="dx-field-value-static">{{appointmentData.billingCustName}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Service Order #:</div>
+                    <div class="dx-field-value-static">{{appointmentData.addendumName}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Jobsite Address:</div>
+                    <div class="dx-field-value-static">{{appointmentData.JobsiteAddress}}</div>
+                </div>
+                <div class="dx-field" *ngIf="appointmentData.confirmed">
+                    <div class="dx-field-label">Confirmed by:</div>
+                    <div class="dx-field-value-static">{{appointmentData.confirmedBy}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Technicians:</div>
+                    <div class="dx-field-value-static">
+                        <ul>
+                            <li *ngFor="let tech of tooltipData.technicians">
+                                {{tech.fullName}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Labor Hours:</div>
+                    <div class="dx-field-value-static">{{appointmentData.addendumLaborHours}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Scheduled By:</div>
+                    <div class="dx-field-value-static">{{appointmentData.scheduledBy}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Phone number:</div>
+                    <div class="dx-field-value-static">{{appointmentData.scheduledBy}}</div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Comment:</div>
+                    <div class="dx-field-value-static">{{appointmentData.description}}</div>
+                </div>
+            </div>
+        </div>
+    </dx-scroll-view>
+</dx-popover>

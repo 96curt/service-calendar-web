@@ -28,9 +28,6 @@ import { formatDate } from '@angular/common';
 import { flush } from '@angular/core/testing';
 
 
-type ToolTipData = {technicians?:Technician[],startDate?:Date,endDate?:Date};
-
-
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
@@ -50,7 +47,6 @@ export class ScheduleComponent {
   appointmentTypeData = this.appointmentTypeService.getAppointmentTypes();
   startDayHour = 5;
   endDayHour = 19;
-  tooltipData = {} as ToolTipData;
   appointmentData: Appointment | null = null;
   customAppointmentFormVisible = false;
   customTooltipVisible = false;
@@ -77,18 +73,14 @@ export class ScheduleComponent {
    * Show ToolTip
    */
   onAppointmentClick(e:AppointmentClickEvent){
-    e.cancel=true;
+    //e.cancel=true;
     const appointment = e.appointmentData as Appointment;
     if(appointment.type=="TRVL"){
       
       return;
     }
 
-    this.techniciansLookup(appointment.technicians).then((value) => {
-      this.tooltipData.technicians = value;
-    });
-    this.tooltipData.startDate = new Date(appointment.startDateTime);
-    this.tooltipData.endDate = new Date(appointment.endDateTime);
+    
   }
 
   
@@ -122,6 +114,7 @@ export class ScheduleComponent {
     this.customAppointmentFormVisible = true; // display custom form
     return;
 
+    // old appointment form to be removed
     e.popup.option('showTitle', true);
     e.popup.option('title', appointment.label ? 
         appointment.label : 
@@ -195,8 +188,6 @@ export class ScheduleComponent {
       e.appointmentElement.classList.add("dx-state-confirmed");
     if(appointment.type=="MISC")
       e.appointmentElement.classList.add("dx-state-misc");
-
-
   }
   
   /*
@@ -213,28 +204,28 @@ export class ScheduleComponent {
   /**
    * Today DxButton OnClick Event Handler.
    */
-  onTodayClick(e:any){
+  onTodayClick(e:any) {
     this.dxScheduler.currentDate = new Date();
   }
 
   /**
    * Remove Appointment dxButton Event Handler
    */
-  onDeleteClick(e:any,appointment:Appointment){
+  onDeleteClick(e:any,appointment:Appointment) {
     this.dxScheduler.instance.deleteAppointment(appointment);
   }
 
   /**
    * Remove Appointment dxButton Event Handler
    */
-  onEditClick(e:any,appointment:Appointment){
+  onEditClick(e:any,appointment:Appointment) {
     this.dxScheduler.instance.showAppointmentPopup(appointment);
   }
 
   /**
    * Reload data sources and refresh scheduler
    */
-  reload(){
+  reload() {
     this.dxScheduler.instance.beginUpdate();
     this.dxScheduler.groups = [];
     for(let resource of this.dxScheduler.resources){
@@ -254,10 +245,6 @@ export class ScheduleComponent {
   */
   displayFilter() {
     this.filterVisibleChange.emit(true);
-  }
-
-  async techniciansLookup(technicians:number[]){
-    return await lastValueFrom(this.serviceService.serviceTechsList({idIn:technicians}));
   }
 
   showAppointmentPopup(){

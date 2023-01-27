@@ -6,8 +6,9 @@ import { Appointment as dxSchedulerAppointment } from 'devextreme/ui/scheduler';
 import { Schedule, TypeEnum } from 'openapi';
 
 export type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
+
 export class EditAppointment {
-  id: number | undefined;
+  id?: number | undefined;
   label: string = 'Create a new appointment';
   startDateTime: string | undefined;
   endDateTime: string | undefined;
