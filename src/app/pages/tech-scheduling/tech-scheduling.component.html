@@ -40,7 +40,9 @@
                         </app-spreadsheet>
                     </div>
                     <div [hidden]="view.id!=2">
-                        <app-map></app-map>
+                        <app-map
+                            [scheduleResource]="scheduleStore"
+                        ></app-map>
                     </div>
                 </div>
             </div>
