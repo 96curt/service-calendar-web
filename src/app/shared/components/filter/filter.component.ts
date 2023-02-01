@@ -3,7 +3,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { ClosedEvent, OpenedEvent, SelectionChangedEvent } from 'devextreme/ui/tag_box';
 import { Region, GenericService, ServiceCentersListRequestParams, ServiceService, ServiceManagersListRequestParams, GenericCitiesListRequestParams, GenericZipcodesListRequestParams, ServiceTechsListRequestParams, GenericRegionsListRequestParams } from 'openapi';
 import { lastValueFrom } from 'rxjs';
-import { Filter } from 'app/shared/models/filter.model';
+import { FilterModel } from 'app/shared/models/filter.model';
 import { DxButtonComponent, DxSelectBoxComponent, DxTagBoxComponent } from 'devextreme-angular';
 import { DxoButtonOptions } from 'devextreme-angular/ui/nested/base/button-options';
 import DataSource from 'devextreme/data/data_source';
@@ -14,7 +14,7 @@ import DataSource from 'devextreme/data/data_source';
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
-  @Output() onChange = new EventEmitter<Filter>();
+  @Output() onChange = new EventEmitter<FilterModel>();
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>;
   @ViewChildren(DxTagBoxComponent, {}) tagBoxes!: DxTagBoxComponent[];
@@ -24,7 +24,7 @@ export class FilterComponent implements OnInit {
   citiesStore: CustomStore;
   zipStore: CustomStore;
   technicianStore: CustomStore;
-  filterValues: Filter = new Filter();
+  filterValues: FilterModel = new FilterModel();
   clearButtonOptions: any;
   closeButtonOptions: any;
 

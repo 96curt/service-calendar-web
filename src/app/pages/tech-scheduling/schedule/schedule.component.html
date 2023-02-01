@@ -1,12 +1,12 @@
 <!-- Appointment Editing Form Popup, not visible until onAppointmentOpening() -->
 <app-appointment-form
     [(visible)]="customAppointmentFormVisible"
-    [(appointmentData)]="appointmentData"
+    [(appointmentData)]="selectedAppointment"
     [filterValues]="filterValues">
 </app-appointment-form>
 <app-scheduler-tooltip
-    [appointmentData]="appointmentData"
-    (onDeleteClick)="onDeleteClick
+    [selectedAppointment]="selectedAppointment"
+    (onDeleteClick)="onDeleteClick"
     (onEditClick)="onEditClick">
 </app-scheduler-tooltip>
 <!-- Today Button, moved in onContentReady() -->
@@ -22,8 +22,8 @@
     timeZone="America/Los_Angeles"
     textExpr="label"
     descriptionExpr="description"
-    startDateExpr="startDateTime"
-    endDateExpr="endDateTime"
+    startDateExpr="startDate"
+    endDateExpr="endDate"
     [(currentView)]="currentView"
     [groups]="['technicians']"
     [startDayHour]="startDayHour"

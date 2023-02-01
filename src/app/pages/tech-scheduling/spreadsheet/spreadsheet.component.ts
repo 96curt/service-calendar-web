@@ -11,10 +11,10 @@ import { lastValueFrom } from 'rxjs';
   styleUrls: ['./spreadsheet.component.scss']
 })
 export class SpreadsheetComponent{
-  @Input() scheduleResource:CustomStore = new CustomStore;
-  @Input() technicianResource:CustomStore = new CustomStore;
-  @Input() centerResource:CustomStore = new CustomStore;
-  @Input() addendumResource:CustomStore = new CustomStore;
+  @Input() scheduleResource: CustomStore | null = null;
+  @Input() technicianResource: CustomStore | null = null;
+  @Input() centerResource: CustomStore | null = null;
+  @Input() addendumResource: CustomStore | null = null;
 
   constructor(private serviceService: ServiceService) {
   }

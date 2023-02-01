@@ -1,4 +1,4 @@
-export class Filter {
+export class FilterModel {
     regions:number[] = [];
     centers:number[] = [];
     managers:number[] = [];

@@ -1,7 +1,7 @@
 // https://github.com/DevExpress-Examples/scheduler-how-to-create-custom-editing-form/
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { Filter } from 'app/shared/models/filter.model';
-import { Appointment, EditAppointment } from 'app/shared/services/appointment.service';
+import { FilterModel } from 'app/shared/models/filter.model';
+import { Appointment, AppointmentModel } from 'app/shared/models/appointment.model';
 import { AppointmentTypeService } from 'app/shared/services/appointmentType.service';
 import { DxFormComponent, DxSelectBoxComponent, DxTagBoxComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -23,9 +23,9 @@ export class AppointmentFormComponent implements OnChanges {
   @ViewChildren('dx-selectbox', {}) selectBoxes!: (DxTagBoxComponent | DxSelectBoxComponent)[] ;
   @Input() visible = false; // DxPopup Visibility
   @Output() visibleChange = new EventEmitter<boolean>;
-  @Input() appointmentData: Appointment | null = null; // Data for appointment form
+  @Input() appointmentData?: Appointment | undefined // Data for appointment form
   @Output() appointmentDataChange = new EventEmitter<Appointment>;
-  @Input() filterValues = new Filter();
+  @Input() filterValues: FilterModel = new FilterModel;
   typeDataSource;
   techniciansDataSource: DataSource;
   centerDataSource: DataSource;
@@ -34,7 +34,7 @@ export class AppointmentFormComponent implements OnChanges {
   dateEditorOptions;
   submitButtonOptions;
   cancelButtonOptions;
-  formData = new EditAppointment();
+  formData = new AppointmentModel();
   constructor(
     private serviceService: ServiceService,
     private typeService: AppointmentTypeService
@@ -119,7 +119,7 @@ export class AppointmentFormComponent implements OnChanges {
    */
   onHiding(e:any) {
     this.visibleChange.emit(this.visible);
-    this.formData = new EditAppointment();
+    this.formData = new AppointmentModel();
   }
 
   onAppointmentTypeChange(e:any) {
@@ -148,8 +148,8 @@ export class AppointmentFormComponent implements OnChanges {
   }
 
   serializeDates() {  
-    let start = formatDate(this.formData.startDate, environment.dateTimeFormat);
-    let end = formatDate(this.formData.endDate, environment.dateTimeFormat);
+    let start = formatDate(<Date>this.formData.startDate, environment.dateTimeFormat);
+    let end = formatDate(<Date>this.formData.endDate, environment.dateTimeFormat);
     this.formData.startDateTime = start;
     this.formData.endDateTime = end;
   }

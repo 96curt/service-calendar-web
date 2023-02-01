@@ -1,36 +1,10 @@
 import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { DxSchedulerComponent } from 'devextreme-angular';
-import { template } from 'devextreme/core/templates/template';
-import { Appointment as dxSchedulerAppointment } from 'devextreme/ui/scheduler';
+import { Appointment, AppointmentModel } from '../models/appointment.model';
 import { Schedule, TypeEnum } from 'openapi';
+import { environment } from 'environments/environment';
 
-export type Appointment = Schedule & dxSchedulerAppointment & {parentId?:number};
-
-export class EditAppointment {
-  id?: number | undefined;
-  label: string = 'Create a new appointment';
-  startDateTime: string | undefined;
-  endDateTime: string | undefined;
-  confirmed?: boolean = false;
-  description?: string | null | undefined;
-  travelHours: string = "0.0";
-  returnHours: string = "0.0";
-  addendum?: number | null | undefined;
-  serviceCenter: number | undefined;
-  scheduledBy?: number | null | undefined;
-  confirmedBy?: number | null | undefined;
-  technicians: number[] = [];
-  type?: TypeEnum = "ORDR";
-  startDate: Date;
-  endDate: Date;
-  constructor() {
-    this.startDate = new Date();
-    this.endDate = new Date(this.startDate);
-    this.endDate.setHours(this.endDate.getHours() + 1);
-  }
-  
-}
 
 @Injectable({
   providedIn: 'root'
@@ -187,6 +161,22 @@ export class AppointmentService {
     return appointment.technicians.find((value) => {
       return value == technician;
     });
+  }
+
+  unserializeDates(appointment: Appointment) {
+    if(appointment.startDateTime && appointment.endDateTime){
+      let start = new Date(appointment.startDateTime);
+      let end = new Date(appointment.endDateTime);
+      appointment.startDate = start;
+      appointment.endDate = end;
+    }
+  }
+
+  serializeDates(appointment: Appointment) {  
+    let start = formatDate(<Date>appointment.startDate, environment.dateTimeFormat, "en-US");
+    let end = formatDate(<Date>appointment.endDate, environment.dateTimeFormat, "en-US");
+    appointment.startDateTime = start;
+    appointment.endDateTime = end;
   }
 
 }

@@ -21,25 +21,25 @@
             <div class="dx-fieldset">
                 <div class="dx-field">
                     <div class="dx-field-label">Customer Name:</div>
-                    <div class="dx-field-value-static">{{appointmentData.billingCustName}}</div>
+                    <div class="dx-field-value-static">{{ appointment.billingCustName}}</div>
                 </div>
                 <div class="dx-field">
                     <div class="dx-field-label">Service Order #:</div>
-                    <div class="dx-field-value-static">{{appointmentData.addendumName}}</div>
+                    <div class="dx-field-value-static">{{appointment.addendumName}}</div>
                 </div>
                 <div class="dx-field">
                     <div class="dx-field-label">Jobsite Address:</div>
-                    <div class="dx-field-value-static">{{appointmentData.JobsiteAddress}}</div>
+                    <div class="dx-field-value-static">{{appointment.JobsiteAddress}}</div>
                 </div>
-                <div class="dx-field" *ngIf="appointmentData.confirmed">
+                <div class="dx-field" *ngIf="appointment.confirmed">
                     <div class="dx-field-label">Confirmed by:</div>
-                    <div class="dx-field-value-static">{{appointmentData.confirmedBy}}</div>
+                    <div class="dx-field-value-static">{{appointment.confirmedBy}}</div>
                 </div>
                 <div class="dx-field">
                     <div class="dx-field-label">Technicians:</div>
                     <div class="dx-field-value-static">
                         <ul>
-                            <li *ngFor="let tech of tooltipData.technicians">
+                            <li *ngFor="let tech of technicians">
                                 {{tech.fullName}}
                             </li>
                         </ul>
@@ -47,19 +47,19 @@
                 </div>
                 <div class="dx-field">
                     <div class="dx-field-label">Labor Hours:</div>
-                    <div class="dx-field-value-static">{{appointmentData.addendumLaborHours}}</div>
+                    <div class="dx-field-value-static">{{appointment.addendumLaborHours}}</div>
                 </div>
                 <div class="dx-field">
                     <div class="dx-field-label">Scheduled By:</div>
-                    <div class="dx-field-value-static">{{appointmentData.scheduledBy}}</div>
+                    <div class="dx-field-value-static">{{appointment.scheduledBy}}</div>
                 </div>
                 <div class="dx-field">
                     <div class="dx-field-label">Phone number:</div>
-                    <div class="dx-field-value-static">{{appointmentData.scheduledBy}}</div>
+                    <div class="dx-field-value-static">{{appointment.scheduledBy}}</div>
                 </div>
                 <div class="dx-field">
                     <div class="dx-field-label">Comment:</div>
-                    <div class="dx-field-value-static">{{appointmentData.description}}</div>
+                    <div class="dx-field-value-static">{{appointment.description}}</div>
                 </div>
             </div>
         </div>

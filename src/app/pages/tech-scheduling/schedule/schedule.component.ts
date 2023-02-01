@@ -19,11 +19,12 @@ import {
 import { lastValueFrom, Observable } from 'rxjs';
 import Form, { SimpleItem } from "devextreme/ui/form";
 import { FilterComponent } from 'app/shared/components/filter/filter.component';
-import { Filter } from 'app/shared/models/filter.model';
+import { FilterModel } from 'app/shared/models/filter.model';
 import { AppointmentFormOpeningEvent, AppointmentAddingEvent, AppointmentUpdatingEvent, Appointment as dxSchedulerAppointment, AppointmentRenderedEvent, ContentReadyEvent, AppointmentDraggingRemoveEvent, AppointmentClickEvent, AppointmentDblClickEvent } from 'devextreme/ui/scheduler';
 import notify from 'devextreme/ui/notify';
 import { AppointmentType, AppointmentTypeService } from 'app/shared/services/appointmentType.service';
-import { AppointmentService, Appointment, EditAppointment} from 'app/shared/services/appointment.service';
+import { AppointmentService} from 'app/shared/services/appointment.service';
+import { Appointment, AppointmentModel } from 'app/shared/models/appointment.model';
 import { formatDate } from '@angular/common';
 import { flush } from '@angular/core/testing';
 
@@ -35,11 +36,11 @@ import { flush } from '@angular/core/testing';
 })
 export class ScheduleComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) dxScheduler!: DxSchedulerComponent
-  @Input() scheduleResource:CustomStore = new CustomStore;
-  @Input() technicianResource = {};
-  @Input() centerResource = {};
-  @Input() addendumResource = {};
-  @Input() filterValues = new Filter();
+  @Input() scheduleResource: CustomStore | null = null;
+  @Input() technicianResource: DataSource | null = null;
+  @Input() centerResource: DataSource | null = null;
+  @Input() addendumResource: DataSource | null = null;
+  @Input() filterValues: FilterModel = new FilterModel;
   @Input() filterVisible = false;
   @Output() filterVisibleChange = new EventEmitter<boolean>;
   
@@ -47,15 +48,15 @@ export class ScheduleComponent {
   appointmentTypeData = this.appointmentTypeService.getAppointmentTypes();
   startDayHour = 5;
   endDayHour = 19;
-  appointmentData: Appointment | null = null;
+  selectedAppointment?: Appointment | undefined;
   customAppointmentFormVisible = false;
   customTooltipVisible = false;
+
   constructor(
     private serviceService: ServiceService,
     private appointmentTypeService: AppointmentTypeService,
     private appointmentService: AppointmentService
-  ) {
-  }
+  ) {}
 
   /*
   * DxScheduler OnAppointmentAdding Event Handler. 
@@ -72,17 +73,14 @@ export class ScheduleComponent {
    * DxScheduler OnAppointmentClick Event Handler.
    * Show ToolTip
    */
-  onAppointmentClick(e:AppointmentClickEvent){
-    //e.cancel=true;
+  onAppointmentClick(e:AppointmentClickEvent) {
+    e.cancel=true;
     const appointment = e.appointmentData as Appointment;
-    if(appointment.type=="TRVL"){
-      
+    if(appointment.type=="TRVL") {
       return;
     }
-
-    
+    this.customTooltipVisible = true;
   }
-
   
   /**
    * DxScheduler OnContentReady Event Handler. 
@@ -106,16 +104,14 @@ export class ScheduleComponent {
   */
   onAppointmentFormOpening(e:AppointmentFormOpeningEvent) {
     e.cancel=true; // disable default form
-    let appointment = e.appointmentData as Appointment;
-    if(appointment.type=="TRVL")
+    let appointment = e.appointmentData as Appointment | undefined;
+    if(!appointment || appointment.type == "TRVL")
       return;
-    this.appointmentData = appointment;
-    
+    this.selectedAppointment = appointment;
     this.customAppointmentFormVisible = true; // display custom form
-    return;
-
+    
     // old appointment form to be removed
-    e.popup.option('showTitle', true);
+    /* e.popup.option('showTitle', true);
     e.popup.option('title', appointment.label ? 
         appointment.label : 
         'Create a new appointment');
@@ -172,7 +168,7 @@ export class ScheduleComponent {
         dataField: "confirmed",
       });
       form.itemOption('mainGroup', 'items', mainGroupItems);
-    }
+    } */
   }
 
   /*
